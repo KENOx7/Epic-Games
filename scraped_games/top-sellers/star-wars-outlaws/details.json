@@ -1,0 +1,34 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/star-wars-outlaws",
+  "title": "Star Wars Outlaws",
+  "developer": "Ubisoft Entertainment",
+  "publisher": "Ubisoft Entertainment",
+  "releaseDate": "08/30/24",
+  "platform": "Windows",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Shooter"
+  ],
+  "features": [
+    "Single Player"
+  ],
+  "playerRating": "4.3",
+  "description": "Star Wars Outlaws\n\nExperience the first-ever open world Star Wars™ action-adventure game and explore distinct locations across the galaxy, both iconic and new. Risk it all as scoundrel Kay Vess, seeking freedom and the means to start a new life. Fight, steal, and outwit your way through the galaxy’s crime syndicates as you join the galaxy’s most wanted.\n\nIf you’re willing to take the risk, the galaxy is full of opportunity.\n\nDISCOVER A GALAXY OF OPPORTUNITY\n\nExplore distinct locations with bustling cities and cantinas. Race across sprawling outdoor landscapes on your speeder. Each location brings new adventures, unique challenges, and enticing rewards if you’re willing to take the risk.\n\nEXPERIENCE AN ORIGINAL SCOUNDREL STORY\n\nLive the high-stakes lifestyle of an outlaw. Turn any situation to your advantage with Nix by your side: fight with your blaster, overcome enemies with stealth and gadgets, or find the right moments to distract enemies and gain the upper hand.\n\nEMBARK ON HIGH-STAKES MISSIONS\n\nTake on high-risk, high-reward missions from the galaxy’s crime syndicates. Steal valuable goods, infiltrate secret locations, and outwit enemies as one of the galaxy’s most wanted. Every choice you make influences your ever-changing reputation.\n\nJUMP INTO THE PILOT SEAT\n\nPilot your ship, the Trailblazer, as you engage in thrilling dogfights with the Empire and other foes. Find the right opportunities to chase, evade, and attack to get the upper hand.\n\n*Offer, content, and dates subject to change.",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.png",
+    "screenshot-4.png",
+    "screenshot-5.png",
+    "screenshot-6.png",
+    "screenshot-7.png",
+    "screenshot-8.png",
+    "screenshot-9.png",
+    "screenshot-10.png"
+  ],
+  "discount": "-75%",
+  "oldPrice": "$69.99",
+  "newPrice": "$17.49"
+}

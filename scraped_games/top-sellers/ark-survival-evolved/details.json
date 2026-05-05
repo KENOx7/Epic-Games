@@ -1,0 +1,32 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/ark",
+  "title": "ARK: Survival Evolved",
+  "developer": "Studio Wildcard",
+  "publisher": "Snail Games USA",
+  "releaseDate": "06/11/20",
+  "platform": "Windows",
+  "genres": [
+    "Adventure",
+    "RPG",
+    "Survival"
+  ],
+  "features": [
+    "Single Player"
+  ],
+  "playerRating": "4.6",
+  "description": "ARK: Survival Evolved\n\nStranded on the shores of a mysterious island, you must learn to survive. Use your cunning to kill or tame the primeval creatures roaming the land, and encounter other players to survive, dominate... and escape!",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.png",
+    "screenshot-4.png",
+    "screenshot-5.png",
+    "screenshot-6.jpg",
+    "screenshot-7.png",
+    "screenshot-8.png",
+    "screenshot-9.jpg",
+    "screenshot-10.jpg"
+  ],
+  "newPrice": "$6.69"
+}

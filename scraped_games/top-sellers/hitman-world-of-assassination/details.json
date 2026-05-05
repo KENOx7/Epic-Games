@@ -1,0 +1,34 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/hitman-3",
+  "title": "HITMAN World of Assassination",
+  "developer": "IO Interactive A/S",
+  "publisher": "IO Interactive A/S",
+  "releaseDate": "01/20/21",
+  "platform": "Windows",
+  "genres": [
+    "Action",
+    "Stealth"
+  ],
+  "features": [
+    "Cloud Saves",
+    "Controller Support",
+    "Single Player",
+    "VR"
+  ],
+  "playerRating": "4.7",
+  "description": "HITMAN World of Assassination\n\nEnter the world of the ultimate assassin.\n\nBECOME AGENT 47\n\nSuit up for a spy-thriller adventure where all your deadly abilities are put to the test across more than 20 locations.\n\nFREEDOM OF APPROACH\n\nYour deadliest weapon is creativity. Unlock new gear and up your game on highly replayable missions.\n\nWORLD OF ASSASSINATION\n\nTravel a living, breathing world, filled with intriguing characters and lethal opportunities.\n\nHITMAN FREELANCER\n\nA new way to play on your own terms, that combines rogue-like elements and deep strategic planning with a persistent and infinitely replayable gameplay experience",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.jpg",
+    "screenshot-4.jpg",
+    "screenshot-5.jpg",
+    "screenshot-6.jpg",
+    "screenshot-7.jpg",
+    "screenshot-8.jpg",
+    "screenshot-9.jpg",
+    "screenshot-10.jpg"
+  ],
+  "newPrice": "$31.49"
+}

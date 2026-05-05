@@ -1,0 +1,33 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/the-elder-scrolls-online",
+  "title": "The Elder Scrolls Online",
+  "developer": "ZeniMax Online Studios",
+  "publisher": "Bethesda Softworks",
+  "releaseDate": "07/20/23",
+  "platform": "Windows",
+  "genres": [
+    "Open World",
+    "RPG"
+  ],
+  "features": [
+    "Co-op",
+    "Online Multiplayer",
+    "Single Player"
+  ],
+  "playerRating": "4.4",
+  "description": "The Elder Scrolls Online\n\nIncludes The Elder Scrolls Online base game plus the Morrowind, Imperial City, Orsinium, Thieves Guild, and Dark Brotherhood adventures.\n\nEvery legend starts somewhere and in The Elder Scrolls Online, it starts with you. Write your story into a vibrant chapter of Tamriel’s distant past that takes place nearly 1,000 years before the iconic TES V: Skyrim, and discover a world steeped in adventure and possibility.\n\nWELCOME TO SEASONS\n\nStep into new stories and experimental content inspired by classic TES history, delivered every three months. Play and unlock epic rewards with Tamriel Tomes.\n\nA DIVERSE FANTASY WORLD\n\nTravel Tamriel and discover a world of adventure. Explore mushroom forests in Morrowind, battle Daedra in Oblivion, or duel other players in PvP combat.\n\nRICH STORIES ON A SHARED CANVAS\n\nImmerse yourself in storytelling crafted with the same spirit as your favorite Elder Scrolls games. Discover an ever-growing world with friends or solo.\n\nPURPOSE IN EVERY PATH\n\nChoose from an array of quests and challenges that fit your desires and ambitions. Make this Elder Scrolls world your own - you belong here.",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.jpg",
+    "screenshot-4.jpg",
+    "screenshot-5.jpg",
+    "screenshot-6.jpg",
+    "screenshot-7.jpg",
+    "screenshot-8.jpg",
+    "screenshot-9.jpg",
+    "screenshot-10.jpg"
+  ],
+  "newPrice": "$19.99"
+}

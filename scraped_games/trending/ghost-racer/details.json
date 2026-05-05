@@ -1,0 +1,23 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/ghost-racer-f9e819",
+  "title": "Ghost Racer",
+  "developer": "TAIKOM",
+  "publisher": "TAIKOM",
+  "releaseDate": "05/04/26",
+  "platform": "Windows",
+  "genres": [
+    "Racing"
+  ],
+  "features": [
+    "Controller Support",
+    "Single Player"
+  ],
+  "playerRating": "N/A",
+  "description": "Ghost Racer\n\nCONTROLS\nTap Brake + Steer → Initiate Drift\nStart → Change Track / Toggle Music Off\nSelect → Change Camera View\nEscape Key → Exit Game\n\nSURVIVAL TIPS\nDrift early, not late—momentum is everything.\nStay smooth—oversteering kills speed.\nLearn the track rhythm—Devil’s Loop punishes hesitation.\nIf you see flashing lights behind you… push harder.",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.jpg",
+    "screenshot-2.png"
+  ],
+  "newPrice": "Free"
+}

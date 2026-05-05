@@ -1,0 +1,33 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/overcooked-2",
+  "title": "Overcooked! 2",
+  "developer": "Ghost Town Games and Team17 Digital Ltd",
+  "publisher": "Team17 Digital Ltd",
+  "releaseDate": "08/07/18",
+  "platform": "Windows",
+  "genres": [
+    "Simulation"
+  ],
+  "features": [
+    "Cloud Saves",
+    "Co-op",
+    "Local Multiplayer",
+    "Online Multiplayer"
+  ],
+  "playerRating": "4.7",
+  "description": "Overcooked returns with a brand-new helping of chaotic cooking action! Journey back to the Onion Kingdom and assemble your team of chefs in classic couch co-op or online play for up to four players. Hold onto your aprons … it’s time to save the world (again!)\n\nOUT OF THE FRYING PAN, AND INTO THE FIRE!\n\nYou’ve saved the world from the Ever Peckish. Now a new threat has arisen and it’s time to get back in the kitchen to stave off the hunger of The Unbread!\n\nONLINE/LOCAL MULTIPLAYER MADNESS\n\nYou’ll knead to work together (or against each other) to get the highest score in chaotic local and online multiplayer.\n\nFEAST YOUR EYES ON THIS\n\nJourney across a brand new overworld map by land, sea and air. Get cooking in new themes ranging from sushi restaurants, magic schools, mines and even alien planets!\n\nWHET YOUR APPETITE!\n\nTravel the land cooking up a range of new recipes that are sure to cater to any tastes, including sushi, cakes, burgers and pizzas.\n\nROMAINE CALM!\n\nTravel through teleporters, across moving platforms and save time by throwing ingredients across dynamic kitchens that shift and evolve. Some kitchens even whisk your chefs away to new locations.",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.jpg",
+    "screenshot-4.jpg",
+    "screenshot-5.jpg",
+    "screenshot-6.jpg",
+    "screenshot-7.jpg",
+    "screenshot-8.jpg",
+    "screenshot-9.jpg",
+    "screenshot-10.jpg"
+  ],
+  "newPrice": "$12.49"
+}

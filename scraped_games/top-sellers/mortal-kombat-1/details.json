@@ -1,0 +1,34 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/mortal-kombat-1",
+  "title": "Mortal Kombat 1",
+  "developer": "NetherRealm Studios | QLOC",
+  "publisher": "Warner Bros. Games",
+  "releaseDate": "09/19/23",
+  "platform": "Windows",
+  "genres": [
+    "Action",
+    "Adventure",
+    "Fighting"
+  ],
+  "features": [
+    "Achievements",
+    "Multiplayer",
+    "Single Player"
+  ],
+  "playerRating": "4.6",
+  "description": "Mortal Kombat 1\n\nIt’s In Our Blood!\n\nDiscover a reborn Mortal Kombat Universe created by the Fire God Liu Kang. Mortal Kombat 1 ushers in a new era of the iconic franchise with a new fighting system, game modes, and fatalities!",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.jpg",
+    "screenshot-4.jpg",
+    "screenshot-5.jpg",
+    "screenshot-6.jpg",
+    "screenshot-7.jpg",
+    "screenshot-8.jpg",
+    "screenshot-9.jpg",
+    "screenshot-10.jpg"
+  ],
+  "newPrice": "$39.99"
+}

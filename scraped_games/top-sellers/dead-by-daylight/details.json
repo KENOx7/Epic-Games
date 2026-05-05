@@ -1,0 +1,33 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/dead-by-daylight",
+  "title": "Dead by Daylight",
+  "developer": "Behaviour Interactive",
+  "publisher": "Behaviour Interactive",
+  "releaseDate": "06/14/16",
+  "platform": "Windows",
+  "genres": [
+    "Action",
+    "Survival"
+  ],
+  "features": [
+    "Online Multiplayer"
+  ],
+  "playerRating": "4.5",
+  "description": "Death Is Not an Escape.\n\nDead by Daylight is a multiplayer (4vs1) horror game where one player takes on the role of the savage Killer, and the other four players play as Survivors, trying to escape the Killer and avoid being caught, tortured and killed.\n\nSurvivors play in third-person and have the advantage of better situational awareness. The Killer plays in first-person and is more focused on their prey.\n\nThe Survivors' goal in each encounter is to escape the Killing Ground without getting caught by the Killer - something that sounds easier than it is, especially when the environment changes every time you play.\n\nMore information about the game is available at http://www.deadbydaylight.com\n(Opens in new tab)\n\nSurvive Together… Or Not\nSurvivors can either cooperate with the others or be selfish. Your chance of survival will vary depending on whether you work together as a team or if you go at it alone. Will you be able to outwit the Killer and escape their Killing Ground?\n\nWhere Am I?\nEach level is procedurally generated, so you'll never know what to expect. Random spawn points mean you will never feel safe as the world and its danger change every time you play.\n\nA Feast for Killers\nDead by Daylight draws from all corners of the horror world. As a Killer you can play as anything from a powerful Slasher to terrifying paranormal entities. Familiarize yourself with your Killing Grounds and master each Killer's unique power to be able to hunt, catch and sacrifice your victims.\n\nDeeper and Deeper\nEach Killer and Survivor has their own deep progression system and plenty of unlockables that can be customized to fit your own personal strategy. Experience, skills and understanding of the environment are key to being able to hunt or outwit the Killer.\n\nReal People, Real Fear\nThe procedural levels and real human reactions to pure horror makes each game session an unexpected scenario. You will never be able to tell how it's going to turn out. Ambience, music, and chilling environments combine into a terrifying experience. With enough time, you might even discover what's hiding in the Fog.",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.jpg",
+    "screenshot-4.jpg",
+    "screenshot-5.jpg",
+    "screenshot-6.jpg",
+    "screenshot-7.jpg",
+    "screenshot-8.jpg",
+    "screenshot-9.jpg",
+    "screenshot-10.jpg"
+  ],
+  "discount": "-60%",
+  "oldPrice": "$14.99",
+  "newPrice": "$5.99"
+}

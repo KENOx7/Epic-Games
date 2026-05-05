@@ -1,0 +1,30 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/kerbal-space-program",
+  "title": "Kerbal Space Program",
+  "developer": "Squad",
+  "publisher": "The Kerbal Company",
+  "releaseDate": "04/27/15",
+  "platform": "Windows",
+  "genres": [
+    "Simulation"
+  ],
+  "features": [
+    "–"
+  ],
+  "playerRating": "4.8",
+  "description": "Kerbal Space Program\n\nKerbal Space Program features three gameplay modes. In Science Mode, perform space experiments to unlock new technology and advance the knowledge of Kerbalkind. In Career Mode, oversee every aspect of the space program, including construction, strategy, funding, upgrades, and more. In Sandbox, you are free to build any spacecraft you can think of, with all parts and technology in the game.\n\nKey Features\n\nTake full control over your ship’s setup to execute complex flight maneuvers.\n\nManage your Kerbal crewmembers, including hiring, training, and sending them into space to become heroes.\n\nDiscover a whole star system with unique moons and planets, exploring detailed terrain at a vast scale.\n\nSend your Kerbal crew outside their ships for “extra-vehicular” activities.\n\nDock spacecraft together to construct space stations, massive starships, and surface bases on new planets.\n\nUse satellites to scan terrain and find biomes and other anomalies.\n\nSet up communications networks to communicate between your spacecraft and Kerbal Space Center.\n\nResearch and develop new technologies to extract valuable information and resources from all over the solar system, and much more!",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.jpg",
+    "screenshot-4.jpg",
+    "screenshot-5.jpg",
+    "screenshot-6.jpg",
+    "screenshot-7.jpg",
+    "screenshot-8.jpg",
+    "screenshot-9.jpg",
+    "screenshot-10.jpg"
+  ],
+  "newPrice": "$19.99"
+}

@@ -1,0 +1,35 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/ranch-simulator",
+  "title": "Ranch Simulator",
+  "developer": "Toxic Dog",
+  "publisher": "Excalibur Games",
+  "releaseDate": "03/04/21",
+  "platform": "Windows",
+  "genres": [
+    "Indie",
+    "Open World",
+    "Simulation"
+  ],
+  "features": [
+    "Cloud Saves",
+    "Co-op",
+    "Online Multiplayer",
+    "Single Player"
+  ],
+  "playerRating": "4.4",
+  "description": "Life is Better on the Ranch\n\nIt was once your grandfather’s pride-and-joy, but your family ranch has fallen on hard times and it’s up to you to turn things around. Sitting in a remote forested valley, the dilapidated homestead will test all your abilities as you attempt to turn it into the most prosperous ranch in the region – either alone or in up to four player co-op multiplayer.\n\nRebuild Your Ranch\n\nThe years have not been kind to your family ranch and it will take time and money to restore it to its former glory. Buy tools from the local hardware store and purchase a range of vehicles from the garage to help with your rebuilding projects. Renovate the main house, decide what livestock you want to farm and construct the barns, pens and runs you’ll need to keep them safe and secure.\n\nLook After Your Livestock\n\nGrand building projects are one thing. Paying for them? That’ll come down to your ranching skills. Overseeing a profitable operation is all about the day-to-day. Once you’ve selected and taken on your livestock, regular feeding and watering will keep them healthy. Successful breeding and careful rearing of the young will help boost the numbers in your herds and flocks — and the more produce you have to sell, the more income you’ll receive for all that hard work.\n\nHead Out on the Hunt\n\nThere’s a large open-world environment outside your cosy homestead and it’s teeming with wildlife. So when you feel like slowing the pace, why not grab your trusty rifle and head out into the forest to stalk deer and hunt bears? But remember, the wilderness lives by its own laws and you aren’t the only skilled hunter in the neighbourhood. Sometimes your steady hand and sharp eyes will also be needed back on the ranch to stop hungry wolves turning your off-grid dream into a nightmare.",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.jpg",
+    "screenshot-4.jpg",
+    "screenshot-5.jpg",
+    "screenshot-6.jpg",
+    "screenshot-7.jpg",
+    "screenshot-8.jpg",
+    "screenshot-9.jpg",
+    "screenshot-10.jpg"
+  ],
+  "newPrice": "$12.49"
+}

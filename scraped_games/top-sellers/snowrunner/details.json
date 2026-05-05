@@ -1,0 +1,33 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/snowrunner",
+  "title": "SnowRunner",
+  "developer": "Saber Interactive",
+  "publisher": "Focus Entertainment",
+  "releaseDate": "04/28/20",
+  "platform": "Windows",
+  "genres": [
+    "Adventure",
+    "Simulation"
+  ],
+  "features": [
+    "Cloud Saves",
+    "Co-op",
+    "Single Player"
+  ],
+  "playerRating": "4.7",
+  "description": "SnowRunner\n\nIGN - \"addictive, deep and rewarding\" 8/10\nPC Games N - \"Essential purchase\" 8/10\nTop Gear - \"will have you punching the air in grim satisfaction\"\n\nGet ready for the next-generation off-road experience!\n\nSnowRunner puts you in the driver’s seat of powerful vehicles as you conquer extreme open environments with the most advanced terrain simulation ever. Drive 40 vehicles from brands such as Ford, Chevrolet, and Freightliner as you leave your mark on an untamed open world.\n\nOvercome mud, torrential waters, snow, and frozen lakes while taking on perilous contracts and missions. Expand and customize your fleet with many upgrades and accessories including an exhaust snorkel for heavy waters or chain tires to battle the snow.\n\nRide solo or with other players in 4-player co-operative and expand your SnowRunner experience with community-created mods!\n• Face extreme environments in a highly advanced physics engine\n• 40 unique vehicles to unlock, upgrade, and customize\n• Complete dozens of challenging missions across an interconnected world\n• Go solo or play with other players in 4-player co-op",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.jpg",
+    "screenshot-4.jpg",
+    "screenshot-5.jpg",
+    "screenshot-6.jpg",
+    "screenshot-7.jpg",
+    "screenshot-8.jpg",
+    "screenshot-9.jpg",
+    "screenshot-10.jpg"
+  ],
+  "newPrice": "$24.99"
+}

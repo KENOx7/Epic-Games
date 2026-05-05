@@ -1,0 +1,37 @@
+{
+  "url": "https://store.epicgames.com/en-US/p/sifu--deluxe-edition",
+  "title": "Sifu Digital Deluxe Edition",
+  "developer": "Sloclap",
+  "publisher": "Sloclap",
+  "releaseDate": "02/08/22",
+  "platform": "Windows",
+  "genres": [
+    "Action",
+    "Fighting",
+    "Indie"
+  ],
+  "features": [
+    "Achievements",
+    "Cloud Saves",
+    "Controller Support",
+    "Single Player"
+  ],
+  "playerRating": "4.7",
+  "description": "Sifu Digital Deluxe Edition\nThe Digital Deluxe edition of Sifu includes:\n\nThe base game\n\nThe “Art of Sifu” art book containing pages filled with sharp stylized paintings reminiscent of the culture and lifestyle of Kung Fu\n\nThe original soundtrack marrying traditional Chinese melodies with modern urban elements, composed by Howie Lee\n\nDeluxe outfits to fight your enemies with style. Complete the required challenges in order to unlock them in-game\n\nThe Photo Mode Cinematic Pack giving you access to exclusive new filters & character poses",
+  "saved_images": [
+    "cover.jpg",
+    "screenshot-1.svg",
+    "screenshot-2.svg",
+    "screenshot-3.jpg",
+    "screenshot-4.jpg",
+    "screenshot-5.jpg",
+    "screenshot-6.jpg",
+    "screenshot-7.jpg",
+    "screenshot-8.jpg",
+    "screenshot-9.jpg",
+    "screenshot-10.jpg"
+  ],
+  "discount": "-75%",
+  "oldPrice": "$25.99",
+  "newPrice": "$6.49"
+}
