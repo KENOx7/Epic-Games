@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Bookmark } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function EpicSavings() {
   const [games, setGames] = useState([]);
-  const [scrollIndex, setScrollIndex] = useState(0);
+  const [scrollindex, setscrollindex] = useState(0);
 
   useEffect(() => {
     fetch('/scraped_games/epic-savings/category_summary.json?')
@@ -12,14 +13,14 @@ export default function EpicSavings() {
   }, []);
 
   const slideLeft = () => {
-    if (scrollIndex > 0) {
-      setScrollIndex(scrollIndex - 6);
+    if (scrollindex > 0) {
+      setscrollindex(scrollindex - 6);
     }
   };
 
   const slideRight = () => {
-    if (scrollIndex < games.length - 6) {
-      setScrollIndex(scrollIndex + 6);
+    if (scrollindex < games.length - 6) {
+      setscrollindex(scrollindex + 6);
     }
   };
 
@@ -42,14 +43,14 @@ export default function EpicSavings() {
       <div className="overflow-hidden">
         <div
           className="flex gap-5 transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${scrollIndex * 198}px)` }}>
+          style={{ transform: `translateX(-${scrollindex * 198}px)` }}>
           {games.map((game, index) => {
             const folderName = getFolderName(game.title);
             const imageSrc = `/scraped_games/epic-savings/${folderName}/cover.jpg`;
             const { discount, oldPrice, newPrice } = game;
 
             return (
-              <div key={index} className="min-w-[178px] max-w-[178px] cursor-pointer group">
+              <Link key={index} to={`/game/${folderName}`} className="min-w-[178px] max-w-[178px] cursor-pointer group" style={{ textDecoration: 'none' }}>
                 <div className="relative w-full h-[238px] rounded-lg mb-3 bg-[#1a1a1a]">
                   <img
                     src={imageSrc}
@@ -69,10 +70,10 @@ export default function EpicSavings() {
                   {oldPrice && (<span className="text-gray-500 text-sm line-through">{oldPrice}</span>)}
                   {newPrice && (<span className="text-white text-sm">{newPrice}</span>)}
                 </div>
-              </div>
+              </Link>
             );
           })}
-        </div> 
+        </div>
       </div>
     </div>
   );

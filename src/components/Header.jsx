@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import logo from "../assets/logo.png"
 import store from "../assets/store.svg"
 import { Link } from 'react-router-dom'
-import { Earth, TextAlignJustify, X, Search, ChevronDown, ChevronUp, Bookmark, Gift, ShoppingCart} from 'lucide-react';
+import { Earth, TextAlignJustify, X, Search, ChevronDown, ChevronUp, Bookmark, Gift, ShoppingCart } from 'lucide-react';
 
 function Header() {
   const [Menu, setMenu] = useState();
@@ -45,7 +45,7 @@ function Header() {
           </div>
         </div>
       )}
-      
+
       <div className='bg-[#101014] h-[100px] w-full'>
         <div className='max-w-[1200px] mx-auto h-full flex justify-between items-center'>
           <div className='flex items-center'>
