@@ -9,10 +9,6 @@ import http from 'http';
 // 3 target URLs with their category folder names
 const CATEGORIES = [
     {
-        url: 'https://store.epicgames.com/en-US/sales-and-specials/epic-savings',
-        folder: 'epic-savings'
-    },
-    {
         url: 'https://store.epicgames.com/en-US/collection/top-sellers',
         folder: 'top-sellers'
     },
@@ -202,7 +198,8 @@ async function scrapeEpicGames() {
                 if (card.coverImageUrl) {
                     const coverPath = path.join(gameFolderPath, 'cover.jpg');
                     try {
-                        await downloadImage(card.coverImageUrl, coverPath);
+                        const cleanCoverUrl = card.coverImageUrl.split('?')[0];
+                        await downloadImage(cleanCoverUrl, coverPath);
                         console.log(`   🖼️ [${i + 1}/${gameCards.length}] Cover saved: ${card.title}`);
                     } catch (e) {
                         console.log(`   ⚠️ [${i + 1}/${gameCards.length}] Cover download failed: ${card.title}`);
@@ -352,12 +349,37 @@ async function scrapeEpicGames() {
                             }
                         } catch(e) {}
 
+                        // Collect cover-2 specifically
+                        let cover2Url = null;
+                        try {
+                            const cover2Img = document.querySelector('div.css-2azk84 img') || document.querySelector('div.css-uwwqev[data-testid="picture"] img');
+                            if (cover2Img) {
+                                cover2Url = cover2Img.getAttribute('data-image') || cover2Img.src;
+                            }
+                        } catch(e) {}
+
+                        // Collect age rating image
+                        let ageUrl = null;
+                        try {
+                            const ageImg = document.querySelector('[data-testid="ratings-image"] img');
+                            if (ageImg) {
+                                ageUrl = ageImg.getAttribute('data-image') || ageImg.src;
+                            }
+                        } catch(e) {}
+
                         // Collect all meaningful images from the game page
                         const imgElements = Array.from(document.querySelectorAll('img'));
-                        const imageUrls = imgElements
+                        let imageUrls = imgElements
                             .map(img => img.getAttribute('data-image') || img.src)
-                            .filter(src => src && src.startsWith('http') && !src.includes('logo') && !src.includes('avatar') && !src.includes('icon'))
+                            .filter(src => src && src.startsWith('http') && !src.includes('logo') && !src.includes('avatar') && !src.includes('icon') && !src.includes('.svg') && !src.includes('.svg?'))
                             .filter((value, index, self) => self.indexOf(value) === index);
+                            
+                        if (cover2Url) {
+                            imageUrls = imageUrls.filter(url => url !== cover2Url);
+                        }
+                        if (ageUrl) {
+                            imageUrls = imageUrls.filter(url => url !== ageUrl);
+                        }
 
                         return { 
                             title, 
@@ -370,7 +392,9 @@ async function scrapeEpicGames() {
                             features,
                             playerRating,
                             description, 
-                            images: imageUrls 
+                            images: imageUrls,
+                            cover2Url,
+                            ageUrl
                         };
                     });
 
@@ -383,6 +407,37 @@ async function scrapeEpicGames() {
                     const gameFolderPath = card._folderPath;
                     const safeFolderName = card._safeFolderName;
                     const downloadedImageNames = ['cover.jpg']; // cover already saved
+                    
+                    if (gameData.cover2Url) {
+                        const cleanCover2Url = gameData.cover2Url.split('?')[0];
+                        let ext = path.extname(cleanCover2Url);
+                        if (!ext || ext.length > 5) ext = '.jpg';
+                        const cover2Name = `cover-2${ext}`;
+                        const cover2Path = path.join(gameFolderPath, cover2Name);
+                        try {
+                            await downloadImage(cleanCover2Url, cover2Path);
+                            downloadedImageNames.push(cover2Name);
+                            console.log(`   🖼️ Cover-2 saved.`);
+                        } catch (e) {
+                            console.log(`   ⚠️ Failed to download cover-2: ${cleanCover2Url}`);
+                        }
+                    }
+
+                    if (gameData.ageUrl) {
+                        const cleanAgeUrl = gameData.ageUrl.split('?')[0];
+                        let ext = path.extname(cleanAgeUrl);
+                        if (!ext || ext.length > 5) ext = '.png';
+                        const ageName = `age${ext}`;
+                        const agePath = path.join(gameFolderPath, ageName);
+                        try {
+                            await downloadImage(cleanAgeUrl, agePath);
+                            downloadedImageNames.push(ageName);
+                            console.log(`   🖼️ Age rating saved.`);
+                        } catch (e) {
+                            console.log(`   ⚠️ Failed to download age rating: ${cleanAgeUrl}`);
+                        }
+                    }
+
                     let imgCounter = 1;
 
                     console.log(`   ⬇️ Downloading ${gameData.images.length} additional images...`);
@@ -391,15 +446,15 @@ async function scrapeEpicGames() {
                         let ext = path.extname(cleanUrl);
                         if (!ext || ext.length > 5) ext = '.jpg';
 
-                        const imageName = `screenshot-${imgCounter}${ext}`;
+                        const imageName = `image-${imgCounter}${ext}`;
                         const imagePath = path.join(gameFolderPath, imageName);
                         
                         try {
-                            await downloadImage(imgUrl, imagePath);
+                            await downloadImage(cleanUrl, imagePath);
                             downloadedImageNames.push(imageName);
                             imgCounter++;
                         } catch (e) {
-                            console.log(`   ⚠️ Failed to download: ${imgUrl}`);
+                            console.log(`   ⚠️ Failed to download: ${cleanUrl}`);
                         }
 
                         if (imgCounter > 10) break;

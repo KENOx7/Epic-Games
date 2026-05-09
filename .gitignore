@@ -11,6 +11,8 @@ dist
 dist-ssr
 *.local
 
+scraped_games
+
 .vscode/*
 !.vscode/extensions.json
 .idea

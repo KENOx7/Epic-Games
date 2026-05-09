@@ -3,12 +3,12 @@ import { Bookmark } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-export default function EpicSavings() {
+export default function Trending() {
   const [games, setGames] = useState([]);
   const [scrollindex, setscrollindex] = useState(0);
 
   useEffect(() => {
-    axios.get('https://epic-games-a-pi.vercel.app/epic-savings/category_summary.json?')
+    axios.get('https://epic-games-a-pi.vercel.app/trending/category_summary.json?')
       .then((res) => setGames(res.data));
   }, []);
 
@@ -36,7 +36,7 @@ export default function EpicSavings() {
   return (
     <div className="max-w-[1200px] mx-auto mt-10 px-4">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-white text-xl font-bold">Epic Savings Spotlight</h2>
+        <h2 className="text-white text-xl font-bold">Trending</h2>
         <div className="flex gap-2">
           <button onClick={slideLeft} className="w-8 h-8 rounded-full bg-[#2a2a2a] text-white hover:bg-[#3a3a3a]">‹</button>
           <button onClick={slideRight} className="w-8 h-8 rounded-full bg-[#2a2a2a] text-white hover:bg-[#3a3a3a]">›</button>
@@ -48,11 +48,11 @@ export default function EpicSavings() {
           style={{ transform: `translateX(-${scrollindex * 198}px)` }}>
           {games.map((game, index) => {
             const folderName = getFolderName(game.title);
-            const imageSrc = `https://epic-games-a-pi.vercel.app/epic-savings/${folderName}/cover.jpg`;
+            const imageSrc = `https://epic-games-a-pi.vercel.app/trending/${folderName}/cover.jpg`;
             const { discount, oldPrice, newPrice } = game;
 
             return (
-              <Link key={index} to={`/game/${folderName}`} className="block flex-shrink-0 w-[178px] group">
+              <Link key={index} to={`/game/${folderName}?from=trending`} className="block flex-shrink-0 w-[178px] group">
                 <div className="relative w-full h-[238px] rounded-lg overflow-hidden bg-[#1a1a1a]">
                   <img
                     src={imageSrc}
