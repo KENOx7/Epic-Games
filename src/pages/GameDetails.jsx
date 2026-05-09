@@ -124,7 +124,11 @@ export default function GameDetails() {
           {/* Cover şəkil */}
           <div className="w-full h-[200px] lg:h-[180px] rounded-lg overflow-hidden mb-4 bg-[#1a1a1e]">
             <img
-              src={game.saved_images && game.saved_images.find(img => img.startsWith('cover-2')) ? `${basePath}/cover-2.jpg` : `${basePath}/cover.jpg`}
+              src={(() => {
+                const cover2 = game.saved_images && game.saved_images.find(img => img.startsWith('cover-2'));
+                const cover = game.saved_images && game.saved_images.find(img => img === 'cover.jpg' || img === 'cover.png');
+                return cover2 ? `${basePath}/${cover2}` : (cover ? `${basePath}/${cover}` : `${basePath}/cover.jpg`);
+              })()}
               alt={game.title}
               className="w-full h-full object-cover"
             />

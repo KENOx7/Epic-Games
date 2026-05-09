@@ -9,12 +9,12 @@ import http from 'http';
 // 3 target URLs with their category folder names
 const CATEGORIES = [
     {
-        url: 'https://store.epicgames.com/en-US/collection/top-sellers',
-        folder: 'top-sellers'
+        url: 'https://store.epicgames.com/en-US/collection/top-player-reviewed',
+        folder: 'top-player-reviewed'
     },
     {
-        url: 'https://store.epicgames.com/en-US/collection/trending',
-        folder: 'trending'
+        url: 'https://store.epicgames.com/collection/most-popular',
+        folder: 'most-popular'
     }
 ];
 
