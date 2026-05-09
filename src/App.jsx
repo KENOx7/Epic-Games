@@ -6,6 +6,8 @@ import EpicSavings from './components/EpicSavings';
 import GameDetails from './pages/GameDetails';
 import './index.css';
 import Trending from './components/Trending';
+import MostPopular from './components/MostPopular';
+import TopPlayerReviewed from './components/TopPlayerReviewed';
 
 // Ana sehife komponenti
 function Home() {
@@ -15,6 +17,8 @@ function Home() {
       <EpicSavings />
       <FreeGames />
       <Trending/>
+      <MostPopular/>
+      <TopPlayerReviewed/>
     </div>
   );
 }

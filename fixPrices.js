@@ -15,6 +15,14 @@ function processFile(filePath) {
 
     const processItem = (item) => {
       if (item && item.price && typeof item.price === 'string') {
+        // "Unknown Price" olanlar üçün Coming Soon
+        if (item.price.trim() === 'Unknown Price') {
+          delete item.price;
+          item.newPrice = 'Coming Soon';
+          modified = true;
+          return;
+        }
+
         const priceList = item.price.split('\n');
         let discount = null;
         let oldPrice = null;

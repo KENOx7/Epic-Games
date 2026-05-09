@@ -136,19 +136,21 @@ export default function GameDetails() {
 
           {/* Qiymət hissəsi */}
           <div className="bg-[#1a1a1e] rounded-lg p-5 mb-4">
-            {game.discount && (
-              <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3 mb-3">
+              {game.discount && (
                 <span className="bg-[#26BBFF] text-black font-bold px-2.5 py-1 rounded-md text-sm">
                   {game.discount}
                 </span>
-                {game.oldPrice && (
-                  <span className="text-gray-500 line-through text-sm">{game.oldPrice}</span>
-                )}
-                {game.newPrice && (
-                  <span className="text-white font-bold text-lg">{game.newPrice}</span>
-                )}
-              </div>
-            )}
+              )}
+              {game.oldPrice && (
+                <span className="text-gray-500 line-through text-sm">{game.oldPrice}</span>
+              )}
+              {game.newPrice ? (
+                <span className="text-white font-bold text-lg">{game.newPrice}</span>
+              ) : (
+                <span className="text-white font-bold text-lg">—</span>
+              )}
+            </div>
 
             <button 
               onClick={() => setIsCheckoutOpen(true)}
