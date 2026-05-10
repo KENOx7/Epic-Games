@@ -90,13 +90,13 @@ export default function Cart() {
             return (
               <div
                 key={index}
-                className="bg-[#18181c] rounded-xl p-4 flex flex-col sm:flex-row gap-4"
+                className="bg-[#18181c] rounded-xl p-4 flex flex-row gap-4"
               >
-                <div className="w-full sm:w-[120px] h-[160px] bg-[#111] rounded-lg overflow-hidden flex-shrink-0">
+                <div className="w-[100px] h-[140px] bg-[#111] rounded-lg overflow-hidden flex-shrink-0">
                   <img
                     src={coverUrl}
                     alt={game.title}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover"
                   />
                 </div>
 
