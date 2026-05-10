@@ -26,7 +26,7 @@ export default function GameDetails() {
   // Oyun məlumatlarının yüklənməsi
   useEffect(() => {
     window.scrollTo(0, 0);
-    const url = `https://epic-games-a-pi.vercel.app/${from}/category_summary.json`;
+    const url = `https://epic-games-api-eta.vercel.app/${from}/category_summary.json`;
     axios.get(url)
       .then((res) => {
         // Slug-a uyğun oyunu tapırıq
@@ -57,9 +57,9 @@ export default function GameDetails() {
   }
 
   const folderName = slugYarat(game.title);
-  const basePath = from === 'free' 
-    ? `/scraped_games/${from}/${folderName}` 
-    : `https://epic-games-a-pi.vercel.app/${from}/${folderName}`;
+  const basePath = from === 'free'
+    ? `/scraped_games/${from}/${folderName}`
+    : `https://epic-games-api-eta.vercel.app/${from}/${folderName}`;
 
   // Screenshot şəkillərin siyahısı (cover və age xaric)
   const screenshots = (game.saved_images || [])
@@ -83,10 +83,10 @@ export default function GameDetails() {
 
       {/* Checkout Modal */}
       {isCheckoutOpen && (
-        <Checkout 
-          game={game} 
-          basePath={basePath} 
-          onClose={() => setIsCheckoutOpen(false)} 
+        <Checkout
+          game={game}
+          basePath={basePath}
+          onClose={() => setIsCheckoutOpen(false)}
         />
       )}
 
@@ -120,7 +120,7 @@ export default function GameDetails() {
 
         {/* 1. Qiymət və Məlumat paneli (Mobildə Üstdə, PC-də Sağ Tərəfdə) */}
         <div className="w-full lg:w-[320px]">
-          
+
           {/* Cover şəkil */}
           <div className="w-full h-[200px] lg:h-[180px] rounded-lg overflow-hidden mb-4 bg-[#1a1a1e]">
             <img
@@ -130,7 +130,7 @@ export default function GameDetails() {
                 return cover2 ? `${basePath}/${cover2}` : (cover ? `${basePath}/${cover}` : `${basePath}/cover.jpg`);
               })()}
               alt={game.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </div>
 
@@ -152,7 +152,7 @@ export default function GameDetails() {
               )}
             </div>
 
-            <button 
+            <button
               onClick={() => setIsCheckoutOpen(true)}
               className="w-full py-3 bg-[#26BBFF] text-black font-bold text-sm rounded-lg mb-2 hover:bg-[#72D3FF] transition"
             >
@@ -198,7 +198,7 @@ export default function GameDetails() {
 
         {/* 2. Sol hissə - Şəkillər və Açıqlama */}
         <div className="flex-1 min-w-0">
-          
+
           {/* Böyük şəkil */}
           <div className="relative group w-full h-[300px] md:h-[400px] lg:h-[500px] rounded-xl overflow-hidden bg-[#1a1a1e] mb-4">
             <img
@@ -208,13 +208,13 @@ export default function GameDetails() {
             />
             {screenshots.length > 1 && (
               <>
-                <button 
+                <button
                   onClick={() => setSelectedImage(prev => prev === 0 ? screenshots.length - 1 : prev - 1)}
                   className="absolute left-4 top-[45%] w-10 h-10 bg-black/60 hover:bg-black/90 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <ChevronLeft size={24} />
                 </button>
-                <button 
+                <button
                   onClick={() => setSelectedImage(prev => prev === screenshots.length - 1 ? 0 : prev + 1)}
                   className="absolute right-4 top-[45%] w-10 h-10 bg-black/60 hover:bg-black/90 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
                 >
@@ -227,7 +227,7 @@ export default function GameDetails() {
           {/* Kiçik screenshotlar */}
           {screenshots.length > 1 && (
             <div className="flex items-center gap-3 mb-8">
-              <button 
+              <button
                 onClick={() => {
                   const container = document.getElementById('thumbnails-container');
                   if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
@@ -236,15 +236,14 @@ export default function GameDetails() {
               >
                 <ChevronLeft size={20} />
               </button>
-              
+
               <div id="thumbnails-container" className="hide-scrollbar flex-1 flex gap-2 overflow-x-auto">
                 {screenshots.map((img, index) => (
                   <div
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`w-[110px] flex-none h-[64px] rounded-md overflow-hidden cursor-pointer transition-all ${
-                      selectedImage === index ? 'border-2 border-[#26BBFF] opacity-100' : 'border-2 border-transparent opacity-60 hover:opacity-80'
-                    }`}
+                    className={`w-[110px] flex-none h-[64px] rounded-md overflow-hidden cursor-pointer transition-all ${selectedImage === index ? 'border-2 border-[#26BBFF] opacity-100' : 'border-2 border-transparent opacity-60 hover:opacity-80'
+                      }`}
                   >
                     <img
                       src={`${basePath}/${img}`}
@@ -255,7 +254,7 @@ export default function GameDetails() {
                 ))}
               </div>
 
-              <button 
+              <button
                 onClick={() => {
                   const container = document.getElementById('thumbnails-container');
                   if (container) container.scrollBy({ left: 300, behavior: 'smooth' });

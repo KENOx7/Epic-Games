@@ -8,7 +8,7 @@ export default function EpicSavings() {
   const [scrollindex, setscrollindex] = useState(0);
 
   useEffect(() => {
-    axios.get('https://epic-games-a-pi.vercel.app/epic-savings/category_summary.json?')
+    axios.get('https://epic-games-api-eta.vercel.app/epic-savings/category_summary.json?')
       .then((res) => setGames(res.data));
   }, []);
 
@@ -48,7 +48,7 @@ export default function EpicSavings() {
           style={{ transform: `translateX(-${scrollindex * 198}px)` }}>
           {games.map((game, index) => {
             const folderName = getFolderName(game.title);
-            const imageSrc = `https://epic-games-a-pi.vercel.app/epic-savings/${folderName}/cover.jpg`;
+            const imageSrc = `https://epic-games-api-eta.vercel.app/epic-savings/${folderName}/cover.jpg`;
             const { discount, oldPrice, newPrice } = game;
 
             return (

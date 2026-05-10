@@ -10,12 +10,12 @@ function useCountdown(target) {
   function calc() {
     const diff = target - Date.now();
     if (diff <= 0) return '00:00:00:00';
-    
+
     const d = Math.floor(diff / 86400000);
     const h = Math.floor((diff % 86400000) / 3600000);
     const m = Math.floor((diff % 3600000) / 60000);
     const s = Math.floor((diff % 60000) / 1000);
-    
+
     return [d, h, m, s].map(n => String(n).padStart(2, '0')).join(':');
   }
 
@@ -38,7 +38,7 @@ export default function FreeGames() {
   const countdown = useCountdown(UNLOCK_DATE);
 
   useEffect(() => {
-    axios.get('https://epic-games-a-pi.vercel.app/free/category_summary.json')
+    axios.get('https://epic-games-api-eta.vercel.app/free/category_summary.json')
       .then(res => setGames(res.data))
       .catch(err => console.error("Failed to load free games:", err));
   }, []);
@@ -46,7 +46,7 @@ export default function FreeGames() {
   return (
     <div className="max-w-[1200px] mx-auto mt-10 px-4">
       <div className="bg-[#18181c] rounded-2xl p-6 md:p-8">
-        
+
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
@@ -65,12 +65,12 @@ export default function FreeGames() {
 
         {/* Cards Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          
+
           {/* Active Free Games */}
           {games.map((game, idx) => {
             const slug = toSlug(game.title);
             const cover = `/scraped_games/free/${slug}/cover.jpg`;
-            
+
             return (
               <Link key={idx} to={`/game/${slug}?from=free`} className="block group">
                 <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden bg-[#1a1a1a]">

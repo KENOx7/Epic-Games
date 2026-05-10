@@ -5,7 +5,6 @@ import FreeGames from './components/FreeGames';
 import EpicSavings from './components/EpicSavings';
 import GameDetails from './pages/GameDetails';
 import './index.css';
-import Trending from './components/Trending';
 import MostPopular from './components/MostPopular';
 import TopPlayerReviewed from './components/TopPlayerReviewed';
 import TopSellers from './components/TopSellers';
@@ -17,7 +16,6 @@ function Home() {
       <Slider />
       <EpicSavings />
       <FreeGames />
-      <Trending/>
       <MostPopular/>
       <TopPlayerReviewed/>
       <TopSellers/>

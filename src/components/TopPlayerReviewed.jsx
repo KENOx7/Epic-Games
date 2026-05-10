@@ -8,7 +8,7 @@ export default function TopPlayerReviewed() {
   const [scrollindex, setscrollindex] = useState(0);
 
   useEffect(() => {
-    axios.get('https://epic-games-a-pi.vercel.app/top-player-reviewed/category_summary.json')
+    axios.get('https://epic-games-api-eta.vercel.app/top-player-reviewed/category_summary.json')
       .then((res) => setGames(res.data));
   }, []);
 
@@ -48,7 +48,7 @@ export default function TopPlayerReviewed() {
           style={{ transform: `translateX(-${scrollindex * 198}px)` }}>
           {games.map((game, index) => {
             const folderName = getFolderName(game.title);
-            const imageSrc = `https://epic-games-a-pi.vercel.app/top-player-reviewed/${folderName}/cover.jpg`;
+            const imageSrc = `https://epic-games-api-eta.vercel.app/top-player-reviewed/${folderName}/cover.jpg`;
             const { discount, oldPrice, newPrice } = game;
 
             return (
