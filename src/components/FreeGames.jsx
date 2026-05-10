@@ -38,7 +38,7 @@ export default function FreeGames() {
   const countdown = useCountdown(UNLOCK_DATE);
 
   useEffect(() => {
-    axios.get('/scraped_games/free/category_summary.json')
+    axios.get('https://epic-games-a-pi.vercel.app/free/category_summary.json')
       .then(res => setGames(res.data))
       .catch(err => console.error("Failed to load free games:", err));
   }, []);
