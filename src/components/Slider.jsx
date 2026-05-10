@@ -66,6 +66,33 @@ const slides = [
 
 export default function Slider() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
+  const minSwipeDistance = 50;
+
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      setActiveIndex((prevIndex) => (prevIndex === slides.length - 1 ? 0 : prevIndex + 1));
+    }
+    if (isRightSwipe) {
+      setActiveIndex((prevIndex) => (prevIndex === 0 ? slides.length - 1 : prevIndex - 1));
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -85,7 +112,12 @@ export default function Slider() {
     <div className="max-w-[1200px] mx-auto flex gap-4 h-[500px] md:h-[600px] px-4">
       
       {/* Main Slider Area */}
-      <div className="flex-1 relative rounded-xl overflow-hidden h-full bg-[#1a1a1a]">
+      <div 
+        className="flex-1 relative rounded-xl overflow-hidden h-full bg-[#1a1a1a]"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div
           className="flex h-full transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
@@ -96,12 +128,13 @@ export default function Slider() {
                 src={slide.mainImage}
                 alt={slide.title}
                 className="w-full h-full object-cover"
+                draggable="false"
               />
-              <div className="absolute bottom-0 left-0 w-full p-5 md:p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+              <div className="absolute bottom-0 left-0 w-full p-5 md:p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none">
                 <p className="text-gray-300 text-[10px] md:text-xs font-bold mb-1 md:mb-2">{slide.subtitle}</p>
                 <h2 className="text-white text-xl md:text-4xl font-bold mb-2 md:mb-4">{slide.title}</h2>
                 <p className="text-gray-200 text-xs md:text-lg mb-4 md:mb-6 max-w-[400px]">{slide.description}</p>
-                <button type="button" className="bg-white text-black text-xs md:text-sm font-bold py-2 px-4 md:py-2.5 md:px-6 rounded hover:bg-gray-200 transition">
+                <button type="button" className="bg-white text-black text-xs md:text-sm font-bold py-2 px-4 md:py-2.5 md:px-6 rounded hover:bg-gray-200 transition pointer-events-auto">
                   Discover now
                 </button>
               </div>
@@ -110,7 +143,7 @@ export default function Slider() {
         </div>
 
         {/* Mobile Pagination Dots */}
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 md:hidden z-20">
+        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 md:hidden z-20 pointer-events-none">
           {slides.map((_, idx) => (
             <div key={idx} className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${activeIndex === idx ? 'bg-white' : 'bg-white/30'}`}></div>
           ))}
