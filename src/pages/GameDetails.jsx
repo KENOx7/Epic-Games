@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Star, ShoppingCart, Heart, Share2, ChevronLeft, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import Checkout from '../components/Checkout';
+import { CartContext } from '../context/CartContext';
 
 // Oyunun slug-ini yaratmaq üçün (URL-də istifadə olunur)
 function slugYarat(title) {
@@ -15,8 +16,11 @@ function slugYarat(title) {
 export default function GameDetails() {
   const { slug } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const from = queryParams.get('from') || 'epic-savings';
+
+  const { addToCart, isInCart } = useContext(CartContext);
 
   const [game, setGame] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -157,9 +161,21 @@ export default function GameDetails() {
               Buy Now
             </button>
 
-            <button className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2 mb-2 hover:bg-[#3a3a40] transition">
-              <ShoppingCart size={16} /> Add to Cart
-            </button>
+            {isInCart(game.title) ? (
+              <button 
+                onClick={() => navigate('/cart')}
+                className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2 mb-2 hover:bg-[#3a3a40] transition"
+              >
+                <ShoppingCart size={16} /> View in Cart
+              </button>
+            ) : (
+              <button 
+                onClick={() => addToCart(game, basePath)}
+                className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2 mb-2 hover:bg-[#3a3a40] transition"
+              >
+                <ShoppingCart size={16} /> Add to Cart
+              </button>
+            )}
 
             <button className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2 hover:bg-[#3a3a40] transition">
               <Heart size={16} /> Wishlist
@@ -268,7 +284,6 @@ export default function GameDetails() {
           <div>
             {/* Janr və xüsusiyyətlər */}
             <div className="flex gap-12 mb-6 flex-wrap">
-              {game.genres && game.genres.length > 0 && (
                 <div>
                   <p className="text-gray-400 text-sm mb-2">Genres</p>
                   <div className="flex gap-2 flex-wrap">
@@ -279,7 +294,6 @@ export default function GameDetails() {
                     ))}
                   </div>
                 </div>
-              )}
               {game.features && game.features.length > 0 && (
                 <div>
                   <p className="text-gray-400 text-sm mb-2">Features</p>

@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import logo from "../assets/logo.png"
 import store from "../assets/store.svg"
 import { Link } from 'react-router-dom'
 import { Earth, TextAlignJustify, X, Search, ChevronDown, ChevronUp, Bookmark, Gift, ShoppingCart } from 'lucide-react';
+import { CartContext } from '../context/CartContext';
 
 function Header() {
   const [Menu, setMenu] = useState(false);
   const [DropdownOpen, setDropdownOpen] = useState(false);
   const [MobileSearchOpen, setMobileSearchOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const { cart } = useContext(CartContext);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -26,8 +28,10 @@ function Header() {
     <>
       <header className='bg-[#121216] h-[72px] w-full flex items-center justify-between p-5 '>
         <div className='flex items-center gap-5'>
-          <img src={logo} alt="logo" className=' h-[40px]' />
-          <img src={store} alt="store" className='w-[54px] h-[32px]' />
+          <Link to="/" className="flex items-center gap-5 hover:opacity-80 transition cursor-pointer">
+            <img src={logo} alt="logo" className=' h-[40px]' />
+            <img src={store} alt="store" className='w-[54px] h-[32px]' />
+          </Link>
           <Link to="/" className='text-white hidden md:block text-[16px] hover:text-gray-300 transition'>Support</Link>
           <Link to="/" className='text-white hidden md:block text-[16px] hover:text-gray-300 transition'>Distribute</Link>
 
@@ -46,7 +50,9 @@ function Header() {
       {Menu && (
         <div className="md:hidden bg-[#121216] fixed inset-0 z-[60] flex flex-col p-5 gap-6 h-screen">
           <div className='flex justify-between items-center'>
-            <img src={logo} alt="logo" className='h-[40px]' />
+            <Link to="/" onClick={() => setMenu(false)} className="hover:opacity-80 transition">
+              <img src={logo} alt="logo" className='h-[40px]' />
+            </Link>
             <X className='text-white text-[24px] hover:opacity-60 transition duration-300 cursor-pointer' onClick={() => setMenu(false)} />
           </div>
           <div className='flex justify-end items-center gap-5 mt-4'>
@@ -93,7 +99,14 @@ function Header() {
           <div className='flex items-center gap-6 text-[#AEAEAF]'>
             <Bookmark className="hover:text-white cursor-pointer transition" size={20} />
             <Gift className="hover:text-white cursor-pointer transition" size={20} />
-            <ShoppingCart className="hover:text-white cursor-pointer transition" size={20} />
+            <Link to="/cart" className="relative hover:text-white cursor-pointer transition flex items-center">
+              <ShoppingCart size={20} />
+              {cart && cart.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-white text-black text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                  {cart.length}
+                </span>
+              )}
+            </Link>
           </div>
         </div>
       </div>

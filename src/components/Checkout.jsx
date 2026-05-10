@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { X, CreditCard, Wallet, Plus, Coins } from 'lucide-react';
 import logo from '../assets/logo.png';
 
-export default function Checkout({ game, basePath, onClose }) {
+export default function Checkout({ game, basePath, onClose, onSuccess, cartItems }) {
   const [selectedPayment, setSelectedPayment] = useState('credit');
 
   // Arxa fonun scroll olmasinin qarsisini almaq ucun
@@ -33,18 +33,34 @@ export default function Checkout({ game, basePath, onClose }) {
             <span className="font-bold text-white text-xl">Checkout</span>
           </div>
 
-          <div className="flex gap-4 mb-8">
-            <div className="w-20 h-28 bg-[#2a2a30] rounded flex-none overflow-hidden">
-              <img 
-                src={`${basePath}/cover.jpg`} 
-                alt={game.title} 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <h3 className="text-white font-medium leading-tight">{game.title}</h3>
-              <p className="text-gray-400 text-sm mt-1">{game.publisher}</p>
-            </div>
+          <div className="flex-1 overflow-y-auto mb-4 pr-2 space-y-4 custom-scrollbar">
+            {(cartItems || [game]).map((item, idx) => {
+              // Get cover url
+              let coverUrl = `${item.cartBasePath || basePath}/cover.jpg`;
+              if (item.saved_images) {
+                const cover = item.saved_images.find(img => img === 'cover.jpg' || img === 'cover.png');
+                if (cover) coverUrl = `${item.cartBasePath || basePath}/${cover}`;
+              }
+
+              return (
+                <div key={idx} className="flex gap-4">
+                  <div className="w-16 h-20 bg-[#111] rounded flex-none overflow-hidden">
+                    <img 
+                      src={coverUrl} 
+                      alt={item.title} 
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-white font-medium text-sm leading-tight">{item.title}</h3>
+                    <p className="text-gray-400 text-xs mt-1">{item.publisher || 'Epic Games Store'}</p>
+                    {(cartItems) && (
+                      <p className="text-gray-300 text-xs mt-1">{item.newPrice || 'Free'}</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           <div className="mt-auto">
@@ -69,7 +85,7 @@ export default function Checkout({ game, basePath, onClose }) {
 
             <div className="bg-[#1e2320] text-[#42b781] px-3 py-2 rounded text-xs flex items-center gap-2">
               <Coins size={14} /> 
-              <span>Get 5% in Epic Rewards. ${(game.newPrice.slice(1) * 0.05).toFixed(2)}</span>
+              <span>Get 5% in Epic Rewards. ${( (game.newPrice === 'Free' ? 0 : game.newPrice.slice(1)) * 0.05 ).toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -136,7 +152,10 @@ export default function Checkout({ game, basePath, onClose }) {
           </button>
 
           <button 
-            onClick={onClose}
+            onClick={() => {
+              if (onSuccess) onSuccess();
+              onClose();
+            }}
             className={`w-full py-4 rounded-lg font-bold mb-4 transition ${
               selectedPayment ? 'bg-[#26BBFF] text-black hover:bg-[#72D3FF]' : 'bg-[#2a2a30] text-gray-500 cursor-not-allowed'
             }`}
