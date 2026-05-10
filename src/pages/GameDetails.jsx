@@ -57,9 +57,7 @@ export default function GameDetails() {
   }
 
   const folderName = slugYarat(game.title);
-  const basePath = from === 'free'
-    ? `/scraped_games/${from}/${folderName}`
-    : `https://epic-games-api-eta.vercel.app/${from}/${folderName}`;
+  const basePath = `https://epic-games-api-eta.vercel.app/${from}/${folderName}`;
 
   // Screenshot şəkillərin siyahısı (cover və age xaric)
   const screenshots = (game.saved_images || [])

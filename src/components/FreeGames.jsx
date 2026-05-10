@@ -53,14 +53,12 @@ export default function FreeGames() {
             <Gift size={20} className="text-white" />
             <h2 className="text-white text-lg font-bold">Free Games</h2>
           </div>
-          <a
-            href="https://store.epicgames.com/en-US/free-games"
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to={`/free`}
             className="text-white text-sm px-4 py-1.5 border border-[#3a3a3a] rounded transition hover:bg-white/10"
           >
             View More
-          </a>
+          </Link>
         </div>
 
         {/* Cards Grid */}
@@ -69,7 +67,7 @@ export default function FreeGames() {
           {/* Active Free Games */}
           {games.map((game, idx) => {
             const slug = toSlug(game.title);
-            const cover = `/scraped_games/free/${slug}/cover.jpg`;
+            const cover = `https://epic-games-api-eta.vercel.app/free/${slug}/cover.jpg`;
 
             return (
               <Link key={idx} to={`/game/${slug}?from=free`} className="block group">
