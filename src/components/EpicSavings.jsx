@@ -1,79 +1,132 @@
-import React, { useState, useEffect } from 'react';
-import { Bookmark } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from "react";
+import { Bookmark } from "lucide-react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { WishlistContext } from "../context/WishlistContext";
+
+function getFolderName(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 export default function EpicSavings() {
   const [games, setGames] = useState([]);
-  const [scrollindex, setscrollindex] = useState(0);
+  const [scrollIndex, setScrollIndex] = useState(0);
+
+  const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
 
   useEffect(() => {
-    axios.get('https://epic-games-api-eta.vercel.app/epic-savings/category_summary.json?')
-      .then((res) => setGames(res.data));
+    axios
+      .get("https://epic-games-api-eta.vercel.app/epic-savings/category_summary.json")
+      .then((res) => {
+        setGames(res.data);
+      });
   }, []);
 
+  const getStep = () => {
+    return window.innerWidth < 768 ? 2 : 6;
+  };
+
   const slideLeft = () => {
-    const step = window.innerWidth < 768 ? 2 : 6;
-    if (scrollindex > 0) {
-      setscrollindex(Math.max(0, scrollindex - step));
-    }
+    const step = getStep();
+    setScrollIndex((prev) => Math.max(0, prev - step));
   };
 
   const slideRight = () => {
-    const step = window.innerWidth < 768 ? 2 : 6;
-    if (scrollindex < games.length - step) {
-      setscrollindex(Math.min(games.length - step, scrollindex + step));
-    }
-  };
-
-  const getFolderName = (title) => {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+    const step = getStep();
+    setScrollIndex((prev) => Math.min(games.length - step, prev + step));
   };
 
   return (
     <div className="max-w-[1200px] mx-auto mt-10 px-4">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-white text-xl font-bold">Epic Savings Spotlight</h2>
+        <h2 className="text-white text-xl font-bold">
+          Epic Savings Spotlight
+        </h2>
+
         <div className="flex gap-2">
-          <button onClick={slideLeft} className="w-8 h-8 rounded-full bg-[#2a2a2a] text-white hover:bg-[#3a3a3a]">‹</button>
-          <button onClick={slideRight} className="w-8 h-8 rounded-full bg-[#2a2a2a] text-white hover:bg-[#3a3a3a]">›</button>
+          <button
+            onClick={slideLeft}
+            className="w-8 h-8 rounded-full bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white"
+          >
+            ‹
+          </button>
+
+          <button
+            onClick={slideRight}
+            className="w-8 h-8 rounded-full bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white"
+          >
+            ›
+          </button>
         </div>
       </div>
+
       <div className="overflow-hidden">
         <div
-          className="flex gap-5 transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${scrollindex * 198}px)` }}>
-          {games.map((game, index) => {
+          className="flex gap-5"
+          style={{ transform: `translateX(-${scrollIndex * 198}px)` }}
+        >
+          {games.map((game) => {
             const folderName = getFolderName(game.title);
             const imageSrc = `https://epic-games-api-eta.vercel.app/epic-savings/${folderName}/cover.jpg`;
-            const { discount, oldPrice, newPrice } = game;
+            const inWishlist = isInWishlist(game.title);
 
             return (
-              <Link key={index} to={`/game/${folderName}`} className="block flex-shrink-0 w-[178px] group">
+              <Link
+                key={game.title}
+                to={`/game/${folderName}`}
+                className="block w-[178px] shrink-0 group"
+              >
                 <div className="relative w-full h-[238px] rounded-lg overflow-hidden bg-[#1a1a1a]">
                   <img
                     src={imageSrc}
                     alt={game.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
-                  <div className="absolute inset-0 group-hover:bg-white/10 transition-colors duration-300 pointer-events-none"></div>
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button className="w-7 h-7 flex items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80 transition">
-                      <Bookmark size={16} />
+
+                  <div className="absolute inset-0 group-hover:bg-white/10 pointer-events-none" />
+
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toggleWishlist(game);
+                      }}
+                      className="w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center"
+                    >
+                      <Bookmark
+                        size={16}
+                        className={inWishlist ? "fill-white" : ""}
+                      />
                     </button>
                   </div>
                 </div>
+
                 <div className="mt-3">
                   <p className="text-white text-sm font-semibold mb-1">
                     {game.title}
                   </p>
+
                   <div className="flex items-center gap-2">
-                    {discount && (<span className="bg-[#26bbff] text-black text-[11px] font-bold px-1.5 py-0.5 rounded">{discount}</span>)}
-                    {oldPrice && (<span className="text-gray-500 text-xs line-through">{oldPrice}</span>)}
-                    {newPrice && (<span className="text-white text-sm">{newPrice}</span>)}
+                    {game.discount && (
+                      <span className="bg-[#26bbff] text-black text-[11px] font-bold px-1.5 py-0.5 rounded">
+                        {game.discount}
+                      </span>
+                    )}
+
+                    {game.oldPrice && (
+                      <span className="text-gray-500 text-xs line-through">
+                        {game.oldPrice}
+                      </span>
+                    )}
+
+                    {game.newPrice && (
+                      <span className="text-white text-sm">
+                        {game.newPrice}
+                      </span>
+                    )}
                   </div>
                 </div>
               </Link>

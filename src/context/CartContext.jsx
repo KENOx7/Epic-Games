@@ -1,44 +1,52 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useEffect, useState } from "react";
 
 export const CartContext = createContext();
 
-export const CartProvider = ({ children }) => {
-  // LocalStorage-dən səbəti oxuyuruq
+export function CartProvider({ children }) {
   const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem('epic_cart');
-    return saved ? JSON.parse(saved) : [];
+    const savedCart = localStorage.getItem("epic_cart");
+    return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // Səbət dəyişəndə LocalStorage-ə yazırıq
   useEffect(() => {
-    localStorage.setItem('epic_cart', JSON.stringify(cart));
+    localStorage.setItem("epic_cart", JSON.stringify(cart));
   }, [cart]);
 
-  // Səbətə oyun əlavə etmək (şəkilləri düzgün çəkmək üçün basePath-i də saxlayırıq)
-  const addToCart = (game, basePath) => {
-    if (!cart.find(item => item.title === game.title)) {
-      setCart([...cart, { ...game, cartBasePath: basePath }]);
-    }
-  };
-
-  // Səbətdən silmək
-  const removeFromCart = (title) => {
-    setCart(cart.filter(item => item.title !== title));
-  };
-
-  // Oyunun səbətdə olub-olmadığını yoxlamaq
   const isInCart = (title) => {
-    return cart.some(item => item.title === title);
+    return cart.some((game) => game.title === title);
   };
 
-  // Səbəti tamamilə təmizləmək (Checkout etdikdən sonra)
+  const addToCart = (game, basePath) => {
+    setCart((prev) => {
+      const exists = prev.some((item) => item.title === game.title);
+
+      if (exists) {
+        return prev;
+      }
+
+      return [...prev, { ...game, cartBasePath: basePath }];
+    });
+  };
+
+  const removeFromCart = (title) => {
+    setCart((prev) => prev.filter((game) => game.title !== title));
+  };
+
   const clearCart = () => {
     setCart([]);
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, isInCart, clearCart }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        isInCart,
+        clearCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
-};
+}

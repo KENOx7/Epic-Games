@@ -4,6 +4,7 @@ import { ArrowLeft, Star, ShoppingCart, Heart, Share2, ChevronLeft, ChevronRight
 import axios from 'axios';
 import Checkout from '../components/Checkout';
 import { CartContext } from '../context/CartContext';
+import { WishlistContext } from '../context/WishlistContext';
 
 // Oyunun slug-ini yaratmaq üçün (URL-də istifadə olunur)
 function slugYarat(title) {
@@ -21,6 +22,7 @@ export default function GameDetails() {
   const from = queryParams.get('from') || 'epic-savings';
 
   const { addToCart, isInCart } = useContext(CartContext);
+  const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
 
   const [game, setGame] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -63,22 +65,20 @@ export default function GameDetails() {
   const folderName = slugYarat(game.title);
   const basePath = `https://epic-games-api-eta.vercel.app/${from}/${folderName}`;
 
-  // Screenshot şəkillərin siyahısı (cover və age xaric)
-  const screenshots = (game.saved_images || [])
-    .filter((img) => img !== 'cover.jpg' && !img.startsWith('cover-2') && !img.startsWith('age'))
-    .map((img) => game.title === 'Trash Goblin' ? img.replace('.png', '.jpg') : img);
+  const screenshots = (game.saved_images || []).filter(
+    (img) => img !== "cover.jpg" && !img.startsWith("cover-2") && !img.startsWith("age")
+  );
 
-  const ageImage = (game.saved_images || []).find(img => img.startsWith('age'));
+  const ageImage = (game.saved_images || []).find((img) => img.startsWith("age"));
 
-  // Hazırda seçilmiş şəkil
-  const currentImage = screenshots.length > 0
-    ? `${basePath}/${screenshots[selectedImage]}`
-    : `${basePath}/cover.jpg`;
+  const currentImage = screenshots.length > 0 ? `${basePath}/${screenshots[selectedImage]}` : `${basePath}/cover.jpg`;
 
-  // Ulduzların göstərilməsi (rating üçün)
+  const cover2 = game.saved_images?.find(img => img.startsWith('cover-2'));
+  const cover1 = game.saved_images?.find(img => img === 'cover.jpg' || img === 'cover.png');
+  const coverSrc = `${basePath}/${cover2 || cover1 || 'cover.jpg'}`;
+
   const rating = parseFloat(game.playerRating) || 0;
   const fullStars = Math.floor(rating);
-  const hasHalf = rating - fullStars >= 0.3;
 
   return (
     <div className="bg-[#101014] min-h-screen text-white">
@@ -108,8 +108,8 @@ export default function GameDetails() {
               <Star
                 key={i}
                 size={16}
-                fill={i < fullStars ? '#FFD700' : (i === fullStars && hasHalf ? '#FFD700' : 'none')}
-                color={i < fullStars || (i === fullStars && hasHalf) ? '#FFD700' : '#555'}
+                fill={i < fullStars ? '#FFD700' : 'none'}
+                color={i < fullStars ? '#FFD700' : '#555'}
               />
             ))}
           </div>
@@ -126,11 +126,7 @@ export default function GameDetails() {
           {/* Cover şəkil */}
           <div className="w-full h-[200px] lg:h-[180px] rounded-lg overflow-hidden mb-4 bg-[#1a1a1e]">
             <img
-              src={(() => {
-                const cover2 = game.saved_images && game.saved_images.find(img => img.startsWith('cover-2'));
-                const cover = game.saved_images && game.saved_images.find(img => img === 'cover.jpg' || img === 'cover.png');
-                return cover2 ? `${basePath}/${cover2}` : (cover ? `${basePath}/${cover}` : `${basePath}/cover.jpg`);
-              })()}
+              src={coverSrc}
               alt={game.title}
               className="w-full h-full object-contain"
             />
@@ -156,7 +152,7 @@ export default function GameDetails() {
 
             <button
               onClick={() => setIsCheckoutOpen(true)}
-              className="w-full py-3 bg-[#26BBFF] text-black font-bold text-sm rounded-lg mb-2 hover:bg-[#72D3FF] transition"
+              className="w-full py-3 bg-[#26BBFF] text-black font-bold text-sm rounded-lg mb-2"
             >
               Buy Now
             </button>
@@ -164,21 +160,25 @@ export default function GameDetails() {
             {isInCart(game.title) ? (
               <button 
                 onClick={() => navigate('/cart')}
-                className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2 mb-2 hover:bg-[#3a3a40] transition"
+                className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2 mb-2"
               >
                 <ShoppingCart size={16} /> View in Cart
               </button>
             ) : (
               <button 
                 onClick={() => addToCart(game, basePath)}
-                className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2 mb-2 hover:bg-[#3a3a40] transition"
+                className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2 mb-2"
               >
                 <ShoppingCart size={16} /> Add to Cart
               </button>
             )}
 
-            <button className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2 hover:bg-[#3a3a40] transition">
-              <Heart size={16} /> Wishlist
+            <button 
+              onClick={() => toggleWishlist(game)}
+              className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2"
+            >
+              <Heart size={16} className={isInWishlist(game.title) ? 'fill-white' : ''} /> 
+              {isInWishlist(game.title) ? 'In Wishlist' : 'Wishlist'}
             </button>
           </div>
 
@@ -190,7 +190,7 @@ export default function GameDetails() {
             <InfoRow label="Platform" value={game.platform} />
 
             <div className="border-t border-[#2a2a30] mt-4 pt-4 flex justify-center">
-              <button className="flex items-center gap-2 text-gray-400 py-2 px-5 rounded-md text-sm hover:text-white transition">
+              <button className="flex items-center gap-2 text-gray-400 py-2 px-5 rounded-md text-sm">
                 <Share2 size={14} /> Share
               </button>
             </div>
@@ -224,13 +224,13 @@ export default function GameDetails() {
               <>
                 <button
                   onClick={() => setSelectedImage(prev => prev === 0 ? screenshots.length - 1 : prev - 1)}
-                  className="absolute left-4 top-[45%] w-10 h-10 bg-black/60 hover:bg-black/90 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute left-4 top-[45%] w-10 h-10 bg-black/60 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100"
                 >
                   <ChevronLeft size={24} />
                 </button>
                 <button
                   onClick={() => setSelectedImage(prev => prev === screenshots.length - 1 ? 0 : prev + 1)}
-                  className="absolute right-4 top-[45%] w-10 h-10 bg-black/60 hover:bg-black/90 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute right-4 top-[45%] w-10 h-10 bg-black/60 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100"
                 >
                   <ChevronRight size={24} />
                 </button>
@@ -246,7 +246,7 @@ export default function GameDetails() {
                   const container = document.getElementById('thumbnails-container');
                   if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
                 }}
-                className="w-10 h-10 flex-none rounded-full bg-[#2a2a30] hover:bg-[#3a3a40] flex items-center justify-center text-white transition hidden md:flex"
+                className="w-10 h-10 flex-none rounded-full bg-[#2a2a30] flex items-center justify-center text-white"
               >
                 <ChevronLeft size={20} />
               </button>
@@ -256,7 +256,7 @@ export default function GameDetails() {
                   <div
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`w-[110px] flex-none h-[64px] rounded-md overflow-hidden cursor-pointer transition-all ${selectedImage === index ? 'border-2 border-[#26BBFF] opacity-100' : 'border-2 border-transparent opacity-60 hover:opacity-80'
+                    className={`w-[110px] flex-none h-[64px] rounded-md overflow-hidden cursor-pointer ${selectedImage === index ? 'border-2 border-[#26BBFF] opacity-100' : 'border-2 border-transparent opacity-60'
                       }`}
                   >
                     <img
@@ -273,7 +273,7 @@ export default function GameDetails() {
                   const container = document.getElementById('thumbnails-container');
                   if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
                 }}
-                className="w-10 h-10 flex-none rounded-full bg-[#2a2a30] hover:bg-[#3a3a40] flex items-center justify-center text-white transition hidden md:flex"
+                className="w-10 h-10 flex-none rounded-full bg-[#2a2a30] flex items-center justify-center text-white"
               >
                 <ChevronRight size={20} />
               </button>
@@ -294,18 +294,16 @@ export default function GameDetails() {
                     ))}
                   </div>
                 </div>
-              {game.features && game.features.length > 0 && (
                 <div>
                   <p className="text-gray-400 text-sm mb-2">Features</p>
                   <div className="flex gap-2 flex-wrap">
-                    {game.features.map((feature) => (
+                    {game.features?.map((feature) => (
                       <span key={feature} className="bg-[#1e1e24] px-3 py-1 rounded text-sm text-gray-300">
                         {feature}
                       </span>
                     ))}
                   </div>
                 </div>
-              )}
             </div>
 
             {/* Açıqlama */}
