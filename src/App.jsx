@@ -13,6 +13,7 @@ import GameCategories from "./components/GameCategories";
 import GameDetails from "./pages/GameDetails";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
+import Footer from "./components/Footer";
 
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
@@ -46,6 +47,8 @@ export default function App() {
               <Route path="/wishlist" element={<Wishlist />} />
             </Routes>
           </main>
+          
+          <Footer />
         </div>
       </WishlistProvider>
     </CartProvider>
