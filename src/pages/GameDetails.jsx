@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, ShoppingCart, Heart, Share2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Star, ShoppingCart, Bookmark, Share2, ChevronLeft, ChevronRight } from 'lucide-react';
 import axios from 'axios';
 import Checkout from '../components/Checkout';
 import { CartContext } from '../context/CartContext';
@@ -174,10 +174,10 @@ export default function GameDetails() {
             )}
 
             <button 
-              onClick={() => toggleWishlist(game)}
+              onClick={() => toggleWishlist({ ...game, endpoint: from })}
               className="w-full py-3 bg-[#2a2a30] text-white text-sm rounded-lg flex items-center justify-center gap-2"
             >
-              <Heart size={16} className={isInWishlist(game.title) ? 'fill-white' : ''} /> 
+              <Bookmark size={16} className={isInWishlist(game.title) ? 'fill-white' : ''} /> 
               {isInWishlist(game.title) ? 'In Wishlist' : 'Wishlist'}
             </button>
           </div>

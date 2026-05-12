@@ -1,4 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import "./index.css";
 
 import Header from "./components/Header";
@@ -18,6 +19,13 @@ import Footer from "./components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+}
+
 function Home() {
   return (
     <>
@@ -36,6 +44,7 @@ export default function App() {
   return (
     <CartProvider>
       <WishlistProvider>
+        <ScrollToTop />
         <div className="bg-[#101014] min-h-screen text-white">
           <Header />
 
@@ -47,7 +56,7 @@ export default function App() {
               <Route path="/wishlist" element={<Wishlist />} />
             </Routes>
           </main>
-          
+
           <Footer />
         </div>
       </WishlistProvider>

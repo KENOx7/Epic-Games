@@ -90,7 +90,7 @@ export default function TopSellers() {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        toggleWishlist(game);
+                        toggleWishlist({ ...game, endpoint: "top-sellers" });
                       }}
                       className="w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center"
                     >

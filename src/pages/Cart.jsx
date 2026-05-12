@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { Gift, Bookmark } from "lucide-react";
+import { ShoppingCart, Bookmark } from "lucide-react";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
 import Checkout from "../components/Checkout";
@@ -47,7 +47,7 @@ export default function Cart() {
         <h1 className="text-4xl font-bold mb-8">My Cart</h1>
 
         <div className="bg-[#18181c] rounded-xl p-10 text-center flex flex-col items-center">
-          <Gift size={64} className="mb-4 text-[#3a3a3a]" />
+          <ShoppingCart size={64} className="mb-4 text-[#3a3a3a]" />
 
           <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
           <p className="text-gray-400 mb-6">Shop for games and apps.</p>

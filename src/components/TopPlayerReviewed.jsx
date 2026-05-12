@@ -91,7 +91,7 @@ export default function TopPlayerReviewed() {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        toggleWishlist(game);
+                        toggleWishlist({ ...game, endpoint: "top-player-reviewed" });
                       }}
                       className="w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center"
                     >

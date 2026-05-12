@@ -24,7 +24,7 @@ function GameColumn({ title, endpoint }) {
   }, [endpoint]);
 
   return (
-    <div className="flex-1 w-full border-r border-[#2a2a2a] last:border-0 md:pr-4 last:pr-0 mb-8 md:mb-0">
+    <div className="flex-1 w-full md:border-r border-[#2a2a2a] last:border-0 md:pr-4 last:pr-0 mb-8 md:mb-0">
       <div className="flex items-center justify-between mb-4 group">
         <h3 className="text-white text-lg">{title}</h3>
 
@@ -61,7 +61,7 @@ function GameColumn({ title, endpoint }) {
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      toggleWishlist(game);
+                      toggleWishlist({ ...game, endpoint });
                     }}
                     className="w-5 h-5 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center"
                   >

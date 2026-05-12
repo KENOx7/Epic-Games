@@ -55,21 +55,21 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function scrapeEpicGames() {
     console.log('🚀 Starting Epic Games Scraper...');
-    
+
     // Ensure output directory exists
     const outputDir = path.join(process.cwd(), 'scraped_games');
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    const browser = await puppeteer.launch({ 
+    const browser = await puppeteer.launch({
         headless: false,
         defaultViewport: null,
         args: ['--start-maximized']
     });
 
     const page = await browser.newPage();
-    
+
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
     // Process each category separately
@@ -102,7 +102,7 @@ async function scrapeEpicGames() {
                     const results = [];
                     // Find all anchor tags that link to game pages (/p/)
                     const anchors = Array.from(document.querySelectorAll('a[href*="/p/"]'));
-                    
+
                     for (const anchor of anchors) {
                         const href = anchor.href;
                         if (!href || !href.includes('/p/')) continue;
@@ -113,7 +113,7 @@ async function scrapeEpicGames() {
                         if (!pictureDiv) {
                             pictureDiv = card.querySelector('[data-testid="picture"]');
                         }
-                        
+
                         let coverUrl = '';
                         if (pictureDiv) {
                             const img = pictureDiv.querySelector('img');
@@ -233,7 +233,7 @@ async function scrapeEpicGames() {
 
                         const titleElement = document.querySelector('h1');
                         const title = titleElement ? titleElement.innerText : 'Unknown Title';
-                        
+
                         const priceElement = Array.from(document.querySelectorAll('span, div'))
                             .find(el => el.innerText && (el.innerText.includes('$') || el.innerText.toLowerCase() === 'free') && el.innerText.length < 15 && el.innerText.length > 2);
                         const price = priceElement ? priceElement.innerText : 'Unknown Price';
@@ -246,7 +246,7 @@ async function scrapeEpicGames() {
                             } else {
                                 description = "No description available.";
                             }
-                        } catch(e) {}
+                        } catch (e) { }
 
                         const extractSidebarField = (label) => {
                             try {
@@ -265,14 +265,14 @@ async function scrapeEpicGames() {
                                     val = val.replace(/^\n+/, '').trim();
                                     return val.split('\n')[0].trim();
                                 }
-                            } catch(e) {}
+                            } catch (e) { }
                             return 'N/A';
                         };
 
                         const developer = extractSidebarField('Developer');
                         const publisher = extractSidebarField('Publisher');
                         const releaseDate = extractSidebarField('Release Date');
-                        
+
                         let platform = extractSidebarField('Platform');
                         if (platform === 'N/A' || platform === '') {
                             try {
@@ -285,7 +285,7 @@ async function scrapeEpicGames() {
                                     }
                                 }
                                 if (pDiv && pDiv.querySelectorAll('svg').length > 0) platform = 'Windows';
-                            } catch(e) {}
+                            } catch (e) { }
                         }
 
                         const extractTags = (label) => {
@@ -313,7 +313,7 @@ async function scrapeEpicGames() {
                                     const lines = tagDiv.innerText.split('\n').map(t => safeTrim(t)).filter(Boolean);
                                     return Array.from(new Set(lines.filter(t => t !== label)));
                                 }
-                            } catch(e) {}
+                            } catch (e) { }
                             return [];
                         };
 
@@ -327,7 +327,7 @@ async function scrapeEpicGames() {
                                 const text = h.innerText.trim();
                                 return text.match(/^([1-4](\.\d)?|5(\.0)?)$/);
                             });
-                            
+
                             if (ratingH2) {
                                 playerRating = ratingH2.innerText.trim();
                             } else {
@@ -347,7 +347,7 @@ async function scrapeEpicGames() {
                                     if (match) playerRating = match[0];
                                 }
                             }
-                        } catch(e) {}
+                        } catch (e) { }
 
                         // Collect cover-2 specifically
                         let cover2Url = null;
@@ -356,7 +356,7 @@ async function scrapeEpicGames() {
                             if (cover2Img) {
                                 cover2Url = cover2Img.getAttribute('data-image') || cover2Img.src;
                             }
-                        } catch(e) {}
+                        } catch (e) { }
 
                         // Collect age rating image
                         let ageUrl = null;
@@ -365,7 +365,7 @@ async function scrapeEpicGames() {
                             if (ageImg) {
                                 ageUrl = ageImg.getAttribute('data-image') || ageImg.src;
                             }
-                        } catch(e) {}
+                        } catch (e) { }
 
                         // Collect all meaningful images from the game page
                         const imgElements = Array.from(document.querySelectorAll('img'));
@@ -373,7 +373,7 @@ async function scrapeEpicGames() {
                             .map(img => img.getAttribute('data-image') || img.src)
                             .filter(src => src && src.startsWith('http') && !src.includes('logo') && !src.includes('avatar') && !src.includes('icon') && !src.includes('.svg') && !src.includes('.svg?'))
                             .filter((value, index, self) => self.indexOf(value) === index);
-                            
+
                         if (cover2Url) {
                             imageUrls = imageUrls.filter(url => url !== cover2Url);
                         }
@@ -381,9 +381,9 @@ async function scrapeEpicGames() {
                             imageUrls = imageUrls.filter(url => url !== ageUrl);
                         }
 
-                        return { 
-                            title, 
-                            price, 
+                        return {
+                            title,
+                            price,
                             developer,
                             publisher,
                             releaseDate,
@@ -391,7 +391,7 @@ async function scrapeEpicGames() {
                             genres,
                             features,
                             playerRating,
-                            description, 
+                            description,
                             images: imageUrls,
                             cover2Url,
                             ageUrl
@@ -407,7 +407,7 @@ async function scrapeEpicGames() {
                     const gameFolderPath = card._folderPath;
                     const safeFolderName = card._safeFolderName;
                     const downloadedImageNames = ['cover.jpg']; // cover already saved
-                    
+
                     if (gameData.cover2Url) {
                         const cleanCover2Url = gameData.cover2Url.split('?')[0];
                         let ext = path.extname(cleanCover2Url);
@@ -448,7 +448,7 @@ async function scrapeEpicGames() {
 
                         const imageName = `image-${imgCounter}${ext}`;
                         const imagePath = path.join(gameFolderPath, imageName);
-                        
+
                         try {
                             await downloadImage(cleanUrl, imagePath);
                             downloadedImageNames.push(imageName);
@@ -475,9 +475,9 @@ async function scrapeEpicGames() {
                         description: gameData.description,
                         saved_images: downloadedImageNames
                     };
-                    
+
                     fs.writeFileSync(
-                        path.join(gameFolderPath, 'details.json'), 
+                        path.join(gameFolderPath, 'details.json'),
                         JSON.stringify(gameDetails, null, 2)
                     );
 

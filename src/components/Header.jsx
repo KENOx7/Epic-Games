@@ -1,16 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Earth,
-  TextAlignJustify,
-  X,
-  Search,
-  ChevronDown,
-  ChevronUp,
-  Bookmark,
-  Gift,
-  ShoppingCart,
-} from "lucide-react";
+import { Earth, TextAlignJustify, X, Search, ChevronDown, ChevronUp, Bookmark, ShoppingCart,} from "lucide-react";
 import logo from "../assets/logo.png";
 import store from "../assets/store.svg";
 import { CartContext } from "../context/CartContext";
@@ -171,8 +161,6 @@ function Header() {
                 </span>
               )}
             </Link>
-
-            <Gift className="hover:text-white cursor-pointer" size={20} />
 
             <Link to="/cart" className="relative hover:text-white flex items-center">
               <ShoppingCart size={20} />
