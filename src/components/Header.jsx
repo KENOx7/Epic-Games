@@ -133,12 +133,16 @@ function Header() {
               {dropdownOpen && (
                 <div className="absolute top-10 bg-[#18181c] rounded-md shadow-xl py-2 w-[180px] z-50">
                   <ul>
-                    <li className="text-white hover:bg-[#2a2a30] px-5 py-3 cursor-pointer">
-                      Discover
-                    </li>
-                    <li className="text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] px-5 py-2.5 cursor-pointer">
-                      Browse
-                    </li>
+                    <Link to="/" onClick={() => setDropdownOpen(false)}>
+                      <li className="text-white hover:bg-[#2a2a30] px-5 py-3 cursor-pointer">
+                        Discover
+                      </li>
+                    </Link>
+                    <Link to="/browse" onClick={() => setDropdownOpen(false)}>
+                      <li className="text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] px-5 py-2.5 cursor-pointer">
+                        Browse
+                      </li>
+                    </Link>
                     <li className="text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] px-5 py-2.5 cursor-pointer">
                       News
                     </li>

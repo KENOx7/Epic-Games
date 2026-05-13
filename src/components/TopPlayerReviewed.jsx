@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Bookmark } from "lucide-react";
+import { Bookmark, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { WishlistContext } from "../context/WishlistContext";
@@ -44,7 +44,10 @@ export default function TopPlayerReviewed() {
   return (
     <div className="max-w-[1200px] mx-auto mt-10 px-4">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-white text-xl font-bold">Top Player Reviewed</h2>
+        <Link to="/browse?category=top-player-reviewed" className="flex items-center group">
+          <h2 className="text-white text-xl font-bold">Top Player Reviewed</h2>
+          <ChevronRight className="text-white ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+        </Link>
 
         <div className="flex gap-2">
           <button

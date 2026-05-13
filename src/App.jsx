@@ -40,6 +40,8 @@ function Home() {
   );
 }
 
+import Browse from "./pages/Browse";
+
 export default function App() {
   return (
     <CartProvider>
@@ -54,6 +56,7 @@ export default function App() {
               <Route path="/game/:slug" element={<GameDetails />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/browse" element={<Browse />} />
             </Routes>
           </main>
 
