@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Bookmark, ShoppingCart } from "lucide-react";
+import { Bookmark, ShoppingCart, CircleDollarSign } from "lucide-react";
 import { WishlistContext } from "../context/WishlistContext";
 import { CartContext } from "../context/CartContext";
 
@@ -9,6 +9,15 @@ function getSlug(title) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+function getReward(price) {
+  if (!price || price === "Free") {
+    return "0.00";
+  }
+
+  const number = Number(price.slice(1));
+  return (number * 0.05).toFixed(2);
 }
 
 export default function Wishlist() {
@@ -46,17 +55,23 @@ export default function Wishlist() {
 
       <div className="grid grid-cols-1 gap-6">
         {wishlist.map((game) => {
-          const cover = game.saved_images?.find((img) => {
-            return img === "cover.jpg" || img === "cover.png";
-          });
-
           const slug = getSlug(game.title);
           const endpoint = game.endpoint || "epic-savings";
+
           const basePath =
             game.cartBasePath ||
             `https://epic-games-api-eta.vercel.app/${endpoint}/${slug}`;
 
+          const cover = game.saved_images?.find((img) => {
+            return img === "cover.jpg" || img === "cover.png";
+          });
+
+          const ageImage = game.saved_images?.find((img) => {
+            return img.startsWith("age");
+          });
+
           const coverUrl = `${basePath}/${cover || "cover.jpg"}`;
+          const ageUrl = ageImage ? `${basePath}/${ageImage}` : null;
           const inCart = isInCart(game.title);
 
           return (
@@ -64,55 +79,121 @@ export default function Wishlist() {
               key={game.title}
               className="bg-[#18181c] rounded-xl p-4 flex flex-col sm:flex-row gap-4"
             >
-              <div className="w-full sm:w-[120px] h-[220px] sm:h-[160px] bg-[#111] rounded-lg overflow-hidden shrink-0">
-                <img
-                  src={coverUrl}
-                  alt={game.title}
-                  className="w-full h-full object-contain"
-                />
+              <div className="flex gap-4 flex-1 min-w-0">
+                <Link
+                  to={`/game/${slug}?from=${endpoint}`}
+                  className="w-[74px] h-[100px] sm:w-[120px] sm:h-[160px] bg-[#111] rounded-lg overflow-hidden shrink-0"
+                >
+                  <img
+                    src={coverUrl}
+                    alt={game.title}
+                    className="w-full h-full object-contain"
+                  />
+                </Link>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    <span className="bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 font-bold">
+                      Base Game
+                    </span>
+
+                    {game.features?.includes("Early Access") && (
+                      <span className="bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 font-bold">
+                        Early Access
+                      </span>
+                    )}
+                  </div>
+
+                  <Link to={`/game/${slug}?from=${endpoint}`}>
+                    <h2 className="text-lg sm:text-xl font-bold leading-tight line-clamp-2">
+                      {game.title}
+                    </h2>
+                  </Link>
+
+                  {game.platform && (
+                    <p className="text-gray-500 text-xs mt-3">
+                      {game.platform}
+                    </p>
+                  )}
+
+                  {ageUrl && (
+                    <div className="border border-[#333] rounded-lg p-3 mt-4 hidden sm:flex items-center gap-3 max-w-[260px]">
+                      <img
+                        src={ageUrl}
+                        alt="Age rating"
+                        className="w-12 h-12 object-contain bg-white"
+                      />
+
+                      <div>
+                        <p className="text-white text-sm font-bold">
+                          {game.ageRating || "12+"}
+                        </p>
+                        <p className="text-gray-400 text-xs">
+                          {game.ageDescription || "Moderate Violence"}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div className="flex-1 flex flex-col justify-between gap-4 min-w-0">
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
-                  <div className="min-w-0">
-                    {game.genres && (
-                      <span className="inline-block bg-[#2a2a2a] text-xs px-2 py-1 rounded text-gray-300 mb-2">
-                        {Array.isArray(game.genres)
-                          ? game.genres.join(", ")
-                          : game.genres}
+              {ageUrl && (
+                <div className="border border-[#333] rounded-lg p-3 flex sm:hidden items-center gap-3">
+                  <img
+                    src={ageUrl}
+                    alt="Age rating"
+                    className="w-12 h-12 object-contain bg-white"
+                  />
+
+                  <div>
+                    <p className="text-white text-sm font-bold">
+                      {game.ageRating || "12+"}
+                    </p>
+                    <p className="text-gray-400 text-xs">
+                      {game.ageDescription || "Moderate Violence"}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <div className="sm:w-[260px] flex flex-col sm:items-end sm:justify-between gap-4">
+                <div className="sm:text-right">
+                  <div className="flex flex-wrap items-center sm:justify-end gap-2">
+                    {game.discount && (
+                      <span className="bg-[#26bbff] text-black text-xs font-bold px-2 py-1 rounded">
+                        {game.discount}
                       </span>
                     )}
 
-                    <h2 className="text-lg sm:text-xl font-bold">
-                      {game.title}
-                    </h2>
-                  </div>
-
-                  <div className="sm:text-right">
-                    <div className="flex flex-wrap items-center sm:justify-end gap-2">
-                      {game.discount && (
-                        <span className="bg-[#26bbff] text-black text-xs font-bold px-2 py-1 rounded">
-                          {game.discount}
-                        </span>
-                      )}
-
-                      {game.oldPrice && (
-                        <span className="text-gray-500 line-through text-sm">
-                          {game.oldPrice}
-                        </span>
-                      )}
-
-                      <span className="text-lg font-bold">
-                        {game.newPrice || "Free"}
+                    {game.oldPrice && (
+                      <span className="text-gray-500 line-through text-sm">
+                        {game.oldPrice}
                       </span>
-                    </div>
+                    )}
+
+                    <span className="text-lg font-bold">
+                      {game.newPrice || "Free"}
+                    </span>
                   </div>
+
+                  {game.saleEnds && (
+                    <p className="text-gray-400 text-xs mt-2">
+                      Sale ends {game.saleEnds}
+                    </p>
+                  )}
+
+                  <p className="text-[#b7d36b] text-sm flex items-center gap-1 sm:justify-end mt-4">
+                    <CircleDollarSign size={16} className="text-yellow-300" />
+                    Earn 5% back in Epic Rewards ${getReward(game.newPrice)}
+                  </p>
+
+
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
+                <div className="flex items-center justify-end gap-3">
                   <button
                     onClick={() => removeFromWishlist(game.title)}
-                    className="text-sm text-gray-400 underline sm:px-2 py-2 text-left sm:text-center"
+                    className="text-sm text-gray-400 underline"
                   >
                     Remove
                   </button>
@@ -128,10 +209,10 @@ export default function Wishlist() {
                   ) : (
                     <button
                       onClick={() => addToCart(game, basePath)}
-                      className="border border-[#3a3a3a] px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2"
+                      className="bg-[#26bbff] sm:bg-transparent text-black sm:text-white border border-[#26bbff] sm:border-[#3a3a3a] px-4 py-2 rounded-lg text-sm font-bold sm:font-normal flex items-center justify-center gap-2"
                     >
-                      <ShoppingCart size={14} />
-                      Add to Cart
+                      <ShoppingCart size={14} className="hidden sm:block" />
+                      Add To Cart
                     </button>
                   )}
                 </div>

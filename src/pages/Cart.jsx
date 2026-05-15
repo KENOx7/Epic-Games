@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, Bookmark } from "lucide-react";
+import { ShoppingCart, Bookmark, CircleDollarSign } from "lucide-react";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
 import Checkout from "../components/Checkout";
@@ -11,6 +11,11 @@ function getPrice(price) {
   }
 
   return parseFloat(price.replace(/[^0-9.]/g, "")) || 0;
+}
+
+function getReward(price) {
+  const value = getPrice(price);
+  return (value * 0.05).toFixed(2);
 }
 
 export default function Cart() {
@@ -75,7 +80,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="max-w-[1200px] mx-auto mt-10 px-4 min-h-[60vh]">
+    <div className="max-w-[1200px] mx-auto mt-8 sm:mt-10 px-3 sm:px-4 min-h-[60vh]">
       {checkoutOpen && (
         <Checkout
           game={checkoutGame}
@@ -103,74 +108,93 @@ export default function Cart() {
                 key={game.title}
                 className="bg-[#18181c] rounded-xl p-4 flex flex-col sm:flex-row gap-4"
               >
-                <div className="w-full sm:w-[120px] h-[220px] sm:h-[160px] bg-[#111] rounded-lg overflow-hidden shrink-0">
-                  <img
-                    src={coverUrl}
-                    alt={game.title}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-
-                <div className="flex-1 flex flex-col justify-between gap-4 min-w-0">
-                  <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
-                    <div className="min-w-0">
-                      {game.genres && (
-                        <span className="inline-block bg-[#2a2a2a] text-xs px-2 py-1 rounded text-gray-300 mb-2">
-                          {Array.isArray(game.genres)
-                            ? game.genres.join(", ")
-                            : game.genres}
-                        </span>
-                      )}
-
-                      <h2 className="text-lg sm:text-xl font-bold">
-                        {game.title}
-                      </h2>
-
-                      {game.newPrice !== "Free" && (
-                        <p className="text-sm text-gray-400 mt-2">
-                          Refundable
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="sm:text-right">
-                      <div className="flex flex-wrap items-center sm:justify-end gap-2">
-                        {game.discount && (
-                          <span className="bg-[#26bbff] text-black text-xs font-bold px-2 py-1 rounded">
-                            {game.discount}
-                          </span>
-                        )}
-
-                        {game.oldPrice && (
-                          <span className="text-gray-500 line-through text-sm">
-                            {game.oldPrice}
-                          </span>
-                        )}
-
-                        <span className="text-lg font-bold">
-                          {game.newPrice || "Free"}
-                        </span>
-                      </div>
-                    </div>
+                <div className="flex gap-4 flex-1 min-w-0">
+                  <div className="w-[58px] h-[78px] sm:w-[120px] sm:h-[160px] bg-[#111] rounded overflow-hidden shrink-0">
+                    <img
+                      src={coverUrl}
+                      alt={game.title}
+                      className="w-full h-full object-contain"
+                    />
                   </div>
 
-                  <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
-                    <button
-                      onClick={() => removeFromCart(game.title)}
-                      className="text-sm text-gray-400 underline sm:px-2 py-2 text-left sm:text-center"
-                    >
-                      Remove
-                    </button>
+                  <div className="flex-1 min-w-0">
+                    {game.genres && (
+                      <span className="inline-block bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 mb-2 font-bold">
+                        {Array.isArray(game.genres)
+                          ? game.genres[0]
+                          : game.genres}
+                      </span>
+                    )}
+
+                    <h2 className="text-lg sm:text-xl font-bold leading-tight line-clamp-2">
+                      {game.title}
+                    </h2>
+
+                    {game.platform && (
+                      <p className="text-gray-500 text-xs mt-3">
+                        {game.platform}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="sm:w-[290px] flex flex-col sm:items-end sm:justify-between gap-4">
+                  <div className="sm:text-right">
+                    <div className="flex flex-wrap items-center sm:justify-end gap-2">
+                      {game.discount && (
+                        <span className="bg-[#26bbff] text-black text-xs font-bold px-2 py-1 rounded">
+                          {game.discount}
+                        </span>
+                      )}
+
+                      {game.oldPrice && (
+                        <span className="text-gray-500 line-through text-sm">
+                          {game.oldPrice}
+                        </span>
+                      )}
+
+                      <span className="text-lg font-bold">
+                        {game.newPrice || "Free"}
+                      </span>
+                    </div>
+
+                    {game.saleEnds && (
+                      <p className="text-gray-400 text-xs mt-2">
+                        Sale ends {game.saleEnds}
+                      </p>
+                    )}
+
+                    <p className="text-[#b7d36b] flex items-center gap-1 text-sm mt-4">
+                      <CircleDollarSign size={16} className="text-yellow-300" />
+                      Earn 5% back in Epic Rewards ${getReward(game.newPrice)}
+                    </p>
+
+                    {game.newPrice !== "Free" && (
+                      <p className="text-sm text-gray-400 mt-4">
+                        {game.refundType || "Refundable"}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => toggleWishlist(game)}
+                        className="flex-1 sm:flex-none border border-[#3a3a3a] px-4 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-2 min-w-[140px]"
+                      >
+                        <Bookmark
+                          size={14}
+                          className={inWishlist ? "fill-white" : ""}
+                        />
+                        {inWishlist ? "In wishlist" : "Move to wishlist"}
+                      </button>
+                    </div>
 
                     <button
-                      onClick={() => toggleWishlist(game)}
-                      className="border border-[#3a3a3a] px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2"
+                      onClick={() => removeFromCart(game.title)}
+                      className="text-sm text-gray-400 hover:text-white text-right"
                     >
-                      <Bookmark
-                        size={14}
-                        className={inWishlist ? "fill-white" : ""}
-                      />
-                      {inWishlist ? "In Wishlist" : "Move to Wishlist"}
+                      Remove
                     </button>
                   </div>
                 </div>

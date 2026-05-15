@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { X, CreditCard, Wallet, Plus, Coins } from "lucide-react";
+import { X, CreditCard, Wallet, Plus } from "lucide-react";
 import logo from "../assets/logo.png";
 
 function getCoverUrl(item, basePath) {
@@ -106,7 +106,7 @@ export default function Checkout({
               </div>
             )}
 
-            <div className="h-[1px] w-full bg-[#3a3a40] my-4"></div>
+            <div className="border-t border-[#3a3a40] my-4"></div>
 
             <div className="flex justify-between items-center mb-4">
               <span className="text-white font-bold text-lg">Total</span>
@@ -115,17 +115,14 @@ export default function Checkout({
               </span>
             </div>
 
-            <div className="bg-[#1e2320] text-[#42b781] px-3 py-2 rounded text-xs flex items-center gap-2">
-              <Coins size={14} />
-              <span>Get 5% in Epic Rewards. ${rewards}</span>
+            <div className="bg-[#1e2320] text-[#42b781] px-3 py-2 rounded text-xs">
+              Get 5% in Epic Rewards. ${rewards}
             </div>
           </div>
         </div>
 
         <div className="flex-1 p-5 md:p-8 bg-[#121214] flex flex-col">
-          <h2 className="text-xl font-bold text-white mb-6 md:mt-0">
-            Payment Details
-          </h2>
+          <h2 className="text-xl font-bold text-white mb-6">Payment Details</h2>
 
           <div className="flex flex-col gap-3 mb-6">
             <div className="border border-gray-700 rounded-lg p-4 bg-[#1a1a1e] hover:bg-[#202024] cursor-pointer">
@@ -160,14 +157,9 @@ export default function Checkout({
                   : "border-gray-700 hover:bg-[#1a1a1e]"
               }`}
             >
-              <CreditCard
-                size={24}
-                className={
-                  selectedPayment === "credit"
-                    ? "text-[#26BBFF]"
-                    : "text-gray-400"
-                }
-              />
+              <div className="w-10 h-8 bg-white rounded flex items-center justify-center shrink-0">
+                <CreditCard size={18} className="text-[#444]" />
+              </div>
 
               <span className="text-gray-300 font-medium flex-1">
                 Credit Card / Debit Card
@@ -194,8 +186,12 @@ export default function Checkout({
                   : "border-gray-700 hover:bg-[#1a1a1e]"
               }`}
             >
-              <div className="w-6 h-6 flex items-center justify-center text-blue-500 font-bold bg-white rounded-sm text-sm">
-                P
+              <div className="w-10 h-8 flex items-center justify-center shrink-0">
+                <img
+                  src="https://static-assets-prod.epicgames.com/payment-web/static/pm_icons/paypal-40x26-fb9398e4e292.svg"
+                  alt="paypal"
+                  className="rounded-sm"
+                />
               </div>
 
               <span className="text-gray-300 font-medium flex-1">PayPal</span>
@@ -227,7 +223,7 @@ export default function Checkout({
           </button>
 
           <p className="text-[11px] text-gray-500 leading-relaxed pb-6 md:pb-0">
-            By selecting 'Pay Now', you certify that you are over 18, are
+            By selecting "Pay Now", you certify that you are over 18, are
             authorized to use this payment method, and agree to the{" "}
             <span className="text-[#26BBFF] hover:underline cursor-pointer">
               End User License Agreement
