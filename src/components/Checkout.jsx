@@ -3,12 +3,12 @@ import { X, CreditCard, Wallet, Plus, Coins } from "lucide-react";
 import logo from "../assets/logo.png";
 
 function getCoverUrl(item, basePath) {
-  const itemBasePath = item.cartBasePath || basePath;
+  const folder = item.cartBasePath || basePath;
   const cover = item.saved_images?.find((img) => {
     return img === "cover.jpg" || img === "cover.png";
   });
 
-  return `${itemBasePath}/${cover || "cover.jpg"}`;
+  return `${folder}/${cover || "cover.jpg"}`;
 }
 
 function getPrice(price) {
@@ -19,7 +19,13 @@ function getPrice(price) {
   return Number(price.replace("$", "")) || 0;
 }
 
-export default function Checkout({ game, basePath, onClose, onSuccess, cartItems }) {
+export default function Checkout({
+  game,
+  basePath,
+  onClose,
+  onSuccess,
+  cartItems,
+}) {
   const [selectedPayment, setSelectedPayment] = useState("credit");
 
   const items = cartItems || [game];
@@ -33,43 +39,42 @@ export default function Checkout({ game, basePath, onClose, onSuccess, cartItems
     };
   }, []);
 
-  const finishPayment = () => {
+  const payNow = () => {
     if (onSuccess) {
       onSuccess();
-      return;
+    } else {
+      onClose();
     }
-
-    onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-[#121214] w-full max-w-[900px] h-full md:h-screen flex flex-col md:flex-row overflow-hidden relative">
+    <div className="fixed inset-0 z-50 bg-[#121214] md:bg-black/70 md:p-4 md:flex md:items-center md:justify-center">
+      <div className="bg-[#121214] w-full h-screen md:max-w-[900px] md:h-[90vh] md:rounded-lg flex flex-col md:flex-row overflow-y-auto md:overflow-hidden relative">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 hover:text-white z-10"
+          className="fixed md:absolute right-4 top-4 text-gray-400 hover:text-white z-20"
         >
           <X size={24} />
         </button>
 
-        <div className="w-full md:w-[35%] bg-[#1a1a1e] p-6 md:p-8 flex flex-col">
-          <div className="flex items-center gap-3 mb-8">
-            <img src={logo} alt="Epic Games" className="h-9 object-cover" />
+        <div className="w-full md:w-[35%] bg-[#1a1a1e] p-5 md:p-8 flex flex-col">
+          <div className="flex items-center gap-3 mb-6">
+            <img src={logo} alt="Epic Games" className="h-9 object-contain" />
             <span className="font-bold text-white text-xl">Checkout</span>
           </div>
 
-          <div className="flex-1 overflow-y-auto mb-4 pr-2 space-y-4 custom-scrollbar">
+          <div className="space-y-4 mb-6">
             {items.map((item) => (
               <div key={item.title} className="flex gap-4">
                 <div className="w-16 h-20 bg-[#111] rounded shrink-0 overflow-hidden">
                   <img
                     src={getCoverUrl(item, basePath)}
                     alt={item.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
 
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <h3 className="text-white font-medium text-sm leading-tight">
                     {item.title}
                   </h3>
@@ -88,7 +93,7 @@ export default function Checkout({ game, basePath, onClose, onSuccess, cartItems
             ))}
           </div>
 
-          <div className="mt-auto">
+          <div>
             <div className="flex justify-between items-center mb-2">
               <span className="text-gray-400 text-sm">Subtotal</span>
               <span className="text-white text-sm">{game.oldPrice}</span>
@@ -101,7 +106,7 @@ export default function Checkout({ game, basePath, onClose, onSuccess, cartItems
               </div>
             )}
 
-            <div className="h-[1px] w-full bg-[#3a3a40] my-4" />
+            <div className="h-[1px] w-full bg-[#3a3a40] my-4"></div>
 
             <div className="flex justify-between items-center mb-4">
               <span className="text-white font-bold text-lg">Total</span>
@@ -117,8 +122,8 @@ export default function Checkout({ game, basePath, onClose, onSuccess, cartItems
           </div>
         </div>
 
-        <div className="flex-1 p-6 md:p-8 bg-[#121214] flex flex-col">
-          <h2 className="text-xl font-bold text-white mb-6 mt-10 md:mt-0">
+        <div className="flex-1 p-5 md:p-8 bg-[#121214] flex flex-col">
+          <h2 className="text-xl font-bold text-white mb-6 md:mt-0">
             Payment Details
           </h2>
 
@@ -131,12 +136,12 @@ export default function Checkout({ game, basePath, onClose, onSuccess, cartItems
                 </span>
               </div>
 
-              <p className="text-gray-400 text-xs mt-2 ml-9">
+              <p className="text-gray-400 text-xs mt-2 md:ml-9">
                 Use your account balance to buy games, V-Bucks, and in-game
                 items. Your account balance is tied to this account.
               </p>
 
-              <div className="ml-9 mt-3 flex items-center gap-4">
+              <div className="mt-3 md:ml-9 flex items-center gap-4">
                 <button className="bg-[#2a2a30] text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-[#3a3a40]">
                   Add funds
                 </button>
@@ -147,25 +152,66 @@ export default function Checkout({ game, basePath, onClose, onSuccess, cartItems
               </div>
             </div>
 
-            <PaymentOption
-              name="credit"
-              selected={selectedPayment}
-              onClick={setSelectedPayment}
-              icon={<CreditCard size={24} />}
-              title="Credit Card / Debit Card"
-            />
+            <div
+              onClick={() => setSelectedPayment("credit")}
+              className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer ${
+                selectedPayment === "credit"
+                  ? "border-[#26BBFF] bg-[#2a2a30]"
+                  : "border-gray-700 hover:bg-[#1a1a1e]"
+              }`}
+            >
+              <CreditCard
+                size={24}
+                className={
+                  selectedPayment === "credit"
+                    ? "text-[#26BBFF]"
+                    : "text-gray-400"
+                }
+              />
 
-            <PaymentOption
-              name="paypal"
-              selected={selectedPayment}
-              onClick={setSelectedPayment}
-              icon={
-                <div className="w-6 h-6 flex items-center justify-center text-blue-500 font-bold bg-white rounded-sm text-sm">
-                  P
-                </div>
-              }
-              title="PayPal"
-            />
+              <span className="text-gray-300 font-medium flex-1">
+                Credit Card / Debit Card
+              </span>
+
+              <div
+                className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                  selectedPayment === "credit"
+                    ? "border-[#26BBFF]"
+                    : "border-gray-500"
+                }`}
+              >
+                {selectedPayment === "credit" && (
+                  <div className="w-3 h-3 rounded-full bg-[#26BBFF]"></div>
+                )}
+              </div>
+            </div>
+
+            <div
+              onClick={() => setSelectedPayment("paypal")}
+              className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer ${
+                selectedPayment === "paypal"
+                  ? "border-[#26BBFF] bg-[#2a2a30]"
+                  : "border-gray-700 hover:bg-[#1a1a1e]"
+              }`}
+            >
+              <div className="w-6 h-6 flex items-center justify-center text-blue-500 font-bold bg-white rounded-sm text-sm">
+                P
+              </div>
+
+              <span className="text-gray-300 font-medium flex-1">PayPal</span>
+
+              <div
+                className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                  selectedPayment === "paypal"
+                    ? "border-[#26BBFF]"
+                    : "border-gray-500"
+                }`}
+              >
+                {selectedPayment === "paypal" && (
+                  <div className="w-3 h-3 rounded-full bg-[#26BBFF]"></div>
+                )}
+              </div>
+            </div>
           </div>
 
           <button className="flex items-center gap-2 text-gray-400 hover:text-white text-sm mb-6 w-fit">
@@ -174,13 +220,13 @@ export default function Checkout({ game, basePath, onClose, onSuccess, cartItems
           </button>
 
           <button
-            onClick={finishPayment}
+            onClick={payNow}
             className="w-full py-4 rounded-lg font-bold mb-4 bg-[#26BBFF] text-black hover:bg-[#72D3FF]"
           >
             Pay Now
           </button>
 
-          <p className="text-[11px] text-gray-500 leading-relaxed mt-auto">
+          <p className="text-[11px] text-gray-500 leading-relaxed pb-6 md:pb-0">
             By selecting 'Pay Now', you certify that you are over 18, are
             authorized to use this payment method, and agree to the{" "}
             <span className="text-[#26BBFF] hover:underline cursor-pointer">
@@ -197,33 +243,6 @@ export default function Checkout({ game, basePath, onClose, onSuccess, cartItems
             .
           </p>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function PaymentOption({ name, selected, onClick, icon, title }) {
-  const active = selected === name;
-
-  return (
-    <div
-      onClick={() => onClick(name)}
-      className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer ${
-        active
-          ? "border-[#26BBFF] bg-[#2a2a30]"
-          : "border-gray-700 hover:bg-[#1a1a1e]"
-      }`}
-    >
-      <div className={active ? "text-[#26BBFF]" : "text-gray-400"}>{icon}</div>
-
-      <span className="text-gray-300 font-medium flex-1">{title}</span>
-
-      <div
-        className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-          active ? "border-[#26BBFF]" : "border-gray-500"
-        }`}
-      >
-        {active && <div className="w-3 h-3 rounded-full bg-[#26BBFF]" />}
       </div>
     </div>
   );

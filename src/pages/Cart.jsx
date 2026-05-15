@@ -5,15 +5,18 @@ import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
 import Checkout from "../components/Checkout";
 
+function getPrice(price) {
+  if (!price || price === "Free" || price === "—") {
+    return 0;
+  }
+
+  return parseFloat(price.replace(/[^0-9.]/g, "")) || 0;
+}
+
 export default function Cart() {
   const { cart, removeFromCart, clearCart } = useContext(CartContext);
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-
-  const getPrice = (price) => {
-    if (!price || price === "Free" || price === "—") return 0;
-    return parseFloat(price.replace(/[^0-9.]/g, "")) || 0;
-  };
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   let total = 0;
   let discount = 0;
@@ -32,21 +35,29 @@ export default function Cart() {
   const subtotal = total - discount;
   const subtotalText = subtotal.toFixed(2);
 
+  const checkoutGame = {
+    title: `${cart.length} Item${cart.length > 1 ? "s" : ""} in Cart`,
+    publisher: "Epic Games Store",
+    oldPrice: `$${total.toFixed(2)}`,
+    newPrice: subtotal === 0 ? "Free" : `$${subtotalText}`,
+    discount: discount > 0 ? `-$${discount.toFixed(2)}` : null,
+  };
+
   const closeCheckout = () => {
-    setIsCheckoutOpen(false);
+    setCheckoutOpen(false);
   };
 
   const finishCheckout = () => {
     clearCart();
-    setIsCheckoutOpen(false);
+    setCheckoutOpen(false);
   };
 
   if (cart.length === 0) {
     return (
       <div className="max-w-[1200px] mx-auto mt-10 px-4 min-h-[60vh]">
-        <h1 className="text-4xl font-bold mb-8">My Cart</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-8">My Cart</h1>
 
-        <div className="bg-[#18181c] rounded-xl p-10 text-center flex flex-col items-center">
+        <div className="bg-[#18181c] rounded-xl p-8 sm:p-10 text-center flex flex-col items-center">
           <ShoppingCart size={64} className="mb-4 text-[#3a3a3a]" />
 
           <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
@@ -63,17 +74,9 @@ export default function Cart() {
     );
   }
 
-  const checkoutGame = {
-    title: `${cart.length} Item${cart.length > 1 ? "s" : ""} in Cart`,
-    publisher: "Epic Games Store",
-    oldPrice: `$${total.toFixed(2)}`,
-    newPrice: subtotal === 0 ? "Free" : `$${subtotalText}`,
-    discount: discount > 0 ? `-$${discount.toFixed(2)}` : null,
-  };
-
   return (
     <div className="max-w-[1200px] mx-auto mt-10 px-4 min-h-[60vh]">
-      {isCheckoutOpen && (
+      {checkoutOpen && (
         <Checkout
           game={checkoutGame}
           basePath={cart[0]?.cartBasePath || ""}
@@ -83,7 +86,7 @@ export default function Cart() {
         />
       )}
 
-      <h1 className="text-4xl font-bold mb-8">My Cart</h1>
+      <h1 className="text-3xl sm:text-4xl font-bold mb-8">My Cart</h1>
 
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1 space-y-4">
@@ -98,9 +101,9 @@ export default function Cart() {
             return (
               <div
                 key={game.title}
-                className="bg-[#18181c] rounded-xl p-4 flex gap-4"
+                className="bg-[#18181c] rounded-xl p-4 flex flex-col sm:flex-row gap-4"
               >
-                <div className="w-[120px] h-[160px] bg-[#111] rounded-lg overflow-hidden shrink-0">
+                <div className="w-full sm:w-[120px] h-[220px] sm:h-[160px] bg-[#111] rounded-lg overflow-hidden shrink-0">
                   <img
                     src={coverUrl}
                     alt={game.title}
@@ -108,28 +111,30 @@ export default function Cart() {
                   />
                 </div>
 
-                <div className="flex-1 flex flex-col justify-between">
-                  <div className="flex justify-between gap-4">
-                    <div>
+                <div className="flex-1 flex flex-col justify-between gap-4 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
+                    <div className="min-w-0">
                       {game.genres && (
-                        <span className="bg-[#2a2a2a] text-xs px-2 py-1 rounded text-gray-300">
+                        <span className="inline-block bg-[#2a2a2a] text-xs px-2 py-1 rounded text-gray-300 mb-2">
                           {Array.isArray(game.genres)
                             ? game.genres.join(", ")
                             : game.genres}
                         </span>
                       )}
 
-                      <h2 className="text-xl font-bold mt-2">{game.title}</h2>
+                      <h2 className="text-lg sm:text-xl font-bold">
+                        {game.title}
+                      </h2>
 
                       {game.newPrice !== "Free" && (
-                        <p className="text-sm text-gray-400 mt-3">
+                        <p className="text-sm text-gray-400 mt-2">
                           Refundable
                         </p>
                       )}
                     </div>
 
-                    <div className="text-right">
-                      <div className="flex items-center justify-end gap-2">
+                    <div className="sm:text-right">
+                      <div className="flex flex-wrap items-center sm:justify-end gap-2">
                         {game.discount && (
                           <span className="bg-[#26bbff] text-black text-xs font-bold px-2 py-1 rounded">
                             {game.discount}
@@ -149,17 +154,17 @@ export default function Cart() {
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-4 mt-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
                     <button
                       onClick={() => removeFromCart(game.title)}
-                      className="text-sm text-gray-400 underline"
+                      className="text-sm text-gray-400 underline sm:px-2 py-2 text-left sm:text-center"
                     >
                       Remove
                     </button>
 
                     <button
                       onClick={() => toggleWishlist(game)}
-                      className="border border-[#3a3a3a] px-4 py-2 rounded-lg text-sm flex items-center gap-2"
+                      className="border border-[#3a3a3a] px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2"
                     >
                       <Bookmark
                         size={14}
@@ -196,7 +201,7 @@ export default function Cart() {
             </div>
 
             <button
-              onClick={() => setIsCheckoutOpen(true)}
+              onClick={() => setCheckoutOpen(true)}
               className="w-full bg-[#26bbff] text-black font-bold py-3.5 rounded-lg"
             >
               Check Out
