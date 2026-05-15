@@ -216,7 +216,7 @@ const GameDetails = () => {
 
       <div className="max-w-[1200px] mx-auto px-4 pb-10 flex flex-col lg:flex-row-reverse gap-8">
         <div className="w-full lg:w-[320px]">
-          <div className="w-full h-[200px] lg:h-[180px] rounded-lg overflow-hidden mb-4 bg-[#1a1a1e]">
+          <div className="w-full h-[200px] lg:h-[180px] rounded-lg overflow-hidden mb-4">
             <img
               src={coverSrc}
               alt={game.title}
@@ -224,7 +224,7 @@ const GameDetails = () => {
             />
           </div>
 
-          <div className="bg-[#1a1a1e] rounded-lg p-5 mb-4">
+          <div className="mb-4">
             <div className="flex items-center gap-3 mb-3">
               {game.discount && (
                 <span className="bg-[#26BBFF] text-black font-bold px-2.5 py-1 rounded-md text-sm">
@@ -277,7 +277,7 @@ const GameDetails = () => {
             </button>
           </div>
 
-          <div className="bg-[#1a1a1e] rounded-lg p-5">
+          <div>
             <div className="flex justify-between px-[2px] mb-3 text-sm">
               <span className="text-gray-400">Developer</span>
               <span className="text-white text-right">{game.developer}</span>
@@ -307,7 +307,7 @@ const GameDetails = () => {
           </div>
 
           {ageImage && (
-            <div className="bg-[#1a1a1e] rounded-lg p-5 mt-4 flex items-center gap-4">
+            <div className="mt-4 flex items-center gap-4">
               <div className="w-12 h-12 bg-[#2a2a30] rounded-md overflow-hidden flex items-center justify-center p-1 shrink-0">
                 <img
                   src={`${basePath}/${ageImage}`}
