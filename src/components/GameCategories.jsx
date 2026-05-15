@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bookmark } from "lucide-react";
+import { Bookmark, ChevronRight } from "lucide-react";
 import axios from "axios";
 import { WishlistContext } from "../context/WishlistContext";
 
@@ -25,16 +25,13 @@ function GameColumn({ title, endpoint }) {
 
   return (
     <div className="flex-1 w-full md:border-r border-[#2a2a2a] last:border-0 md:pr-4 last:pr-0 mb-8 md:mb-0">
-      <div className="flex items-center justify-between mb-4 group">
+      <Link
+        to={`/browse?category=${endpoint}`}
+        className="flex items-center mb-4 group w-fit"
+      >
         <h3 className="text-white text-lg">{title}</h3>
-
-        <Link
-          to={`/${endpoint}`}
-          className="text-white hover:underline opacity-0 group-hover:opacity-100"
-        >
-          View More
-        </Link>
-      </div>
+        <ChevronRight className="text-white ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+      </Link>
 
       <div className="flex flex-col gap-3">
         {games.map((game) => {

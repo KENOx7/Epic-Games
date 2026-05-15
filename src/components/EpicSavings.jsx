@@ -11,9 +11,11 @@ function getFolderName(title) {
     .replace(/^-+|-+$/g, "");
 }
 
-export default function EpicSavings() {
+function EpicSavings() {
   const [games, setGames] = useState([]);
   const [scrollIndex, setScrollIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
 
@@ -37,6 +39,29 @@ export default function EpicSavings() {
   const slideRight = () => {
     const step = getStep();
     setScrollIndex((prev) => Math.min(games.length - step, prev + step));
+  };
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    
+    if (distance > minSwipeDistance) {
+      slideRight();
+    }
+    if (distance < -minSwipeDistance) {
+      slideLeft();
+    }
   };
 
   return (
@@ -66,9 +91,14 @@ export default function EpicSavings() {
         </div>
       </div>
 
-      <div className="overflow-hidden">
+      <div 
+        className="overflow-hidden"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <div
-          className="flex gap-5"
+          className="flex gap-5 transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${scrollIndex * 198}px)` }}
         >
           {games.map((game) => {
@@ -86,7 +116,7 @@ export default function EpicSavings() {
                   <img
                     src={imageSrc}
                     alt={game.title}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover"
                   />
 
                   <div className="absolute inset-0 group-hover:bg-white/10 pointer-events-none" />
@@ -140,3 +170,5 @@ export default function EpicSavings() {
     </div>
   );
 }
+
+export default EpicSavings;

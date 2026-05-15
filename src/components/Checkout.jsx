@@ -151,11 +151,10 @@ export default function Checkout({
 
             <div
               onClick={() => setSelectedPayment("credit")}
-              className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer ${
-                selectedPayment === "credit"
+              className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer ${selectedPayment === "credit"
                   ? "border-[#26BBFF] bg-[#2a2a30]"
                   : "border-gray-700 hover:bg-[#1a1a1e]"
-              }`}
+                }`}
             >
               <div className="w-10 h-8 bg-white rounded flex items-center justify-center shrink-0">
                 <CreditCard size={18} className="text-[#444]" />
@@ -166,11 +165,10 @@ export default function Checkout({
               </span>
 
               <div
-                className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-                  selectedPayment === "credit"
+                className={`w-5 h-5 rounded-full border flex items-center justify-center ${selectedPayment === "credit"
                     ? "border-[#26BBFF]"
                     : "border-gray-500"
-                }`}
+                  }`}
               >
                 {selectedPayment === "credit" && (
                   <div className="w-3 h-3 rounded-full bg-[#26BBFF]"></div>
@@ -180,11 +178,10 @@ export default function Checkout({
 
             <div
               onClick={() => setSelectedPayment("paypal")}
-              className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer ${
-                selectedPayment === "paypal"
+              className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer ${selectedPayment === "paypal"
                   ? "border-[#26BBFF] bg-[#2a2a30]"
                   : "border-gray-700 hover:bg-[#1a1a1e]"
-              }`}
+                }`}
             >
               <div className="w-10 h-8 flex items-center justify-center shrink-0">
                 <img
@@ -197,11 +194,10 @@ export default function Checkout({
               <span className="text-gray-300 font-medium flex-1">PayPal</span>
 
               <div
-                className={`w-5 h-5 rounded-full border flex items-center justify-center ${
-                  selectedPayment === "paypal"
+                className={`w-5 h-5 rounded-full border flex items-center justify-center ${selectedPayment === "paypal"
                     ? "border-[#26BBFF]"
                     : "border-gray-500"
-                }`}
+                  }`}
               >
                 {selectedPayment === "paypal" && (
                   <div className="w-3 h-3 rounded-full bg-[#26BBFF]"></div>

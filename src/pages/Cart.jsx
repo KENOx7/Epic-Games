@@ -117,9 +117,9 @@ export default function Cart() {
                     />
                   </div>
 
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 flex flex-col">
                     {game.genres && (
-                      <span className="inline-block bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 mb-2 font-bold">
+                      <span className="inline-block bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 mb-2 font-bold self-start">
                         {Array.isArray(game.genres)
                           ? game.genres[0]
                           : game.genres}
@@ -135,10 +135,16 @@ export default function Cart() {
                         {game.platform}
                       </p>
                     )}
+
+                    {game.newPrice !== "Free" && (
+                      <p className="text-sm text-white mt-auto pt-2">
+                        {game.refundType || "Refundable"}
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                <div className="sm:w-[290px] flex flex-col sm:items-end sm:justify-between gap-4">
+                <div className="sm:w-auto sm:min-w-[290px] flex flex-col sm:items-end sm:justify-between gap-4">
                   <div className="sm:text-right">
                     <div className="flex flex-wrap items-center sm:justify-end gap-2">
                       {game.discount && (
@@ -164,16 +170,12 @@ export default function Cart() {
                       </p>
                     )}
 
-                    <p className="text-[#b7d36b] flex items-center gap-1 text-sm mt-4">
+                    <p className="text-[#b7d36b] flex items-center gap-2 text-sm mt-4 sm:whitespace-nowrap">
                       <CircleDollarSign size={16} className="text-yellow-300" />
                       Earn 5% back in Epic Rewards ${getReward(game.newPrice)}
                     </p>
 
-                    {game.newPrice !== "Free" && (
-                      <p className="text-sm text-gray-400 mt-4">
-                        {game.refundType || "Refundable"}
-                      </p>
-                    )}
+
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">

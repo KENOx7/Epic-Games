@@ -24,7 +24,7 @@ export default function MegaSale() {
           </p>
 
           <Link
-            to="/browse?category=epic-savings"
+            to="/browse?price=Discounted"
             className="bg-white text-black font-bold text-sm px-10 py-3 rounded-lg hover:bg-gray-200 mb-4"
           >
             Save Now

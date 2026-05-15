@@ -156,7 +156,7 @@ export default function Wishlist() {
                 </div>
               )}
 
-              <div className="sm:w-[260px] flex flex-col sm:items-end sm:justify-between gap-4">
+              <div className="sm:w-auto sm:min-w-[260px] flex flex-col sm:items-end sm:justify-between gap-4">
                 <div className="sm:text-right">
                   <div className="flex flex-wrap items-center sm:justify-end gap-2">
                     {game.discount && (
@@ -182,7 +182,7 @@ export default function Wishlist() {
                     </p>
                   )}
 
-                  <p className="text-[#b7d36b] text-sm flex items-center gap-1 sm:justify-end mt-4">
+                  <p className="text-[#b7d36b] text-sm flex items-center gap-2 sm:justify-end mt-4 sm:whitespace-nowrap">
                     <CircleDollarSign size={16} className="text-yellow-300" />
                     Earn 5% back in Epic Rewards ${getReward(game.newPrice)}
                   </p>

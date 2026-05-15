@@ -92,6 +92,7 @@ export default function Browse() {
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get("category") || "";
   const keywordParam = searchParams.get("keyword") || "";
+  const priceParam = searchParams.get("price") || "";
 
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -99,8 +100,8 @@ export default function Browse() {
   const [keyword, setKeyword] = useState(keywordParam);
 
   const [filters, setFilters] = useState({
-    category: [],
-    price: [],
+    category: categoryParam ? [categoryParam] : [],
+    price: priceParam ? [priceParam] : [],
     genre: [],
     features: [],
     platform: [],
@@ -116,8 +117,9 @@ export default function Browse() {
     setFilters((prev) => ({
       ...prev,
       category: categoryParam ? [categoryParam] : [],
+      price: priceParam ? [priceParam] : [],
     }));
-  }, [categoryParam]);
+  }, [categoryParam, priceParam]);
 
   useEffect(() => {
     async function loadGames() {
@@ -259,7 +261,7 @@ export default function Browse() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:block gap-x-6">
-          <FilterSection title="Category">
+          <FilterSection title="Category" defaultOpen={filters.category.length > 0}>
             {categories.map((category) => (
               <Checkbox
                 key={category.key}
@@ -270,7 +272,7 @@ export default function Browse() {
             ))}
           </FilterSection>
 
-          <FilterSection title="Price">
+          <FilterSection title="Price" defaultOpen={filters.price.length > 0}>
             {priceFilters.map((price) => (
               <Checkbox
                 key={price}
@@ -281,7 +283,7 @@ export default function Browse() {
             ))}
           </FilterSection>
 
-          <FilterSection title="Genre">
+          <FilterSection title="Genre" defaultOpen={filters.genre.length > 0}>
             {genreFilters.map((genre) => (
               <Checkbox
                 key={genre}
@@ -292,7 +294,7 @@ export default function Browse() {
             ))}
           </FilterSection>
 
-          <FilterSection title="Features">
+          <FilterSection title="Features" defaultOpen={filters.features.length > 0}>
             {featureFilters.map((feature) => (
               <Checkbox
                 key={feature}
@@ -303,7 +305,7 @@ export default function Browse() {
             ))}
           </FilterSection>
 
-          <FilterSection title="Platform">
+          <FilterSection title="Platform" defaultOpen={filters.platform.length > 0}>
             {platformFilters.map((platform) => (
               <Checkbox
                 key={platform}
@@ -420,8 +422,14 @@ export default function Browse() {
   );
 }
 
-function FilterSection({ title, children }) {
-  const [open, setOpen] = useState(false);
+function FilterSection({ title, defaultOpen = false, children }) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  useEffect(() => {
+    if (defaultOpen) {
+      setOpen(true);
+    }
+  }, [defaultOpen]);
 
   return (
     <div className="border-b border-[#202024] py-4">
