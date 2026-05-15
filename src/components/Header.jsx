@@ -1,34 +1,142 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { Earth, TextAlignJustify, X, Search, ChevronDown, ChevronUp, Bookmark, ShoppingCart,} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Earth, TextAlignJustify, X, Search, ChevronDown, ChevronUp, Bookmark, ShoppingCart, ArrowRight, } from "lucide-react";
+import axios from "axios";
 import logo from "../assets/logo.png";
 import store from "../assets/store.svg";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
 
+const categories = [
+  {
+    key: "top-sellers",
+    url: "https://epic-games-api-eta.vercel.app/top-sellers/category_summary.json",
+  },
+  {
+    key: "epic-savings",
+    url: "https://epic-games-api-eta.vercel.app/epic-savings/category_summary.json",
+  },
+  {
+    key: "most-popular",
+    url: "https://epic-games-api-eta.vercel.app/most-popular/category_summary.json",
+  },
+  {
+    key: "top-player-reviewed",
+    url: "https://epic-games-api-eta.vercel.app/top-player-reviewed/category_summary.json",
+  },
+];
+
+function getFolderName(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [games, setGames] = useState([]);
 
   const dropdownRef = useRef(null);
+  const searchRef = useRef(null);
+  const navigate = useNavigate();
 
   const { cart } = useContext(CartContext);
   const { wishlist } = useContext(WishlistContext);
 
   useEffect(() => {
-    function closeDropdown(e) {
+    async function loadGames() {
+      const requests = categories.map((category) => {
+        return axios.get(category.url).then((res) => {
+          return res.data.map((game) => ({
+            ...game,
+            endpoint: category.key,
+          }));
+        });
+      });
+
+      const results = await Promise.all(requests);
+      const list = [];
+
+      results.flat().forEach((game) => {
+        const exists = list.some((item) => item.title === game.title);
+
+        if (!exists) {
+          list.push(game);
+        }
+      });
+
+      setGames(list);
+    }
+
+    loadGames();
+  }, []);
+
+  useEffect(() => {
+    function closeMenus(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
       }
+
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setSearchOpen(false);
+      }
     }
 
-    document.addEventListener("mousedown", closeDropdown);
+    document.addEventListener("mousedown", closeMenus);
 
     return () => {
-      document.removeEventListener("mousedown", closeDropdown);
+      document.removeEventListener("mousedown", closeMenus);
     };
   }, []);
+
+  const results = searchText.trim()
+    ? games
+      .filter((game) => {
+        const text = searchText.toLowerCase();
+
+        return (
+          game.title.toLowerCase().includes(text) ||
+          game.developer?.toLowerCase().includes(text) ||
+          game.publisher?.toLowerCase().includes(text)
+        );
+      })
+      .slice(0, 5)
+    : [];
+
+  const searchSubmit = (e) => {
+    e.preventDefault();
+
+    const text = searchText.trim();
+
+    if (!text) return;
+
+    setSearchOpen(false);
+    setMobileSearchOpen(false);
+    setSearchText("");
+    navigate(`/browse?keyword=${encodeURIComponent(text)}`);
+  };
+
+  const openGame = () => {
+    setSearchOpen(false);
+    setMobileSearchOpen(false);
+    setSearchText("");
+  };
+
+  const viewAllResults = () => {
+    const text = searchText.trim();
+
+    if (!text) return;
+
+    setSearchOpen(false);
+    setMobileSearchOpen(false);
+    setSearchText("");
+    navigate(`/browse?keyword=${encodeURIComponent(text)}`);
+  };
 
   return (
     <>
@@ -102,16 +210,81 @@ function Header() {
       <div className="bg-[#101014] h-[100px] w-full sticky top-0 z-50">
         <div className="max-w-[1200px] mx-auto h-full flex justify-between items-center px-4 xl:px-0">
           <div className="flex items-center">
-            <div className="hidden md:flex items-center">
-              <div className="bg-[#202024] text-[#AEAEAF] w-[40px] h-[40px] rounded-l-full flex items-center justify-center">
-                <Search size={16} />
-              </div>
+            <div className="hidden md:block relative" ref={searchRef}>
+              <form onSubmit={searchSubmit} className="flex items-center">
+                <div className="bg-[#202024] text-[#AEAEAF] w-[40px] h-[40px] rounded-l-full flex items-center justify-center">
+                  <Search size={16} />
+                </div>
 
-              <input
-                type="text"
-                placeholder="Search store"
-                className="bg-[#202024] text-[#AEAEAF] w-[190px] h-[40px] rounded-r-full outline-none"
-              />
+                <input
+                  type="text"
+                  placeholder="Search store"
+                  value={searchText}
+                  onChange={(e) => {
+                    setSearchText(e.target.value);
+                    setSearchOpen(true);
+                  }}
+                  onFocus={() => {
+                    if (searchText.trim()) {
+                      setSearchOpen(true);
+                    }
+                  }}
+                  className="bg-[#202024] text-[#AEAEAF] w-[190px] h-[40px] rounded-r-full outline-none"
+                />
+              </form>
+
+              {searchOpen && searchText.trim() && (
+                <div className="absolute top-[48px] left-0 w-[380px] bg-[#18181c] rounded-lg shadow-2xl border border-[#2a2a30] overflow-hidden z-50">
+                  {results.length > 0 ? (
+                    <>
+                      <p className="text-[#AEAEAF] text-[11px] uppercase font-bold px-4 pt-4 pb-2">
+                        Top Results
+                      </p>
+
+                      {results.map((game) => {
+                        const folderName = getFolderName(game.title);
+                        const imageSrc = `https://epic-games-api-eta.vercel.app/${game.endpoint}/${folderName}/cover.jpg`;
+
+                        return (
+                          <Link
+                            key={game.title}
+                            to={`/game/${folderName}?from=${game.endpoint}`}
+                            onClick={openGame}
+                            className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#2a2a30]"
+                          >
+                            <img
+                              src={imageSrc}
+                              alt={game.title}
+                              className="w-[40px] h-[52px] object-cover rounded bg-[#111]"
+                            />
+
+                            <div>
+                              <p className="text-[#AEAEAF] text-[11px]">
+                                Base Game
+                              </p>
+                              <p className="text-white text-sm font-semibold">
+                                {game.title}
+                              </p>
+                            </div>
+                          </Link>
+                        );
+                      })}
+
+                      <button
+                        onClick={viewAllResults}
+                        className="w-full text-left px-4 py-3 text-white text-sm hover:bg-[#2a2a30] border-t border-[#2a2a30] flex items-center gap-2"
+                      >
+                        View all results
+                        <ArrowRight size={14} />
+                      </button>
+                    </>
+                  ) : (
+                    <p className="text-[#AEAEAF] text-sm px-4 py-6 text-center">
+                      No results found
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
             <button
@@ -134,16 +307,18 @@ function Header() {
                 <div className="absolute top-10 bg-[#18181c] rounded-md shadow-xl py-2 w-[180px] z-50">
                   <ul>
                     <Link to="/" onClick={() => setDropdownOpen(false)}>
-                      <li className="text-white hover:bg-[#2a2a30] px-5 py-3 cursor-pointer">
+                      <li className="text-white hover:bg-[#2a2a30] px-5 py-3">
                         Discover
                       </li>
                     </Link>
+
                     <Link to="/browse" onClick={() => setDropdownOpen(false)}>
-                      <li className="text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] px-5 py-2.5 cursor-pointer">
+                      <li className="text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] px-5 py-2.5">
                         Browse
                       </li>
                     </Link>
-                    <li className="text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] px-5 py-2.5 cursor-pointer">
+
+                    <li className="text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] px-5 py-2.5">
                       News
                     </li>
                   </ul>
@@ -166,7 +341,10 @@ function Header() {
               )}
             </Link>
 
-            <Link to="/cart" className="relative hover:text-white flex items-center">
+            <Link
+              to="/cart"
+              className="relative hover:text-white flex items-center"
+            >
               <ShoppingCart size={20} />
 
               {cart.length > 0 && (
@@ -185,23 +363,83 @@ function Header() {
             <h2 className="text-white text-[20px] font-bold">Search</h2>
 
             <button
-              onClick={() => setMobileSearchOpen(false)}
+              onClick={() => {
+                setMobileSearchOpen(false);
+                setSearchText("");
+              }}
               className="text-[#AEAEAF] hover:text-white"
             >
               <X size={28} />
             </button>
           </div>
 
-          <div className="flex items-center bg-[#202024] rounded-full px-4 py-3 h-[50px]">
-            <Search className="text-[#AEAEAF] mr-3" size={20} />
+          <form onSubmit={searchSubmit}>
+            <div className="flex items-center bg-[#202024] rounded-full px-4 py-3 h-[50px]">
+              <Search className="text-[#AEAEAF] mr-3" size={20} />
 
-            <input
-              autoFocus
-              type="text"
-              placeholder="Search store"
-              className="bg-transparent text-white outline-none w-full"
-            />
-          </div>
+              <input
+                autoFocus
+                type="text"
+                placeholder="Search store"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                className="bg-transparent text-white outline-none w-full"
+              />
+            </div>
+          </form>
+
+          {searchText.trim() && (
+            <div className="mt-4">
+              {results.length > 0 ? (
+                <>
+                  <p className="text-[#AEAEAF] text-[11px] uppercase font-bold px-2 pb-2">
+                    Top Results
+                  </p>
+
+                  {results.map((game) => {
+                    const folderName = getFolderName(game.title);
+                    const imageSrc = `https://epic-games-api-eta.vercel.app/${game.endpoint}/${folderName}/cover.jpg`;
+
+                    return (
+                      <Link
+                        key={game.title}
+                        to={`/game/${folderName}?from=${game.endpoint}`}
+                        onClick={openGame}
+                        className="flex items-center gap-3 px-2 py-2.5 hover:bg-[#2a2a30] rounded-md"
+                      >
+                        <img
+                          src={imageSrc}
+                          alt={game.title}
+                          className="w-[40px] h-[52px] object-cover rounded bg-[#111]"
+                        />
+
+                        <div>
+                          <p className="text-[#AEAEAF] text-[11px]">
+                            Base Game
+                          </p>
+                          <p className="text-white text-sm font-semibold">
+                            {game.title}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+
+                  <button
+                    onClick={viewAllResults}
+                    className="w-full text-left px-2 py-3 text-white text-sm flex items-center gap-2 mt-2"
+                  >
+                    View all results
+                    <ArrowRight size={14} />
+                  </button>
+                </>
+              ) : (
+                <p className="text-[#AEAEAF] text-sm text-center mt-8">
+                  No results found
+                </p>
+              )}
+            </div>
+          )}
         </div>
       )}
     </>

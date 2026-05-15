@@ -10,6 +10,7 @@ import MostPopular from "./components/MostPopular";
 import TopPlayerReviewed from "./components/TopPlayerReviewed";
 import TopSellers from "./components/TopSellers";
 import GameCategories from "./components/GameCategories";
+import MegaSale from "./components/MegaSale";
 
 import GameDetails from "./pages/GameDetails";
 import Cart from "./pages/Cart";
@@ -29,6 +30,7 @@ function ScrollToTop() {
 function Home() {
   return (
     <>
+      <MegaSale />
       <Slider />
       <EpicSavings />
       <FreeGames />

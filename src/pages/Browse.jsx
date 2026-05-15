@@ -57,15 +57,18 @@ function getFolderName(title) {
 }
 
 function getPrice(price) {
-  if (!price) return 0;
-  if (price.toLowerCase() === "free") return 0;
+  if (!price || price === "Free") {
+    return 0;
+  }
 
   const number = price.replace(/,/g, "").match(/[\d.]+/);
   return number ? Number(number[0]) : 0;
 }
 
 function getDate(date) {
-  if (!date) return 0;
+  if (!date) {
+    return 0;
+  }
 
   const [month, day, year] = date.split("/").map(Number);
   return new Date(2000 + year, month - 1, day);
@@ -87,12 +90,13 @@ function priceMatches(game, filter) {
 
 export default function Browse() {
   const [searchParams] = useSearchParams();
-  const categoryParam = searchParams.get("category");
+  const categoryParam = searchParams.get("category") || "";
+  const keywordParam = searchParams.get("keyword") || "";
 
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState("all");
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState(keywordParam);
 
   const [filters, setFilters] = useState({
     category: [],
@@ -105,12 +109,14 @@ export default function Browse() {
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
 
   useEffect(() => {
-    if (categoryParam) {
-      setFilters((prev) => ({
-        ...prev,
-        category: [categoryParam],
-      }));
-    }
+    setKeyword(keywordParam);
+  }, [keywordParam]);
+
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      category: categoryParam ? [categoryParam] : [],
+    }));
   }, [categoryParam]);
 
   useEffect(() => {
@@ -125,17 +131,17 @@ export default function Browse() {
       });
 
       const results = await Promise.all(requests);
-      const merged = [];
+      const list = [];
 
       results.flat().forEach((game) => {
-        const exists = merged.some((item) => item.title === game.title);
+        const exists = list.some((item) => item.title === game.title);
 
         if (!exists) {
-          merged.push(game);
+          list.push(game);
         }
       });
 
-      setGames(merged);
+      setGames(list);
       setLoading(false);
     }
 
@@ -326,6 +332,12 @@ export default function Browse() {
             <option value="price-low">Price: Low to High</option>
           </select>
         </div>
+
+        {keyword && (
+          <p className="text-gray-400 text-sm mb-5">
+            Results for <span className="text-white">"{keyword}"</span>
+          </p>
+        )}
 
         {loading ? (
           <div className="text-white text-center py-20">Loading...</div>

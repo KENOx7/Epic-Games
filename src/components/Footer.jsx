@@ -1,8 +1,11 @@
-import React from "react";
-import { ArrowUp } from "lucide-react";
+import React, { useState } from "react";
+import { ArrowUp, ChevronDown } from "lucide-react";
+import { FaFacebookF, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import storeLogo from "../assets/store.svg";
 
 export default function Footer() {
+  const [open, setOpen] = useState("");
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -10,316 +13,251 @@ export default function Footer() {
     });
   };
 
+  const toggleSection = (name) => {
+    if (open == name) {
+      setOpen("");
+    } else {
+      setOpen(name);
+    }
+  };
+
   return (
-    <footer className="bg-[#121216] pt-12 pb-8 px-4 w-full">
+    <footer className="bg-[#121216] pt-10 pb-8 px-4 w-full">
       <div className="max-w-[1200px] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div className="flex flex-col items-center md:flex-row md:justify-between mb-8 gap-6">
           <img src={storeLogo} alt="Epic Games Store" className="h-8" />
 
-          <div className="flex items-center gap-4">
-            <a href="#" className="text-gray-400 hover:text-[#26BBFF]">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-              </svg>
+          <div className="flex items-center gap-5 text-gray-400">
+            <a href="#" className="hover:text-white">
+              <FaFacebookF size={20} />
             </a>
 
-            <a href="#" className="text-gray-400 hover:text-[#26BBFF]">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M4 4l11.733 16h4.267L8.267 4z" />
-                <path d="M4 20l6.768-6.768m2.46-2.46L20 4" />
-              </svg>
+            <a href="#" className="hover:text-white">
+              <FaXTwitter size={20} />
             </a>
 
-            <a href="#" className="text-gray-400 hover:text-[#26BBFF]">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" />
-                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
-              </svg>
+            <a href="#" className="hover:text-white">
+              <FaYoutube size={22} />
             </a>
           </div>
         </div>
 
-        <div className="h-[1px] w-full bg-[#3a3a40] mb-8"></div>
+        <div className="md:hidden border-t border-[#2a2a2a]">
+          <div className="border-b border-[#2a2a2a]">
+            <button
+              onClick={() => toggleSection("games")}
+              className="w-full flex items-center justify-between py-4 text-white font-bold"
+            >
+              Games
+              <ChevronDown size={18} />
+            </button>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-12">
+            {open === "games" && (
+              <ul className="pb-4 flex flex-col gap-2">
+                <li><a href="#" className="text-gray-400 text-sm">Fortnite</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Fall Guys</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Rocket League</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Unreal Tournament</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Infinity Blade</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Shadow Complex</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Robo Recall</a></li>
+              </ul>
+            )}
+          </div>
+
+          <div className="border-b border-[#2a2a2a]">
+            <button
+              onClick={() => toggleSection("marketplaces")}
+              className="w-full flex items-center justify-between py-4 text-white font-bold"
+            >
+              Marketplaces
+              <ChevronDown size={18} />
+            </button>
+
+            {open === "marketplaces" && (
+              <ul className="pb-4 flex flex-col gap-2">
+                <li><a href="#" className="text-gray-400 text-sm">Epic Games Store</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Fab</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Quixel Megascans on Fab</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Quixel Megaplants on Fab</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Sketchfab</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">ArtStation</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Store Refund Policy</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Store EULA</a></li>
+              </ul>
+            )}
+          </div>
+
+          <div className="border-b border-[#2a2a2a]">
+            <button
+              onClick={() => toggleSection("tools")}
+              className="w-full flex items-center justify-between py-4 text-white font-bold"
+            >
+              Tools
+              <ChevronDown size={18} />
+            </button>
+
+            {open === "tools" && (
+              <ul className="pb-4 flex flex-col gap-2">
+                <li><a href="#" className="text-gray-400 text-sm">Unreal Engine</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">UEFN</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">MetaHuman</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Twinmotion</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">RealityScan</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">RAD Game Tools</a></li>
+              </ul>
+            )}
+          </div>
+
+          <div className="border-b border-[#2a2a2a]">
+            <button
+              onClick={() => toggleSection("online")}
+              className="w-full flex items-center justify-between py-4 text-white font-bold"
+            >
+              Online Services
+              <ChevronDown size={18} />
+            </button>
+
+            {open === "online" && (
+              <ul className="pb-4 flex flex-col gap-2">
+                <li><a href="#" className="text-gray-400 text-sm">Epic Online Services</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Kids Web Services</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Services Agreement</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Acceptable Use Policy</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Trust Statement</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Subprocessor List</a></li>
+              </ul>
+            )}
+          </div>
+
+          <div className="border-b border-[#2a2a2a]">
+            <button
+              onClick={() => toggleSection("company")}
+              className="w-full flex items-center justify-between py-4 text-white font-bold"
+            >
+              Company
+              <ChevronDown size={18} />
+            </button>
+
+            {open === "company" && (
+              <ul className="pb-4 flex flex-col gap-2">
+                <li><a href="#" className="text-gray-400 text-sm">About</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Newsroom</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Careers</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Students</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">UX Research</a></li>
+              </ul>
+            )}
+          </div>
+
+          <div className="border-b border-[#2a2a2a]">
+            <button
+              onClick={() => toggleSection("resources")}
+              className="w-full flex items-center justify-between py-4 text-white font-bold"
+            >
+              Resources
+              <ChevronDown size={18} />
+            </button>
+
+            {open === "resources" && (
+              <ul className="pb-4 flex flex-col gap-2">
+                <li><a href="#" className="text-gray-400 text-sm">Dev Community</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">MegaGrants</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Support-A-Creator</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Creator Agreement</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Distribute on Epic Games</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Unreal Engine Branding Guidelines</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Fan Art Policy</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Community Rules</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">EU Digital Services Act Inquiries</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">Epic Pro Support</a></li>
+              </ul>
+            )}
+          </div>
+        </div>
+
+        <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-12 border-t border-[#3a3a40] pt-8">
           <div>
             <h3 className="text-white font-bold mb-4">Games</h3>
             <ul className="flex flex-col gap-2">
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Fortnite
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Fall Guys
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Rocket League
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Unreal Tournament
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Infinity Blade
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Shadow Complex
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Robo Recall
-                </a>
-              </li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Fortnite</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Fall Guys</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Rocket League</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Unreal Tournament</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Infinity Blade</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Shadow Complex</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Robo Recall</a></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white font-bold mb-4">Marketplaces</h3>
             <ul className="flex flex-col gap-2">
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Epic Games Store
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Fab
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Quixel Megascans on Fab
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Quixel Megaplants on Fab
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Sketchfab
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  ArtStation
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Store Refund Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Store EULA
-                </a>
-              </li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Epic Games Store</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Fab</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Quixel Megascans on Fab</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Quixel Megaplants on Fab</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Sketchfab</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">ArtStation</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Store Refund Policy</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Store EULA</a></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white font-bold mb-4">Tools</h3>
             <ul className="flex flex-col gap-2">
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Unreal Engine
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  UEFN
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  MetaHuman
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Twinmotion
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  RealityScan
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  RAD Game Tools
-                </a>
-              </li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Unreal Engine</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">UEFN</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">MetaHuman</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Twinmotion</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">RealityScan</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">RAD Game Tools</a></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white font-bold mb-4">Online Services</h3>
             <ul className="flex flex-col gap-2">
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Epic Online Services
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Kids Web Services
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Services Agreement
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Acceptable Use Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Trust Statement
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Subprocessor List
-                </a>
-              </li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Epic Online Services</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Kids Web Services</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Services Agreement</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Acceptable Use Policy</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Trust Statement</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Subprocessor List</a></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white font-bold mb-4">Company</h3>
             <ul className="flex flex-col gap-2">
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Newsroom
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Students
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  UX Research
-                </a>
-              </li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">About</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Newsroom</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Careers</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Students</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">UX Research</a></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white font-bold mb-4">Resources</h3>
             <ul className="flex flex-col gap-2">
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Dev Community
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  MegaGrants
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Support-A-Creator
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Creator Agreement
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Distribute on Epic Games
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Unreal Engine Branding Guidelines
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Fan Art Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Community Rules
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  EU Digital Services Act Inquiries
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 text-sm hover:text-white">
-                  Epic Pro Support
-                </a>
-              </li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Dev Community</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">MegaGrants</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Support-A-Creator</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Creator Agreement</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Distribute on Epic Games</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Unreal Engine Branding Guidelines</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Fan Art Policy</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Community Rules</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">EU Digital Services Act Inquiries</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Epic Pro Support</a></li>
             </ul>
           </div>
         </div>
 
-        <div className="h-[1px] w-full bg-[#3a3a40] mb-8"></div>
-
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-8">
-          <p className="text-[#AEAEAF] text-xs leading-relaxed max-w-[800px]">
+        <div className="md:border-t md:border-[#3a3a40] md:pt-8 mt-8 md:mt-0">
+          <p className="text-[#AEAEAF] text-[11px] md:text-xs leading-relaxed text-center md:text-left max-w-[850px] mx-auto md:mx-0">
             © 2026 Epic Games, Inc. All rights reserved. Epic, Epic Games, the
             Epic Games logo, Fortnite, the Fortnite logo, Unreal, Unreal Engine,
             the Unreal Engine logo, Unreal Tournament, and the Unreal Tournament
@@ -327,38 +265,43 @@ export default function Footer() {
             the United States of America and elsewhere. Other brands or product
             names are the trademarks of their respective owners. Our websites
             may contain links to other sites and resources provided by third
-            parties.
+            parties. These links are provided for your convenience only. Epic
+            Games has no control over the contents of those sites or resources,
+            and accepts no responsibility for them or for any loss or damage
+            that may arise from your use of them.
           </p>
 
-          <button
-            onClick={scrollToTop}
-            className="flex items-center gap-2 text-white bg-[#202024] hover:bg-[#353539] px-4 py-2 rounded-md"
-          >
-            Back to top
-            <ArrowUp size={16} />
-          </button>
+          <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 mt-8">
+            <a href="#" className="text-gray-400 text-xs hover:text-white">
+              Terms of service
+            </a>
+
+            <a href="#" className="text-gray-400 text-xs hover:text-white">
+              Privacy policy
+            </a>
+
+            <a href="#" className="text-gray-400 text-xs hover:text-white">
+              Safety & security
+            </a>
+
+            <a href="#" className="text-gray-400 text-xs hover:text-white">
+              Store refund policy
+            </a>
+
+            <a href="#" className="text-gray-400 text-xs hover:text-white">
+              Publisher Index
+            </a>
+          </div>
         </div>
 
-        <div className="flex flex-wrap gap-6">
-          <a href="#" className="text-gray-400 text-sm hover:text-white">
-            Terms of service
-          </a>
-
-          <a href="#" className="text-gray-400 text-sm hover:text-white">
-            Privacy policy
-          </a>
-
-          <a href="#" className="text-gray-400 text-sm hover:text-white">
-            Safety & security
-          </a>
-
-          <a href="#" className="text-gray-400 text-sm hover:text-white">
-            Store refund policy
-          </a>
-
-          <a href="#" className="text-gray-400 text-sm hover:text-white">
-            Publisher Index
-          </a>
+        <div className="flex justify-center md:justify-end mt-8">
+          <button
+            onClick={scrollToTop}
+            className="flex items-center gap-2 text-white bg-[#353539] hover:bg-[#45454a] px-4 py-2 rounded-md text-sm"
+          >
+            Back to top
+            <ArrowUp size={15} />
+          </button>
         </div>
       </div>
     </footer>
