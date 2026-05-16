@@ -232,12 +232,12 @@ function Header() {
               )}
             </div>
           ) : (
-            <Link to="/login" className="text-white bg-[#353539] p-1.5 px-3 md:p-2 md:px-4 rounded-md hover:bg-[#656567] text-xs md:text-sm font-semibold transition-colors">
+            <Link to="/login" className="text-white bg-[#353539] py-2 px-3 md:py-2.5 md:px-4 rounded-md hover:bg-[#656567] text-xs md:text-sm font-semibold transition-colors">
               {t("signIn")}
             </Link>
           )}
 
-          <button className="hidden md:block bg-[#26BBFF] p-2 px-3 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold">
+          <button className="hidden md:block bg-[#26BBFF] py-2.5 px-4 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold">
             {t("download")}
           </button>
 
@@ -266,8 +266,8 @@ function Header() {
             </button>
           </div>
 
-          <div className="flex justify-end items-center gap-5 mt-4">
-            <button className="bg-[#26BBFF] p-2 px-4 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold w-full">
+          <div className="flex justify-end items-center mt-4">
+            <button className="bg-[#26BBFF] py-2.5 px-8 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold">
               {t("download")}
             </button>
           </div>
