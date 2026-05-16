@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import {
@@ -9,6 +9,8 @@ import {
   Check,
   X,
   SlidersHorizontal,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { WishlistContext } from "../context/WishlistContext";
 
@@ -182,10 +184,10 @@ function PopularGenresSlider({ games, setFilters }) {
             <div
               key={genre.name}
               onClick={() => openGenre(genre.name)}
-              className="min-w-[170px] sm:min-w-[190px] md:min-w-[210px] bg-[#202024] hover:bg-[#2a2a30] rounded-xl p-4 cursor-pointer"
+              className="min-w-[180px] md:min-w-0 md:flex-1 bg-[#202024] hover:bg-[#2a2a30] rounded-xl p-4 cursor-pointer"
             >
-              <div className="relative w-full aspect-[4/3] mb-4 mt-2">
-                <div className="absolute left-0 top-4 w-[55%] aspect-[3/4] rounded-md overflow-hidden bg-[#101014] opacity-60">
+              <div className="relative h-[140px] md:h-[150px] mb-3">
+                <div className="absolute left-0 top-5 w-[58%] h-[115px] rounded-md overflow-hidden bg-[#101014] opacity-60">
                   <img
                     src={cover2}
                     alt=""
@@ -193,7 +195,7 @@ function PopularGenresSlider({ games, setFilters }) {
                   />
                 </div>
 
-                <div className="absolute right-0 top-4 w-[55%] aspect-[3/4] rounded-md overflow-hidden bg-[#101014] opacity-60">
+                <div className="absolute right-0 top-5 w-[58%] h-[115px] rounded-md overflow-hidden bg-[#101014] opacity-60">
                   <img
                     src={cover3}
                     alt=""
@@ -201,7 +203,7 @@ function PopularGenresSlider({ games, setFilters }) {
                   />
                 </div>
 
-                <div className="absolute left-1/2 top-0 -translate-x-1/2 z-10 w-[60%] aspect-[3/4] rounded-md overflow-hidden bg-[#101014]">
+                <div className="absolute left-1/2 top-0 -translate-x-1/2 z-10 w-[62%] h-[130px] rounded-md overflow-hidden bg-[#101014]">
                   <img
                     src={cover1}
                     alt=""
@@ -230,42 +232,9 @@ function Browse() {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState("all");
-  const [sortOpen, setSortOpen] = useState(false);
   const [keyword, setKeyword] = useState(keywordParam);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
-
-  const sortOptions = [
-    { value: "all", label: "All" },
-    { value: "new-release", label: "New Release" },
-    { value: "alphabetical", label: "Alphabetical" },
-    { value: "price-high", label: "Price: High to Low" },
-    { value: "price-low", label: "Price: Low to High" },
-  ];
-
-  const currentSort = sortOptions.find((o) => o.value === sortBy);
-
-  const sortRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (sortRef.current && !sortRef.current.contains(e.target)) {
-        setSortOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    if (mobileFilterOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileFilterOpen]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [filters, setFilters] = useState({
     category: categoryParam ? [categoryParam] : [],
@@ -317,6 +286,10 @@ function Browse() {
 
     loadGames();
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [keyword, sortBy, filters]);
 
   const toggleFilter = (name, value) => {
     setFilters((prev) => {
@@ -408,6 +381,28 @@ function Browse() {
     });
   }
 
+  const perPage = 20;
+  const totalPages = Math.ceil(shownGames.length / perPage);
+  const firstGame = (currentPage - 1) * perPage;
+  const paginatedGames = shownGames.slice(firstGame, firstGame + perPage);
+
+  const pages = [];
+  const pageStart = Math.max(1, currentPage - 2);
+  const pageEnd = Math.min(totalPages, pageStart + 4);
+
+  for (let page = pageStart; page <= pageEnd; page++) {
+    pages.push(page);
+  }
+
+  const changePage = (page) => {
+    setCurrentPage(page);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       {!loading && games.length > 0 && (
@@ -418,10 +413,7 @@ function Browse() {
         {mobileFilterOpen && (
           <div className="fixed inset-0 z-50 bg-[#121214] overflow-y-auto md:hidden">
             <div className="flex items-center justify-between px-4 pt-5 pb-3 border-b border-[#202024]">
-              <Link to="/" onClick={() => setMobileFilterOpen(false)} className="flex items-center gap-3">
-                <img src={logo} alt="logo" className="h-[40px]" />
-                <img src={store} alt="store" className="w-[54px] h-[32px]" />
-              </Link>
+              <h3 className="text-white text-lg font-bold">Filters</h3>
 
               <button
                 onClick={() => setMobileFilterOpen(false)}
@@ -464,41 +456,17 @@ function Browse() {
           <div className="flex items-center gap-3 mb-6">
             <span className="text-gray-400 text-sm">Show:</span>
 
-            <div className="relative" ref={sortRef}>
-              <button
-                onClick={() => setSortOpen(!sortOpen)}
-                className="min-w-[150px] bg-[#202024] border border-[#333] rounded-lg px-3 py-2 text-white text-sm flex items-center justify-between gap-3"
-              >
-                <span>{currentSort?.label || "All"}</span>
-
-                {sortOpen ? (
-                  <ChevronUp size={15} className="text-gray-400" />
-                ) : (
-                  <ChevronDown size={15} className="text-gray-400" />
-                )}
-              </button>
-
-              {sortOpen && (
-                <div className="absolute left-0 top-11 z-30 w-[190px] bg-[#202024] border border-[#333] rounded-lg overflow-hidden">
-                  {sortOptions.map((item) => (
-                    <button
-                      key={item.value}
-                      onClick={() => {
-                        setSortBy(item.value);
-                        setSortOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2.5 text-sm ${
-                        sortBy === item.value
-                          ? "bg-[#2d2d32] text-white"
-                          : "text-gray-300 hover:bg-[#2a2a30]"
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-[#202024] text-white text-sm px-3 py-2 rounded-md outline-none"
+            >
+              <option value="all">All</option>
+              <option value="new-release">New Release</option>
+              <option value="alphabetical">Alphabetical</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="price-low">Price: Low to High</option>
+            </select>
 
             <button
               onClick={() => setMobileFilterOpen(true)}
@@ -522,76 +490,114 @@ function Browse() {
               No games found.
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {shownGames.map((game) => {
-                const folderName = getFolderName(game.title);
-                const imageSrc = `https://epic-games-api-eta.vercel.app/${game.endpoint}/${folderName}/cover.jpg`;
-                const inWishlist = isInWishlist(game.title);
+            <>
+              <div className="flex flex-wrap gap-4">
+                {paginatedGames.map((game) => {
+                  const folderName = getFolderName(game.title);
+                  const imageSrc = `https://epic-games-api-eta.vercel.app/${game.endpoint}/${folderName}/cover.jpg`;
+                  const inWishlist = isInWishlist(game.title);
 
-                return (
-                  <Link
-                    key={game.title}
-                    to={`/game/${folderName}?from=${game.endpoint}`}
-                    className="block group"
+                  return (
+                    <Link
+                      key={game.title}
+                      to={`/game/${folderName}?from=${game.endpoint}`}
+                      className="w-[47%] sm:w-[31%] md:w-[23%] group"
+                    >
+                      <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden bg-[#1a1a1a]">
+                        <img
+                          src={imageSrc}
+                          alt={game.title}
+                          className="w-full h-full object-contain"
+                        />
+
+                        <div className="absolute inset-0 group-hover:bg-white/10 pointer-events-none"></div>
+
+                        <div className="absolute top-2 right-2 md:opacity-0 md:group-hover:opacity-100">
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              toggleWishlist(game);
+                            }}
+                            className="w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center"
+                          >
+                            <Bookmark
+                              size={16}
+                              className={inWishlist ? "fill-white" : ""}
+                            />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="mt-3">
+                        <p className="text-gray-400 text-[11px] uppercase font-semibold mb-1">
+                          Base Game
+                        </p>
+
+                        <p className="text-white text-sm font-semibold mb-1 line-clamp-2">
+                          {game.title}
+                        </p>
+
+                        <div className="flex flex-wrap items-center gap-2 mt-2">
+                          {game.discount && (
+                            <span className="bg-[#26bbff] text-black text-[11px] font-bold px-1.5 py-0.5 rounded">
+                              {game.discount}
+                            </span>
+                          )}
+
+                          {game.oldPrice && (
+                            <span className="text-gray-500 text-xs line-through">
+                              {game.oldPrice}
+                            </span>
+                          )}
+
+                          {game.newPrice && (
+                            <span className="text-white text-sm">
+                              {game.newPrice}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-2 mt-10">
+                  <button
+                    onClick={() => changePage(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                    className="w-10 h-10 rounded-md text-white disabled:opacity-40 flex items-center justify-center"
                   >
-                    <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden bg-[#1a1a1a]">
-                      <img
-                        src={imageSrc}
-                        alt={game.title}
-                        className="w-full h-full object-contain"
-                      />
+                    <ChevronLeft size={20} />
+                  </button>
 
-                      <div className="absolute inset-0 group-hover:bg-white/10 pointer-events-none"></div>
+                  {pages.map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => changePage(page)}
+                      className={`w-10 h-10 rounded-md text-sm ${
+                        currentPage === page
+                          ? "bg-[#202024] text-white"
+                          : "text-gray-400 hover:text-white"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
 
-                      <div className="absolute top-2 right-2 md:opacity-0 md:group-hover:opacity-100">
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleWishlist(game);
-                          }}
-                          className="w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center"
-                        >
-                          <Bookmark
-                            size={16}
-                            className={inWishlist ? "fill-white" : ""}
-                          />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="mt-3">
-                      <p className="text-gray-400 text-[11px] uppercase font-semibold mb-1">
-                        Base Game
-                      </p>
-
-                      <p className="text-white text-sm font-semibold mb-1 line-clamp-2">
-                        {game.title}
-                      </p>
-
-                      <div className="flex flex-wrap items-center gap-2 mt-2">
-                        {game.discount && (
-                          <span className="bg-[#26bbff] text-black text-[11px] font-bold px-1.5 py-0.5 rounded">
-                            {game.discount}
-                          </span>
-                        )}
-
-                        {game.oldPrice && (
-                          <span className="text-gray-500 text-xs line-through">
-                            {game.oldPrice}
-                          </span>
-                        )}
-
-                        {game.newPrice && (
-                          <span className="text-white text-sm">
-                            {game.newPrice}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
+                  <button
+                    onClick={() =>
+                      changePage(Math.min(totalPages, currentPage + 1))
+                    }
+                    disabled={currentPage === totalPages}
+                    className="w-10 h-10 rounded-md text-white disabled:opacity-40 flex items-center justify-center"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

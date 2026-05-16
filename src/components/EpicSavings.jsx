@@ -121,7 +121,7 @@ function EpicSavings() {
 
                   <div className="absolute inset-0 group-hover:bg-white/10 pointer-events-none" />
 
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100">
+                  <div className="absolute top-2 right-2 md:opacity-0 md:group-hover:opacity-100">
                     <button
                       onClick={(e) => {
                         e.preventDefault();

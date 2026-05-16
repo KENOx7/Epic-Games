@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUp, ChevronDown } from "lucide-react";
 import { FaFacebookF, FaXTwitter, FaYoutube } from "react-icons/fa6";
-import logo from "../assets/logo.png";
+import store from "../assets/store.svg";
 
 export default function Footer() {
   const [open, setOpen] = useState("");
@@ -27,7 +27,7 @@ export default function Footer() {
       <div className="max-w-[1200px] mx-auto">
         <div className="flex flex-col items-center md:flex-row md:justify-between mb-8 gap-6">
           <Link to="/">
-            <img src={logo} alt="Epic Games Store" className="h-8" />
+            <img src={store} alt="Epic Games Store" className="h-8" />
           </Link>
           <div className="flex items-center gap-5 text-gray-400">
             <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white">
