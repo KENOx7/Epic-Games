@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import {
@@ -164,7 +164,7 @@ function PopularGenresSlider({ games, setFilters, t }) {
 
   return (
     <div className="max-w-[1200px] mx-auto px-4 mt-8">
-      <h2 className="text-xl font-bold text-white mb-4">{t ? t("popularGenres") || "Popular Genres" : "Popular Genres"}</h2>
+      <h2 className="text-xl font-bold text-white mb-4">{t("popularGenres")}"</h2>
 
       <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4">
         {popularGenres.map((genre) => {
@@ -214,7 +214,7 @@ function PopularGenresSlider({ games, setFilters, t }) {
               </div>
 
               <p className="text-white text-center text-sm font-semibold">
-                {t ? (t(genre.title) || genre.title) : genre.title}
+                {t(genre.title)}
               </p>
             </div>
           );
@@ -415,7 +415,7 @@ function Browse() {
         {mobileFilterOpen && (
           <div className="fixed inset-0 z-50 bg-[#121214] overflow-y-auto md:hidden">
             <div className="flex items-center justify-between px-4 pt-5 pb-3 border-b border-[#202024]">
-              <h3 className="text-white text-lg font-bold">{t("filters") || "Filters"}</h3>
+              <h3 className="text-white text-lg font-bold">{t("filters")}</h3>
 
               <button
                 onClick={() => setMobileFilterOpen(false)}
@@ -438,14 +438,14 @@ function Browse() {
                 onClick={() => setMobileFilterOpen(false)}
                 className="mt-6 w-full bg-white text-black font-semibold py-3 rounded-lg text-sm"
               >
-                {t("showResults") || "Show Results"}
+                {t("showResults")}
               </button>
             </div>
           </div>
         )}
 
         <div className="hidden md:block md:w-[240px] md:min-w-[240px] md:order-2">
-          <h3 className="text-white text-lg font-bold mb-4">{t("filters") || "Filters"}</h3>
+          <h3 className="text-white text-lg font-bold mb-4">{t("filters")}</h3>
 
           <FilterPanel
             keyword={keyword}
@@ -458,18 +458,18 @@ function Browse() {
 
         <div className="flex-1 min-w-0 md:order-1">
           <div className="flex items-center gap-3 mb-6">
-            <span className="text-gray-400 text-sm">{t("show") || "Show:"}</span>
+            <span className="text-gray-400 text-sm">{t("show")}</span>
 
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-[#202024] text-white text-sm px-3 py-2 rounded-md outline-none"
+              className="bg-[#202024] text-white text-sm px-3 py-2 rounded-md outline-none cursor-pointer"
             >
-              <option value="all">{t("all") || "All"}</option>
-              <option value="new-release">{t("newRelease") || "New Release"}</option>
-              <option value="alphabetical">{t("alphabetical") || "Alphabetical"}</option>
-              <option value="price-high">{t("priceHighToLow") || "Price: High to Low"}</option>
-              <option value="price-low">{t("priceLowToHigh") || "Price: Low to High"}</option>
+              <option value="all">{t("all")}</option>
+              <option value="new-release">{t("newRelease")}</option>
+              <option value="alphabetical">{t("alphabetical")}</option>
+              <option value="price-high">{t("priceHighToLow")}</option>
+              <option value="price-low">{t("priceLowToHigh")}</option>
             </select>
 
             <button
@@ -477,21 +477,21 @@ function Browse() {
               className="md:hidden ml-auto flex items-center gap-1.5 bg-[#202024] text-white text-sm px-3 py-2 rounded-md"
             >
               <SlidersHorizontal size={15} />
-              {t("filters") || "Filter"}
+              {t("filters")}
             </button>
           </div>
 
           {keyword && (
             <p className="text-gray-400 text-sm mb-5">
-              {t("resultsFor") || "Results for"} <span className="text-white">"{keyword}"</span>
+              {t("resultsFor")} <span className="text-white">"{keyword}"</span>
             </p>
           )}
 
           {loading ? (
-            <div className="text-white text-center py-20">{t("loading") || "Loading..."}</div>
+            <div className="text-white text-center py-20">{t("loading")}</div>
           ) : shownGames.length === 0 ? (
             <div className="text-gray-400 text-center py-20">
-              {t("noGamesFound") || "No games found."}
+              {t("noGamesFound")}
             </div>
           ) : (
             <>
@@ -534,7 +534,7 @@ function Browse() {
 
                       <div className="mt-3">
                         <p className="text-gray-400 text-[11px] uppercase font-semibold mb-1">
-                          {t("baseGame") || "Base Game"}
+                          {t("baseGame")}
                         </p>
 
                         <p className="text-white text-sm font-semibold mb-1 line-clamp-2">
@@ -580,11 +580,10 @@ function Browse() {
                     <button
                       key={page}
                       onClick={() => changePage(page)}
-                      className={`w-10 h-10 rounded-md text-sm ${
-                        currentPage === page
+                      className={`w-10 h-10 rounded-md text-sm ${currentPage === page
                           ? "bg-[#202024] text-white"
                           : "text-gray-400 hover:text-white"
-                      }`}
+                        }`}
                     >
                       {page}
                     </button>
@@ -620,62 +619,62 @@ function FilterPanel({ keyword, setKeyword, filters, toggleFilter, t }) {
 
         <input
           type="text"
-          placeholder={t ? (t("keywords") || "Keywords") : "Keywords"}
+          placeholder={t("keywords")}
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           className="w-full bg-[#202024] text-sm text-white rounded-md py-2.5 pl-10 pr-4 outline-none placeholder:text-gray-400"
         />
       </div>
 
-      <FilterSection title={t ? (t("category") || "Category") : "Category"} defaultOpen={filters.category.length > 0}>
+      <FilterSection title={t("category")} defaultOpen={filters.category.length > 0}>
         {categories.map((category) => (
           <Checkbox
             key={category.key}
-            label={t ? (t(category.label) || category.label) : category.label}
+            label={t(category.label)}
             checked={filters.category.includes(category.key)}
             onChange={() => toggleFilter("category", category.key)}
           />
         ))}
       </FilterSection>
 
-      <FilterSection title={t ? (t("price") || "Price") : "Price"} defaultOpen={filters.price.length > 0}>
+      <FilterSection title={t("price")} defaultOpen={filters.price.length > 0}>
         {priceFilters.map((price) => (
           <Checkbox
             key={price}
-            label={t ? (t(price) || price) : price}
+            label={t(price)}
             checked={filters.price.includes(price)}
             onChange={() => toggleFilter("price", price)}
           />
         ))}
       </FilterSection>
 
-      <FilterSection title={t ? (t("genre") || "Genre") : "Genre"} defaultOpen={filters.genre.length > 0}>
+      <FilterSection title={t("genre")} defaultOpen={filters.genre.length > 0}>
         {genreFilters.map((genre) => (
           <Checkbox
             key={genre}
-            label={t ? (t(genre) || genre) : genre}
+            label={t(genre)}
             checked={filters.genre.includes(genre)}
             onChange={() => toggleFilter("genre", genre)}
           />
         ))}
       </FilterSection>
 
-      <FilterSection title={t ? (t("features") || "Features") : "Features"} defaultOpen={filters.features.length > 0}>
+      <FilterSection title={t("features")} defaultOpen={filters.features.length > 0}>
         {featureFilters.map((feature) => (
           <Checkbox
             key={feature}
-            label={t ? (t(feature) || feature) : feature}
+            label={t(feature)}
             checked={filters.features.includes(feature)}
             onChange={() => toggleFilter("features", feature)}
           />
         ))}
       </FilterSection>
 
-      <FilterSection title={t ? (t("platform") || "Platform") : "Platform"} defaultOpen={filters.platform.length > 0}>
+      <FilterSection title={t("platform")} defaultOpen={filters.platform.length > 0}>
         {platformFilters.map((platform) => (
           <Checkbox
             key={platform}
-            label={t ? (t(platform) || platform) : platform}
+            label={t(platform)}
             checked={filters.platform.includes(platform)}
             onChange={() => toggleFilter("platform", platform)}
           />
@@ -716,9 +715,8 @@ function Checkbox({ label, checked, onChange }) {
       className="flex items-center gap-3 cursor-pointer select-none"
     >
       <div
-        className={`w-[18px] h-[18px] rounded flex items-center justify-center border ${
-          checked ? "bg-white border-white" : "border-gray-500"
-        }`}
+        className={`w-[18px] h-[18px] rounded flex items-center justify-center border ${checked ? "bg-white border-white" : "border-gray-500"
+          }`}
       >
         {checked && <Check size={14} className="text-black" />}
       </div>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Star,
@@ -45,18 +45,53 @@ const GameDetails = () => {
   const [copied, setCopied] = useState(false);
   const [touchStart, setTouchStart] = useState(null);
 
+  const ALL_ENDPOINTS = [
+    "top-sellers",
+    "free-games",
+    "most-popular",
+    "top-player-reviewed",
+    "epic-savings"
+  ];
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    setLoading(true);
 
     axios
       .get(`https://epic-games-api-eta.vercel.app/${from}/category_summary.json`)
       .then((res) => {
         const foundGame = res.data.find((item) => createSlug(item.title) === slug);
-        setGame(foundGame || null);
+        if (foundGame) {
+          setGame(foundGame);
+          setLoading(false);
+        } else {
+          // Not found in primary endpoint — search all others
+          const otherEndpoints = ALL_ENDPOINTS.filter((ep) => ep !== from);
+          return Promise.all(
+            otherEndpoints.map((ep) =>
+              axios
+                .get(`https://epic-games-api-eta.vercel.app/${ep}/category_summary.json`)
+                .then((r) => ({ data: r.data, ep }))
+                .catch(() => null)
+            )
+          ).then((results) => {
+            for (const result of results) {
+              if (!result) continue;
+              const found = result.data.find((item) => createSlug(item.title) === slug);
+              if (found) {
+                setGame(found);
+                return;
+              }
+            }
+            setGame(null);
+          }).finally(() => setLoading(false));
+        }
       })
-      .finally(() => {
+      .catch(() => {
+        setGame(null);
         setLoading(false);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, from]);
 
   const copyLink = () => {
@@ -262,7 +297,7 @@ const GameDetails = () => {
               </button>
             ) : (
               <button
-                onClick={() => addToCart(game, basePath)}
+                onClick={() => addToCart({ ...game, endpoint: from }, basePath)}
                 className="w-full py-3 bg-[#2a2a30] hover:bg-[#3a3a40] text-white text-sm rounded-lg flex items-center justify-center gap-2 mb-2"
               >
                 <ShoppingCart size={16} />
@@ -344,32 +379,41 @@ const GameDetails = () => {
               <>
                 <button
                   onClick={goPrev}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100"
+                  className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                 >
-                  <ChevronLeft size={24} />
+                  <ChevronLeft size={22} />
                 </button>
 
                 <button
                   onClick={goNext}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100"
+                  className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                 >
-                  <ChevronRight size={24} />
+                  <ChevronRight size={22} />
                 </button>
               </>
             )}
           </div>
 
           {screenshots.length > 1 && (
-            <div className="flex gap-2 overflow-x-auto mb-8 hide-scrollbar">
+            <div
+              ref={(el) => {
+                if (el) {
+                  const active = el.children[selectedImage];
+                  if (active) {
+                    active.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+                  }
+                }
+              }}
+              className="flex gap-2 overflow-x-auto mb-8 hide-scrollbar"
+            >
               {screenshots.map((img, index) => (
                 <button
                   key={img}
                   onClick={() => setSelectedImage(index)}
-                  className={`w-[110px] h-[64px] rounded-md overflow-hidden shrink-0 border-2 ${
-                    selectedImage === index
+                  className={`w-[110px] h-[64px] rounded-md overflow-hidden shrink-0 border-2 ${selectedImage === index
                       ? "border-[#26BBFF]"
                       : "border-transparent opacity-60 hover:opacity-90"
-                  }`}
+                    }`}
                 >
                   <img
                     src={`${basePath}/${img}`}
@@ -393,7 +437,7 @@ const GameDetails = () => {
                         key={genre}
                         className="bg-[#1e1e24] px-3 py-1 rounded text-sm text-gray-300"
                       >
-                        {genre}
+                        {t(genre)}
                       </span>
                     ))}
                   </div>
@@ -410,7 +454,7 @@ const GameDetails = () => {
                         key={feature}
                         className="bg-[#1e1e24] px-3 py-1 rounded text-sm text-gray-300"
                       >
-                        {feature}
+                        {t(feature)}
                       </span>
                     ))}
                   </div>

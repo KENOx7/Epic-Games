@@ -50,7 +50,7 @@ export default function Checkout({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#121214] md:bg-black/70 md:p-4 md:flex md:items-center md:justify-center">
+    <div className="fixed inset-0 z-[70] bg-[#121214] md:bg-black/70 md:p-4 md:flex md:items-center md:justify-center">
       <div className="bg-[#121214] w-full h-screen md:max-w-[900px] md:h-[90vh] md:rounded-lg flex flex-col md:flex-row overflow-y-auto md:overflow-hidden relative">
         <button
           onClick={onClose}
@@ -220,7 +220,6 @@ export default function Checkout({
           </button>
 
           <p className="text-[11px] text-gray-500 leading-relaxed pb-6 md:pb-0">
-            By selecting "Pay Now", you certify that you are over 18, are
             {t("payNowDisclaimer1")}{" "}
             <span className="text-[#26BBFF] hover:underline cursor-pointer">
               {t("eula")}

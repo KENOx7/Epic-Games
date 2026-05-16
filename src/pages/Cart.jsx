@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Bookmark, CircleDollarSign } from "lucide-react";
 import { useCartStore } from "../store/useCartStore";
@@ -89,7 +89,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="max-w-[1200px] mx-auto mt-8 sm:mt-10 px-3 sm:px-4 min-h-[60vh]">
+    <div className="max-w-[1200px] mx-auto mt-8 mb-4 sm:mt-10 px-3 sm:px-4 min-h-[60vh]">
       {checkoutOpen && (
         <Checkout
           game={checkoutGame}

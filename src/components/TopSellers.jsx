@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bookmark, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -57,7 +57,7 @@ export default function TopSellers() {
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
     const distance = touchStart - touchEnd;
-    
+
     if (distance > minSwipeDistance) {
       slideRight();
     }
@@ -67,7 +67,7 @@ export default function TopSellers() {
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto mt-10 px-4">
+    <div className="max-w-[1200px] mx-auto mt-10 px-4 mb-4">
       <div className="flex items-center justify-between mb-6">
         <Link to="/browse?category=top-sellers" className="flex items-center group">
           <h2 className="text-white text-xl font-bold">{t("Top Sellers")}</h2>
@@ -91,7 +91,7 @@ export default function TopSellers() {
         </div>
       </div>
 
-      <div 
+      <div
         className="overflow-hidden"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}

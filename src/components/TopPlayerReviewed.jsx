@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bookmark, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -59,7 +59,7 @@ export default function TopPlayerReviewed() {
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
     const distance = touchStart - touchEnd;
-    
+
     if (distance > minSwipeDistance) {
       slideRight();
     }
@@ -93,7 +93,7 @@ export default function TopPlayerReviewed() {
         </div>
       </div>
 
-      <div 
+      <div
         className="overflow-hidden"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}

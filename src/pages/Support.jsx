@@ -13,7 +13,6 @@ function Support() {
       <div className="flex justify-end px-5 pt-5">
         <div className="bg-[#1a1a1e]/40 text-white text-sm px-4 py-2 rounded-md flex items-center gap-2">
           <span className="text-gray-300">{t("serverStatus")}</span>
-          <span className="w-2 h-2 bg-green-400 rounded-full"></span>
           <span className="text-green-400">{t("systemsOperational")}</span>
         </div>
       </div>

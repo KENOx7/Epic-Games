@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bookmark, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -57,7 +57,7 @@ function EpicSavings() {
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
     const distance = touchStart - touchEnd;
-    
+
     if (distance > minSwipeDistance) {
       slideRight();
     }
@@ -93,7 +93,7 @@ function EpicSavings() {
         </div>
       </div>
 
-      <div 
+      <div
         className="overflow-hidden"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
@@ -111,7 +111,7 @@ function EpicSavings() {
             return (
               <Link
                 key={game.title}
-                to={`/game/${folderName}`}
+                to={`/game/${folderName}?from=epic-savings`}
                 className="block w-[178px] shrink-0 group"
               >
                 <div className="relative w-full h-[238px] rounded-lg overflow-hidden bg-[#1a1a1a]">

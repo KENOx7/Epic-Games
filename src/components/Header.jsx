@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Earth, TextAlignJustify, X, Search, ChevronDown, ChevronUp, Bookmark, ShoppingCart, ArrowRight, } from "lucide-react";
 import axios from "axios";
@@ -160,34 +160,34 @@ function Header() {
 
         <div className="flex items-center gap-5">
           <div className="relative hidden md:block" ref={langRef}>
-            <button 
+            <button
               onClick={() => setLangDropdownOpen(!langDropdownOpen)}
               className="text-white hover:opacity-60 flex items-center justify-center mt-1"
             >
               <Earth size={24} />
             </button>
-            
+
             {langDropdownOpen && (
               <div className="absolute right-0 top-10 bg-[#18181c] rounded-md shadow-xl py-2 w-[150px] z-50">
-                <button 
+                <button
                   onClick={() => { setLanguage("en"); setLangDropdownOpen(false); }}
                   className={`w-full text-left px-5 py-2.5 hover:bg-[#2a2a30] ${language === "en" ? "text-white font-bold" : "text-[#AEAEAF]"}`}
                 >
                   English
                 </button>
-                <button 
+                <button
                   onClick={() => { setLanguage("tr"); setLangDropdownOpen(false); }}
                   className={`w-full text-left px-5 py-2.5 hover:bg-[#2a2a30] ${language === "tr" ? "text-white font-bold" : "text-[#AEAEAF]"}`}
                 >
                   Türkçe
                 </button>
-                <button 
+                <button
                   onClick={() => { setLanguage("ru"); setLangDropdownOpen(false); }}
                   className={`w-full text-left px-5 py-2.5 hover:bg-[#2a2a30] ${language === "ru" ? "text-white font-bold" : "text-[#AEAEAF]"}`}
                 >
                   Русский
                 </button>
-                <button 
+                <button
                   onClick={() => { setLanguage("az"); setLangDropdownOpen(false); }}
                   className={`w-full text-left px-5 py-2.5 hover:bg-[#2a2a30] ${language === "az" ? "text-white font-bold" : "text-[#AEAEAF]"}`}
                 >
@@ -249,29 +249,29 @@ function Header() {
               </Link>
             </li>
           </ul>
-          
+
           <div className="mt-auto border-t border-[#2a2a30] pt-6 pb-2">
             <div className="flex gap-4">
-              <button 
-                onClick={() => setLanguage("en")} 
+              <button
+                onClick={() => setLanguage("en")}
                 className={`text-sm ${language === "en" ? "text-white font-bold" : "text-gray-400"}`}
               >
                 EN
               </button>
-              <button 
-                onClick={() => setLanguage("tr")} 
+              <button
+                onClick={() => setLanguage("tr")}
                 className={`text-sm ${language === "tr" ? "text-white font-bold" : "text-gray-400"}`}
               >
                 TR
               </button>
-              <button 
-                onClick={() => setLanguage("ru")} 
+              <button
+                onClick={() => setLanguage("ru")}
                 className={`text-sm ${language === "ru" ? "text-white font-bold" : "text-gray-400"}`}
               >
                 RU
               </button>
-              <button 
-                onClick={() => setLanguage("az")} 
+              <button
+                onClick={() => setLanguage("az")}
                 className={`text-sm ${language === "az" ? "text-white font-bold" : "text-gray-400"}`}
               >
                 AZ
@@ -312,7 +312,7 @@ function Header() {
                   {results.length > 0 ? (
                     <>
                       <p className="text-[#AEAEAF] text-[11px] uppercase font-bold px-4 pt-4 pb-2">
-                        Top Results
+                        {t("topResults")}
                       </p>
 
                       {results.map((game) => {
@@ -334,7 +334,7 @@ function Header() {
 
                             <div>
                               <p className="text-[#AEAEAF] text-[11px]">
-                                Base Game
+                                {t("baseGame")}
                               </p>
                               <p className="text-white text-sm font-semibold">
                                 {game.title}
@@ -348,13 +348,13 @@ function Header() {
                         onClick={viewAllResults}
                         className="w-full text-left px-4 py-3 text-white text-sm hover:bg-[#2a2a30] border-t border-[#2a2a30] flex items-center gap-2"
                       >
-                        View all results
+                        {t("viewAllResults")}
                         <ArrowRight size={14} />
                       </button>
                     </>
                   ) : (
                     <p className="text-[#AEAEAF] text-sm px-4 py-6 text-center">
-                      No results found
+                      {t("noGamesFound")}
                     </p>
                   )}
                 </div>
@@ -418,7 +418,7 @@ function Header() {
       {mobileSearchOpen && (
         <div className="fixed inset-0 bg-[#121216] z-[60] flex flex-col p-5">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-white text-[20px] font-bold">Search</h2>
+            <h2 className="text-white text-[20px] font-bold">{t("search")}</h2>
 
             <button
               onClick={() => {
