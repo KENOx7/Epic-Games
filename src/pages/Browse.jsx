@@ -1,17 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import {
-  Bookmark,
-  ChevronDown,
-  ChevronUp,
-  Search,
-  Check,
-  X,
-  SlidersHorizontal,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Bookmark, ChevronDown, Search, Check, X, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useLanguageStore } from "../store/useLanguageStore";
 
@@ -47,62 +37,24 @@ const popularGenres = [
 ];
 
 const priceFilters = [
-  "Free",
-  "Under $5.00",
-  "Under $10.00",
-  "Under $20.00",
-  "Under $30.00",
-  "$14.99 and above",
-  "Discounted",
+  "Free", "Under $5.00", "Under $10.00", "Under $20.00", "Under $30.00", 
+  "$14.99 and above", "Discounted",
 ];
 
 const genreFilters = [
-  "Action",
-  "Action-Adventure",
-  "Adventure",
-  "Card Game",
-  "Casual",
-  "City Builder",
-  "Comedy",
-  "Dungeon Crawler",
-  "Exploration",
-  "Fantasy",
-  "Fighting",
-  "First Person",
-  "Horror",
-  "Indie",
-  "Music",
-  "Narration",
-  "Open World",
-  "Platformer",
-  "Puzzle",
-  "Racing",
-  "Retro",
-  "Rhythm",
-  "Rogue-Lite",
-  "RPG",
-  "Shooter",
-  "Simulation",
-  "Sports",
-  "Stealth",
-  "Strategy",
-  "Survival",
-  "Turn-Based",
-  "Turn-Based Strategy",
+  "Action", "Action-Adventure", "Adventure", "Card Game",
+  "Casual", "City Builder", "Comedy", "Dungeon Crawler", "Exploration",
+  "Fantasy", "Fighting", "First Person", "Horror", "Indie",
+  "Music", "Narration", "Open World", "Platformer", "Puzzle",
+  "Racing", "Retro", "Rhythm", "Rogue-Lite", "RPG",
+  "Shooter", "Simulation", "Sports", "Stealth",
+  "Strategy", "Survival", "Turn-Based", "Turn-Based Strategy",
 ];
 
 const featureFilters = [
-  "Achievements",
-  "Cloud Saves",
-  "Co-op",
-  "Competitive",
-  "Controller Support",
-  "Cross Platform",
-  "Local Multiplayer",
-  "Multiplayer",
-  "Online Multiplayer",
-  "Single Player",
-  "VR",
+  "Achievements", "Cloud Saves", "Co-op", "Competitive", "Controller Support",
+  "Cross Platform", "Local Multiplayer", "Multiplayer", "Online Multiplayer",
+  "Single Player", "VR",
 ];
 
 const platformFilters = ["Mac OS", "Windows", "Linux"];
@@ -700,7 +652,7 @@ function FilterSection({ title, defaultOpen = false, children }) {
         className="w-full flex items-center justify-between text-white hover:text-gray-300"
       >
         <span className="text-sm font-semibold">{title}</span>
-        {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        <ChevronDown size={18} className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && <div className="flex flex-col gap-3 mt-4">{children}</div>}

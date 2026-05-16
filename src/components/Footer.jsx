@@ -53,7 +53,7 @@ export default function Footer() {
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
               {t("games")}
-              <ChevronDown size={18} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "games" ? "rotate-180" : ""}`} />
             </button>
 
             {open === "games" && (
@@ -75,7 +75,7 @@ export default function Footer() {
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
               {t("marketplaces")}
-              <ChevronDown size={18} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "marketplaces" ? "rotate-180" : ""}`} />
             </button>
 
             {open === "marketplaces" && (
@@ -98,7 +98,7 @@ export default function Footer() {
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
               {t("tools")}
-              <ChevronDown size={18} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "tools" ? "rotate-180" : ""}`} />
             </button>
 
             {open === "tools" && (
@@ -119,7 +119,7 @@ export default function Footer() {
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
               {t("onlineServices")}
-              <ChevronDown size={18} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "online" ? "rotate-180" : ""}`} />
             </button>
 
             {open === "online" && (
@@ -140,7 +140,7 @@ export default function Footer() {
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
               {t("company")}
-              <ChevronDown size={18} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "company" ? "rotate-180" : ""}`} />
             </button>
 
             {open === "company" && (
@@ -160,7 +160,7 @@ export default function Footer() {
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
               {t("resources")}
-              <ChevronDown size={18} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "resources" ? "rotate-180" : ""}`} />
             </button>
 
             {open === "resources" && (
