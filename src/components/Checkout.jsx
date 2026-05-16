@@ -65,7 +65,7 @@ export default function Checkout({
             <span className="font-bold text-white text-xl">{t("checkoutTitle")}</span>
           </div>
 
-          <div className="space-y-4 mb-6">
+          <div className="space-y-4 mb-6 overflow-y-auto flex-1 pr-2 max-h-[400px] md:max-h-none custom-scrollbar">
             {items.map((item) => (
               <div key={item.title} className="flex gap-4">
                 <div className="w-16 h-20 bg-[#111] rounded shrink-0 overflow-hidden">

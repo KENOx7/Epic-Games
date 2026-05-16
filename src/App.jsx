@@ -17,7 +17,10 @@ import GameDetails from "./pages/GameDetails";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
 import Support from "./pages/Support";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Footer from "./components/Footer";
+import { useAuthStore } from "./store/useAuthStore";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -42,6 +45,12 @@ function Home() {
 }
 
 function App() {
+  const initializeAuthListener = useAuthStore((state) => state.initializeAuthListener);
+
+  useEffect(() => {
+    initializeAuthListener();
+  }, [initializeAuthListener]);
+
   return (
     <>
       <ScrollToTop />
@@ -56,6 +65,8 @@ function App() {
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/browse" element={<Browse />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </main>
 

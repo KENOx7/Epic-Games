@@ -7,6 +7,8 @@ import store from "../assets/store.svg";
 import { useCartStore } from "../store/useCartStore";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useLanguageStore } from "../store/useLanguageStore";
+import { useAuthStore } from "../store/useAuthStore";
+import { User, LogOut } from "lucide-react";
 
 const categories = [
   {
@@ -41,14 +43,17 @@ function Header() {
   const [searchText, setSearchText] = useState("");
   const [games, setGames] = useState([]);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const searchRef = useRef(null);
   const langRef = useRef(null);
+  const userRef = useRef(null);
   const navigate = useNavigate();
 
   const cart = useCartStore((state) => state.cart);
   const wishlist = useWishlistStore((state) => state.wishlist);
   const { language, setLanguage, t } = useLanguageStore();
+  const { user, logOut } = useAuthStore();
 
   useEffect(() => {
     async function loadGames() {
@@ -86,6 +91,9 @@ function Header() {
       }
       if (langRef.current && !langRef.current.contains(e.target)) {
         setLangDropdownOpen(false);
+      }
+      if (userRef.current && !userRef.current.contains(e.target)) {
+        setUserDropdownOpen(false);
       }
     }
 
@@ -197,9 +205,37 @@ function Header() {
             )}
           </div>
 
-          <button className="hidden md:block text-white bg-[#353539] p-2 px-4 rounded-md hover:bg-[#656567] text-sm font-semibold">
-            {t("signIn")}
-          </button>
+          {user ? (
+            <div className="relative hidden md:block" ref={userRef}>
+              <button
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                className="text-[#AEAEAF] hover:text-white flex items-center justify-center p-2 rounded-full hover:bg-[#202024] transition-colors"
+              >
+                <User size={20} />
+              </button>
+
+              {userDropdownOpen && (
+                <div className="absolute right-0 top-10 bg-[#18181c] rounded-md shadow-xl py-2 w-[200px] z-50 border border-[#2e2e34]">
+                  <div className="px-4 py-2 border-b border-[#2e2e34] mb-2">
+                    <p className="text-white text-sm font-semibold truncate">
+                      {user.email}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => { logOut(); setUserDropdownOpen(false); }}
+                    className="w-full text-left px-4 py-2 text-sm text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] flex items-center gap-2"
+                  >
+                    <LogOut size={16} />
+                    {t("logOut")}
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link to="/login" className="hidden md:block text-white bg-[#353539] p-2 px-4 rounded-md hover:bg-[#656567] text-sm font-semibold transition-colors">
+              {t("signIn")}
+            </Link>
+          )}
 
           <button className="bg-[#26BBFF] md:p-2 p-1 px-3 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold">
             {t("download")}
@@ -231,9 +267,16 @@ function Header() {
           </div>
 
           <div className="flex justify-end items-center gap-5 mt-4">
-            <button className="text-white bg-[#353539] p-2 px-4 rounded-md hover:bg-[#656567] text-sm font-semibold">
-              {t("signIn")}
-            </button>
+            {user ? (
+              <button onClick={() => logOut()} className="text-white bg-[#353539] p-2 px-4 rounded-md hover:bg-[#656567] text-sm font-semibold flex items-center gap-2">
+                <LogOut size={16} />
+                {t("logOut")}
+              </button>
+            ) : (
+              <Link to="/login" onClick={() => setMenuOpen(false)} className="text-white bg-[#353539] p-2 px-4 rounded-md hover:bg-[#656567] text-sm font-semibold">
+                {t("signIn")}
+              </Link>
+            )}
           </div>
 
           <ul>

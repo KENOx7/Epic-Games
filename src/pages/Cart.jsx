@@ -4,7 +4,9 @@ import { ShoppingCart, Bookmark, CircleDollarSign } from "lucide-react";
 import { useCartStore } from "../store/useCartStore";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useLanguageStore } from "../store/useLanguageStore";
+import { useAuthStore } from "../store/useAuthStore";
 import Checkout from "../components/Checkout";
+import { useNavigate } from "react-router-dom";
 
 function getPrice(price) {
   if (!price || price === "Free" || price === "—") {
@@ -30,6 +32,8 @@ export default function Cart() {
   const { cart, removeFromCart, clearCart } = useCartStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();
   const { t } = useLanguageStore();
+  const { user } = useAuthStore();
+  const navigate = useNavigate();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   let total = 0;
@@ -238,7 +242,13 @@ export default function Cart() {
             </div>
 
             <button
-              onClick={() => setCheckoutOpen(true)}
+              onClick={() => {
+                if (user) {
+                  setCheckoutOpen(true);
+                } else {
+                  navigate("/login");
+                }
+              }}
               className="w-full bg-[#26bbff] text-black font-bold py-3.5 rounded-lg"
             >
               {t("checkOutBtn")}

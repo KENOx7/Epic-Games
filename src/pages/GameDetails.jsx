@@ -17,6 +17,7 @@ import Checkout from "../components/Checkout";
 import { useCartStore } from "../store/useCartStore";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useLanguageStore } from "../store/useLanguageStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 function createSlug(title) {
   return title
@@ -36,6 +37,7 @@ const GameDetails = () => {
   const { addToCart, isInCart } = useCartStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();
   const { t } = useLanguageStore();
+  const { user } = useAuthStore();
 
   const [game, setGame] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -281,7 +283,13 @@ const GameDetails = () => {
             </div>
 
             <button
-              onClick={() => setCheckoutOpen(true)}
+              onClick={() => {
+                if (user) {
+                  setCheckoutOpen(true);
+                } else {
+                  navigate("/login");
+                }
+              }}
               className="w-full py-3 bg-[#26BBFF] hover:bg-[#72D3FF] text-black font-bold text-sm rounded-lg mb-2"
             >
               {t("buyNow")}

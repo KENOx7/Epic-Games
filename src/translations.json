@@ -253,7 +253,17 @@
     "audioEnglish": "Audio: English",
     "textLanguages": "Text: English, French, Italian, German, Spanish (Spain), Russian, Japanese, Korean, Chinese (Simplified)",
     "developedAndPublishedBy": "Developed and Published by",
-    "allRightsReserved": "All rights reserved."
+    "allRightsReserved": "All rights reserved.",
+    "logOut": "Sign Out",
+    "signUp": "Sign Up",
+    "emailAddress": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "or": "or",
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google",
+    "dontHaveAccount": "Don't have an Epic Games account?",
+    "alreadyHaveAccount": "Already have an account?"
   },
   "tr": {
     "support": "Destek",
@@ -509,7 +519,17 @@
     "audioEnglish": "Seslendirme: İngilizce",
     "textLanguages": "Metin: İngilizce, Fransızca, İtalyanca, Almanca, İspanyolca, Rusça, Japonca, Korece, Çince (Basitleştirilmiş)",
     "developedAndPublishedBy": "Geliştiren ve Yayınlayan:",
-    "allRightsReserved": "Tüm hakları saklıdır."
+    "allRightsReserved": "Tüm hakları saklıdır.",
+    "logOut": "Çıkış Yap",
+    "signUp": "Kayıt Ol",
+    "emailAddress": "E-posta Adresi",
+    "password": "Şifre",
+    "confirmPassword": "Şifreyi Onayla",
+    "or": "veya",
+    "signInWithGoogle": "Google ile Giriş Yap",
+    "signUpWithGoogle": "Google ile Kayıt Ol",
+    "dontHaveAccount": "Epic Games hesabınız yok mu?",
+    "alreadyHaveAccount": "Zaten bir hesabınız var mı?"
   },
   "ru": {
     "support": "Поддержка",
@@ -765,7 +785,17 @@
     "audioEnglish": "Озвучка: Английский",
     "textLanguages": "Текст: Английский, Французский, Итальянский, Немецкий, Испанский, Русский, Японский, Корейский, Китайский (Упрощенный)",
     "developedAndPublishedBy": "Разработчик и издатель:",
-    "allRightsReserved": "Все права защищены."
+    "allRightsReserved": "Все права защищены.",
+    "logOut": "Выйти",
+    "signUp": "Зарегистрироваться",
+    "emailAddress": "Адрес электронной почты",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "or": "или",
+    "signInWithGoogle": "Войти через Google",
+    "signUpWithGoogle": "Зарегистрироваться через Google",
+    "dontHaveAccount": "Нет аккаунта Epic Games?",
+    "alreadyHaveAccount": "Уже есть аккаунт?"
   },
   "az": {
     "support": "Dəstək",
@@ -1021,6 +1051,16 @@
     "audioEnglish": "Səs: İngiliscə",
     "textLanguages": "Mətn: İngiliscə, Fransızca, İtalyanca, Almanca, İspanca, Rusca, Yaponca, Koreyaca, Çincə (Sadələşdirilmiş)",
     "developedAndPublishedBy": "Tərtibatçı və Nəşriyyat:",
-    "allRightsReserved": "Bütün hüquqlar qorunur."
+    "allRightsReserved": "Bütün hüquqlar qorunur.",
+    "logOut": "Çıxış et",
+    "signUp": "Qeydiyyatdan keç",
+    "emailAddress": "E-poçt ünvanı",
+    "password": "Şifrə",
+    "confirmPassword": "Şifrəni təsdiqlə",
+    "or": "və ya",
+    "signInWithGoogle": "Google ilə daxil ol",
+    "signUpWithGoogle": "Google ilə qeydiyyatdan keç",
+    "dontHaveAccount": "Epic Games hesabınız yoxdur?",
+    "alreadyHaveAccount": "Artıq hesabınız var?"
   }
 }
