@@ -4,9 +4,9 @@ import { Earth, TextAlignJustify, X, Search, ChevronDown, ChevronUp, Bookmark, S
 import axios from "axios";
 import logo from "../assets/logo.png";
 import store from "../assets/store.svg";
-import { CartContext } from "../context/CartContext";
-import { WishlistContext } from "../context/WishlistContext";
-import { LanguageContext } from "../context/LanguageContext";
+import { useCartStore } from "../store/useCartStore";
+import { useWishlistStore } from "../store/useWishlistStore";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 const categories = [
   {
@@ -46,9 +46,9 @@ function Header() {
   const langRef = useRef(null);
   const navigate = useNavigate();
 
-  const { cart } = useContext(CartContext);
-  const { wishlist } = useContext(WishlistContext);
-  const { language, setLanguage, t } = useContext(LanguageContext);
+  const cart = useCartStore((state) => state.cart);
+  const wishlist = useWishlistStore((state) => state.wishlist);
+  const { language, setLanguage, t } = useLanguageStore();
 
   useEffect(() => {
     async function loadGames() {

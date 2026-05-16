@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { X, CreditCard, Wallet, Plus } from "lucide-react";
 import logo from "../assets/logo.png";
-import { LanguageContext } from "../context/LanguageContext";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 function getCoverUrl(item, basePath) {
   const folder = item.cartBasePath || basePath;
@@ -27,7 +27,7 @@ export default function Checkout({
   onSuccess,
   cartItems,
 }) {
-  const { t } = useContext(LanguageContext);
+  const { t } = useLanguageStore();
   const [selectedPayment, setSelectedPayment] = useState("credit");
 
   const items = cartItems || [game];

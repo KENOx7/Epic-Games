@@ -19,10 +19,6 @@ import Wishlist from "./pages/Wishlist";
 import Support from "./pages/Support";
 import Footer from "./components/Footer";
 
-import { CartProvider } from "./context/CartContext";
-import { WishlistProvider } from "./context/WishlistContext";
-import { LanguageProvider } from "./context/LanguageContext";
-
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -47,29 +43,25 @@ function Home() {
 
 function App() {
   return (
-    <LanguageProvider>
-      <CartProvider>
-        <WishlistProvider>
-        <ScrollToTop />
-        <div className="bg-[#101014] min-h-screen text-white">
-          <Header />
+    <>
+      <ScrollToTop />
+      <div className="bg-[#101014] min-h-screen text-white">
+        <Header />
 
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/game/:slug" element={<GameDetails />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/wishlist" element={<Wishlist />} />
-              <Route path="/browse" element={<Browse />} />
-              <Route path="/support" element={<Support />} />
-            </Routes>
-          </main>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/game/:slug" element={<GameDetails />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/browse" element={<Browse />} />
+            <Route path="/support" element={<Support />} />
+          </Routes>
+        </main>
 
-          <Footer />
-        </div>
-        </WishlistProvider>
-      </CartProvider>
-    </LanguageProvider>
+        <Footer />
+      </div>
+    </>
   );
 }
 export default App;

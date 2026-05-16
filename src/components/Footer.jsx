@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import { ArrowUp, ChevronDown } from "lucide-react";
 import { FaFacebookF, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import store from "../assets/store.svg";
-import { LanguageContext } from "../context/LanguageContext";
-import { useContext } from "react";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 export default function Footer() {
   const [open, setOpen] = useState("");
-  const { t } = useContext(LanguageContext);
+  const { t } = useLanguageStore();
 
   const scrollToTop = () => {
     window.scrollTo({

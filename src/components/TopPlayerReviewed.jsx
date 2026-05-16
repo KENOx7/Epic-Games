@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Bookmark, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { WishlistContext } from "../context/WishlistContext";
-import { LanguageContext } from "../context/LanguageContext";
+import { useWishlistStore } from "../store/useWishlistStore";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 function getFolderName(title) {
   return title
@@ -18,9 +18,9 @@ export default function TopPlayerReviewed() {
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
 
-  const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
 
-  const { t } = useContext(LanguageContext);
+  const { t } = useLanguageStore();
   useEffect(() => {
     axios
       .get(

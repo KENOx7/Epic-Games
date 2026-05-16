@@ -12,8 +12,8 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { WishlistContext } from "../context/WishlistContext";
-import { LanguageContext } from "../context/LanguageContext";
+import { useWishlistStore } from "../store/useWishlistStore";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 const categories = [
   {
@@ -245,8 +245,8 @@ function Browse() {
     platform: [],
   });
 
-  const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
-  const { t } = useContext(LanguageContext);
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
+  const { t } = useLanguageStore();
 
   useEffect(() => {
     setKeyword(keywordParam);

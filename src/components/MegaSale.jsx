@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import megaSaleBg from "../assets/mega-sale.png";
-import { LanguageContext } from "../context/LanguageContext";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 export default function MegaSale() {
-  const { t } = useContext(LanguageContext);
+  const { t } = useLanguageStore();
 
   return (
     <div className="w-full mt-4 md:mt-0">

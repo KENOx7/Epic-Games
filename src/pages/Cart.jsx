@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Bookmark, CircleDollarSign } from "lucide-react";
-import { CartContext } from "../context/CartContext";
-import { WishlistContext } from "../context/WishlistContext";
-import { LanguageContext } from "../context/LanguageContext";
+import { useCartStore } from "../store/useCartStore";
+import { useWishlistStore } from "../store/useWishlistStore";
+import { useLanguageStore } from "../store/useLanguageStore";
 import Checkout from "../components/Checkout";
 
 function getPrice(price) {
@@ -14,15 +14,22 @@ function getPrice(price) {
   return parseFloat(price.replace(/[^0-9.]/g, "")) || 0;
 }
 
+function getSlug(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function getReward(price) {
   const value = getPrice(price);
   return (value * 0.05).toFixed(2);
 }
 
 export default function Cart() {
-  const { cart, removeFromCart, clearCart } = useContext(CartContext);
-  const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
-  const { t } = useContext(LanguageContext);
+  const { cart, removeFromCart, clearCart } = useCartStore();
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
+  const { t } = useLanguageStore();
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   let total = 0;
@@ -111,13 +118,13 @@ export default function Cart() {
                 className="bg-[#18181c] rounded-xl p-4 flex flex-col sm:flex-row gap-4"
               >
                 <div className="flex gap-4 flex-1 min-w-0">
-                  <div className="w-[58px] h-[78px] sm:w-[120px] sm:h-[160px] bg-[#111] rounded overflow-hidden shrink-0">
+                  <Link to={`/game/${getSlug(game.title)}?from=${game.endpoint || "epic-savings"}`} className="w-[58px] h-[78px] sm:w-[120px] sm:h-[160px] bg-[#111] rounded overflow-hidden shrink-0 block">
                     <img
                       src={coverUrl}
                       alt={game.title}
                       className="w-full h-full object-contain"
                     />
-                  </div>
+                  </Link>
 
                   <div className="flex-1 min-w-0 flex flex-col">
                     {game.genres && (
@@ -128,9 +135,11 @@ export default function Cart() {
                       </span>
                     )}
 
-                    <h2 className="text-lg sm:text-xl font-bold leading-tight line-clamp-2">
-                      {game.title}
-                    </h2>
+                    <Link to={`/game/${getSlug(game.title)}?from=${game.endpoint || "epic-savings"}`}>
+                      <h2 className="text-lg sm:text-xl font-bold leading-tight line-clamp-2 hover:underline">
+                        {game.title}
+                      </h2>
+                    </Link>
 
                     {game.platform && (
                       <p className="text-gray-500 text-xs mt-3">

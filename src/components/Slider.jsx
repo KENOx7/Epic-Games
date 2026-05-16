@@ -7,8 +7,7 @@ import img4 from "../assets/SliderImgs/may-the-4th.jpeg";
 import img5 from "../assets/SliderImgs/mongil-star.jpg";
 import img6 from "../assets/SliderImgs/first-light.jpg";
 
-import { LanguageContext } from "../context/LanguageContext";
-import { useContext } from "react";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 const slidesData = [
   {
@@ -68,7 +67,7 @@ const slidesData = [
 ];
 
 export default function Slider() {
-  const { t } = useContext(LanguageContext);
+  const { t } = useLanguageStore();
   const slides = slidesData;
   const [activeIndex, setActiveIndex] = useState(0);
   const [oldIndex, setOldIndex] = useState(null);

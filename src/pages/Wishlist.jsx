@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Bookmark, ShoppingCart, CircleDollarSign } from "lucide-react";
-import { WishlistContext } from "../context/WishlistContext";
-import { CartContext } from "../context/CartContext";
-import { LanguageContext } from "../context/LanguageContext";
+import { useWishlistStore } from "../store/useWishlistStore";
+import { useCartStore } from "../store/useCartStore";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 function getSlug(title) {
   return title
@@ -22,9 +22,9 @@ function getReward(price) {
 }
 
 export default function Wishlist() {
-  const { wishlist, removeFromWishlist } = useContext(WishlistContext);
-  const { addToCart, isInCart } = useContext(CartContext);
-  const { t } = useContext(LanguageContext);
+  const { wishlist, removeFromWishlist } = useWishlistStore();
+  const { addToCart, isInCart } = useCartStore();
+  const { t } = useLanguageStore();
 
   if (wishlist.length === 0) {
     return (
@@ -128,10 +128,10 @@ export default function Wishlist() {
 
                       <div>
                         <p className="text-white text-sm font-bold">
-                          {game.ageRating || "12+"}
+                          {game.ageRating || t("ageRating")}
                         </p>
                         <p className="text-gray-400 text-xs">
-                          {game.ageDescription ? t(game.ageDescription) || game.ageDescription : t("moderateViolence")}
+                          {game.ageDescription ? t(game.ageDescription) || game.ageDescription : t("ageRatingWarning")}
                         </p>
                       </div>
                     </div>
@@ -149,10 +149,10 @@ export default function Wishlist() {
 
                   <div>
                     <p className="text-white text-sm font-bold">
-                      {game.ageRating || "12+"}
+                      {game.ageRating || t("ageRating")}
                     </p>
                     <p className="text-gray-400 text-xs">
-                      {game.ageDescription ? t(game.ageDescription) || game.ageDescription : t("moderateViolence")}
+                      {game.ageDescription ? t(game.ageDescription) || game.ageDescription : t("ageRatingWarning")}
                     </p>
                   </div>
                 </div>

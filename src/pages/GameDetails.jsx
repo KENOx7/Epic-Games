@@ -14,8 +14,9 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import Checkout from "../components/Checkout";
-import { CartContext } from "../context/CartContext";
-import { WishlistContext } from "../context/WishlistContext";
+import { useCartStore } from "../store/useCartStore";
+import { useWishlistStore } from "../store/useWishlistStore";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 function createSlug(title) {
   return title
@@ -32,8 +33,9 @@ const GameDetails = () => {
   const params = new URLSearchParams(location.search);
   const from = params.get("from") || "epic-savings";
 
-  const { addToCart, isInCart } = useContext(CartContext);
-  const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
+  const { addToCart, isInCart } = useCartStore();
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
+  const { t } = useLanguageStore();
 
   const [game, setGame] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -69,7 +71,7 @@ const GameDetails = () => {
   if (loading) {
     return (
       <div className="bg-[#101014] min-h-screen flex items-center justify-center">
-        <p className="text-gray-400 text-lg">Yüklənir...</p>
+        <p className="text-gray-400 text-lg">{t("loading")}</p>
       </div>
     );
   }
@@ -77,10 +79,10 @@ const GameDetails = () => {
   if (!game) {
     return (
       <div className="bg-[#101014] min-h-screen flex items-center justify-center flex-col gap-4">
-        <p className="text-gray-400 text-lg">Oyun tapılmadı</p>
+        <p className="text-gray-400 text-lg">{t("gameNotFound")}</p>
 
         <Link to="/" className="text-[#26BBFF] hover:underline">
-          ← Geri qayıt
+          {t("goBack")}
         </Link>
       </div>
     );
@@ -163,7 +165,7 @@ const GameDetails = () => {
               <X size={20} />
             </button>
 
-            <h2 className="text-xl font-bold text-center mb-6">Share Game</h2>
+            <h2 className="text-xl font-bold text-center mb-6">{t("shareGame")}</h2>
 
             <div className="flex items-center bg-[#101014] border border-gray-700 rounded-lg overflow-hidden">
               <input
@@ -186,7 +188,7 @@ const GameDetails = () => {
 
             {copied && (
               <p className="text-[#b7d36b] text-sm mt-3 text-center">
-                Link kopyalandı!
+                {t("linkCopied")}
               </p>
             )}
           </div>
@@ -247,7 +249,7 @@ const GameDetails = () => {
               onClick={() => setCheckoutOpen(true)}
               className="w-full py-3 bg-[#26BBFF] hover:bg-[#72D3FF] text-black font-bold text-sm rounded-lg mb-2"
             >
-              Buy Now
+              {t("buyNow")}
             </button>
 
             {inCart ? (
@@ -256,7 +258,7 @@ const GameDetails = () => {
                 className="w-full py-3 bg-[#2a2a30] hover:bg-[#3a3a40] text-white text-sm rounded-lg flex items-center justify-center gap-2 mb-2"
               >
                 <ShoppingCart size={16} />
-                View in Cart
+                {t("viewInCart")}
               </button>
             ) : (
               <button
@@ -264,7 +266,7 @@ const GameDetails = () => {
                 className="w-full py-3 bg-[#2a2a30] hover:bg-[#3a3a40] text-white text-sm rounded-lg flex items-center justify-center gap-2 mb-2"
               >
                 <ShoppingCart size={16} />
-                Add to Cart
+                {t("addToCart")}
               </button>
             )}
 
@@ -273,25 +275,25 @@ const GameDetails = () => {
               className="w-full py-3 bg-[#2a2a30] hover:bg-[#3a3a40] text-white text-sm rounded-lg flex items-center justify-center gap-2"
             >
               <Bookmark size={16} className={inWishlist ? "fill-white" : ""} />
-              {inWishlist ? "In Wishlist" : "Wishlist"}
+              {inWishlist ? t("inWishlist") : t("wishlistTitle")}
             </button>
           </div>
 
           <div>
             <div className="flex justify-between px-[2px] mb-3 text-sm">
-              <span className="text-gray-400">Developer</span>
+              <span className="text-gray-400">{t("developer")}</span>
               <span className="text-white text-right">{game.developer}</span>
             </div>
             <div className="flex justify-between px-[2px] mb-3 text-sm">
-              <span className="text-gray-400">Publisher</span>
+              <span className="text-gray-400">{t("publisher")}</span>
               <span className="text-white text-right">{game.publisher}</span>
             </div>
             <div className="flex justify-between px-[2px] mb-3 text-sm">
-              <span className="text-gray-400">Release Date</span>
+              <span className="text-gray-400">{t("releaseDate")}</span>
               <span className="text-white text-right">{game.releaseDate}</span>
             </div>
             <div className="flex justify-between px-[2px] mb-3 text-sm">
-              <span className="text-gray-400">Platform</span>
+              <span className="text-gray-400">{t("platform")}</span>
               <span className="text-white text-right">{game.platform}</span>
             </div>
 
@@ -301,7 +303,7 @@ const GameDetails = () => {
                 className="flex items-center gap-2 text-gray-400 hover:text-white py-2 px-5 rounded-md text-sm"
               >
                 <Share2 size={14} />
-                Share
+                {t("share")}
               </button>
             </div>
           </div>
@@ -317,9 +319,9 @@ const GameDetails = () => {
               </div>
 
               <div>
-                <p className="text-white text-sm font-bold">Age Rating</p>
+                <p className="text-white text-sm font-bold">{t("ageRating")}</p>
                 <p className="text-gray-400 text-xs">
-                  Recommended age rating for this game.
+                  {t("ageRatingDesc")}
                 </p>
               </div>
             </div>
@@ -383,7 +385,7 @@ const GameDetails = () => {
             <div className="flex gap-12 mb-6 flex-wrap">
               {game.genres && (
                 <div>
-                  <p className="text-gray-400 text-sm mb-2">Genres</p>
+                  <p className="text-gray-400 text-sm mb-2">{t("genre")}</p>
 
                   <div className="flex gap-2 flex-wrap">
                     {game.genres.map((genre) => (
@@ -400,7 +402,7 @@ const GameDetails = () => {
 
               {game.features && (
                 <div>
-                  <p className="text-gray-400 text-sm mb-2">Features</p>
+                  <p className="text-gray-400 text-sm mb-2">{t("features")}</p>
 
                   <div className="flex gap-2 flex-wrap">
                     {game.features.map((feature) => (
@@ -424,66 +426,66 @@ const GameDetails = () => {
 
             <div className="mt-16">
               <h2 className="text-xl font-bold mb-6">
-                {game.title} System Requirements
+                {t("systemRequirements").replace('{game}', game.title)}
               </h2>
 
               <div className="bg-[#1a1a1e] rounded-lg p-6 md:p-10">
                 <div className="border-b border-[#2a2a30] mb-8">
                   <button className="text-white border-b-2 border-[#26BBFF] pb-3 font-bold text-sm">
-                    Windows
+                    {t("Windows")}
                   </button>
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-8 md:gap-16 mb-10">
                   <div className="flex-1">
-                    <h3 className="font-bold text-white mb-6">Minimum</h3>
+                    <h3 className="font-bold text-white mb-6">{t("minimum")}</h3>
 
                     <div className="flex flex-col gap-5">
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">OS version</p>
+                        <p className="text-gray-400 text-xs mb-1">{t("osVersion")}</p>
                         <p className="text-sm">Windows 10 version 21H1 (build 19043) or newer</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">CPU</p>
+                        <p className="text-gray-400 text-xs mb-1">{t("cpu")}</p>
                         <p className="text-sm">Intel Core i3-8100 or Ryzen 5 1400</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">Memory</p>
+                        <p className="text-gray-400 text-xs mb-1">{t("memory")}</p>
                         <p className="text-sm">6 GB</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">GPU</p>
+                        <p className="text-gray-400 text-xs mb-1">{t("gpu")}</p>
                         <p className="text-sm">Nvidia GeForce GT 1030 (2 GB) or AMD Radeon RX 560 (2 GB) or Intel UHD Graphics 630</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">DirectX</p>
+                        <p className="text-gray-400 text-xs mb-1">{t("directX")}</p>
                         <p className="text-sm">DirectX 11</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="flex-1">
-                    <h3 className="font-bold text-white mb-6">Recommended</h3>
+                    <h3 className="font-bold text-white mb-6">{t("recommended")}</h3>
 
                     <div className="flex flex-col gap-5">
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">OS version</p>
+                        <p className="text-gray-400 text-xs mb-1">{t("osVersion")}</p>
                         <p className="text-sm">Windows 10 version 21H1 (build 19043) or newer</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">CPU</p>
+                        <p className="text-gray-400 text-xs mb-1">{t("cpu")}</p>
                         <p className="text-sm">Intel Core i5-11600 or AMD Ryzen 5 5600</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">Memory</p>
+                        <p className="text-gray-400 text-xs mb-1">{t("memory")}</p>
                         <p className="text-sm">8 GB</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">GPU</p>
+                        <p className="text-gray-400 text-xs mb-1">{t("gpu")}</p>
                         <p className="text-sm">Nvidia GeForce GTX 1070 (8 GB) or AMD Radeon RX 5600 XT (6 GB) or Intel Arc A750 (8 GB)</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-xs mb-1">DirectX</p>
+                        <p className="text-gray-400 text-xs mb-1">{t("directX")}</p>
                         <p className="text-sm">DirectX 12</p>
                       </div>
                     </div>
@@ -492,26 +494,25 @@ const GameDetails = () => {
 
                 <div className="border-t border-[#2a2a30] pt-8 mb-10">
                   <h3 className="text-gray-400 text-xs mb-2">
-                    Languages Supported
+                    {t("languagesSupported")}
                   </h3>
-                  <p className="text-sm mb-4">Audio: English</p>
+                  <p className="text-sm mb-4">{t("audioEnglish")}</p>
                   <p className="text-sm">
-                    Text: English, French, Italian, German, Spanish (Spain),
-                    Russian, Japanese, Korean, Chinese (Simplified)
+                    {t("textLanguages")}
                   </p>
                 </div>
 
                 <div className="text-gray-400 text-xs">
                   <p className="mb-3">
-                    {game.title} © 2025 Developed and Published by Broken Arms
-                    Games srl. All rights reserved.
+                    {game.title} © 2025 {t("developedAndPublishedBy")} Broken Arms
+                    Games srl. {t("allRightsReserved")}
                   </p>
 
                   <a
                     href="#"
                     className="flex items-center gap-1 text-white hover:underline font-bold"
                   >
-                    Privacy Policy
+                    {t("privacyPolicy")}
                     <ExternalLink size={14} />
                   </a>
                 </div>

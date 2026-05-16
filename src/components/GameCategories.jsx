@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Bookmark, ChevronRight } from "lucide-react";
 import axios from "axios";
-import { WishlistContext } from "../context/WishlistContext";
-import { LanguageContext } from "../context/LanguageContext";
+import { useWishlistStore } from "../store/useWishlistStore";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 function getFolderName(title) {
   return title
@@ -14,8 +14,8 @@ function getFolderName(title) {
 
 function GameColumn({ title, endpoint }) {
   const [games, setGames] = useState([]);
-  const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
-  const { t } = useContext(LanguageContext);
+  const { toggleWishlist, isInWishlist } = useWishlistStore();
+  const { t } = useLanguageStore();
 
   useEffect(() => {
     axios

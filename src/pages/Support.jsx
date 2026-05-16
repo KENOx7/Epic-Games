@@ -1,10 +1,10 @@
 import { ArrowRight } from "lucide-react";
 import { useContext } from "react";
 import supportBg from "../assets/support_bg.jpg";
-import { LanguageContext } from "../context/LanguageContext";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 function Support() {
-  const { t } = useContext(LanguageContext);
+  const { t } = useLanguageStore();
 
   return (
     <div

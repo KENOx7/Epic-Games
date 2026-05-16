@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { LanguageContext } from "../context/LanguageContext";
+import { useLanguageStore } from "../store/useLanguageStore";
 
 const MYSTERY_IMAGE =
   "https://cdn1.epicgames.com/offer/d5241c76f178492ea1540fce45616757/image24_1200x1600-22d04473c1b145ca885d2867c05f5ea3?resize=1&w=360&h=480&quality=medium";
@@ -50,7 +50,7 @@ function toSlug(title) {
 export default function FreeGames() {
   const [games, setGames] = useState([]);
   const countdown = useCountdown(UNLOCK_DATE);
-  const { t } = useContext(LanguageContext);
+  const { t } = useLanguageStore();
 
   useEffect(() => {
     axios
