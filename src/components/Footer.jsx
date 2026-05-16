@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 import { ArrowUp, ChevronDown } from "lucide-react";
 import { FaFacebookF, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import store from "../assets/store.svg";
+import { LanguageContext } from "../context/LanguageContext";
+import { useContext } from "react";
 
 export default function Footer() {
   const [open, setOpen] = useState("");
+  const { t } = useContext(LanguageContext);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -50,19 +53,19 @@ export default function Footer() {
               onClick={() => toggleSection("games")}
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
-              Games
+              {t("games")}
               <ChevronDown size={18} />
             </button>
 
             {open === "games" && (
               <ul className="pb-4 flex flex-col gap-2">
-                <li><a href="#" className="text-gray-400 text-sm">Fortnite</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Fall Guys</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Rocket League</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Unreal Tournament</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Infinity Blade</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Shadow Complex</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Robo Recall</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("fortnite")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("fallGuys")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("rocketLeague")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("unrealTournament")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("infinityBlade")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("shadowComplex")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("roboRecall")}</a></li>
               </ul>
             )}
           </div>
@@ -72,20 +75,20 @@ export default function Footer() {
               onClick={() => toggleSection("marketplaces")}
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
-              Marketplaces
+              {t("marketplaces")}
               <ChevronDown size={18} />
             </button>
 
             {open === "marketplaces" && (
               <ul className="pb-4 flex flex-col gap-2">
-                <li><a href="#" className="text-gray-400 text-sm">Epic Games Store</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Fab</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Quixel Megascans on Fab</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Quixel Megaplants on Fab</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Sketchfab</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">ArtStation</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Store Refund Policy</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Store EULA</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("epicGamesStore")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("fab")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("quixelMegascans")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("quixelMegaplants")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("sketchfab")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("artStation")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("storeRefundPolicy")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("storeEula")}</a></li>
               </ul>
             )}
           </div>
@@ -95,18 +98,18 @@ export default function Footer() {
               onClick={() => toggleSection("tools")}
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
-              Tools
+              {t("tools")}
               <ChevronDown size={18} />
             </button>
 
             {open === "tools" && (
               <ul className="pb-4 flex flex-col gap-2">
-                <li><a href="#" className="text-gray-400 text-sm">Unreal Engine</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">UEFN</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">MetaHuman</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Twinmotion</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">RealityScan</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">RAD Game Tools</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("unrealEngine")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("uefn")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("metaHuman")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("twinmotion")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("realityScan")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("radGameTools")}</a></li>
               </ul>
             )}
           </div>
@@ -116,18 +119,18 @@ export default function Footer() {
               onClick={() => toggleSection("online")}
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
-              Online Services
+              {t("onlineServices")}
               <ChevronDown size={18} />
             </button>
 
             {open === "online" && (
               <ul className="pb-4 flex flex-col gap-2">
-                <li><a href="#" className="text-gray-400 text-sm">Epic Online Services</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Kids Web Services</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Services Agreement</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Acceptable Use Policy</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Trust Statement</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Subprocessor List</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("epicOnlineServices")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("kidsWebServices")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("servicesAgreement")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("acceptableUsePolicy")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("trustStatement")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("subprocessorList")}</a></li>
               </ul>
             )}
           </div>
@@ -137,17 +140,17 @@ export default function Footer() {
               onClick={() => toggleSection("company")}
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
-              Company
+              {t("company")}
               <ChevronDown size={18} />
             </button>
 
             {open === "company" && (
               <ul className="pb-4 flex flex-col gap-2">
-                <li><a href="#" className="text-gray-400 text-sm">About</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Newsroom</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Careers</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Students</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">UX Research</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("about")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("newsroom")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("careers")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("students")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("uxResearch")}</a></li>
               </ul>
             )}
           </div>
@@ -157,22 +160,22 @@ export default function Footer() {
               onClick={() => toggleSection("resources")}
               className="w-full flex items-center justify-between py-4 text-white font-bold"
             >
-              Resources
+              {t("resources")}
               <ChevronDown size={18} />
             </button>
 
             {open === "resources" && (
               <ul className="pb-4 flex flex-col gap-2">
-                <li><a href="#" className="text-gray-400 text-sm">Dev Community</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">MegaGrants</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Support-A-Creator</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Creator Agreement</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Distribute on Epic Games</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Unreal Engine Branding Guidelines</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Fan Art Policy</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Community Rules</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">EU Digital Services Act Inquiries</a></li>
-                <li><a href="#" className="text-gray-400 text-sm">Epic Pro Support</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("devCommunity")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("megaGrants")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("supportACreator")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("creatorAgreement")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("distributeOnEpic")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("unrealBranding")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("fanArtPolicy")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("communityRules")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("euDigitalServices")}</a></li>
+                <li><a href="#" className="text-gray-400 text-sm">{t("epicProSupport")}</a></li>
               </ul>
             )}
           </div>
@@ -180,118 +183,108 @@ export default function Footer() {
 
         <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-12 border-t border-[#3a3a40] pt-8">
           <div>
-            <h3 className="text-white font-bold mb-4">Games</h3>
+            <h3 className="text-white font-bold mb-4">{t("games")}</h3>
             <ul className="flex flex-col gap-2">
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Fortnite</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Fall Guys</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Rocket League</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Unreal Tournament</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Infinity Blade</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Shadow Complex</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Robo Recall</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("fortnite")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("fallGuys")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("rocketLeague")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("unrealTournament")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("infinityBlade")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("shadowComplex")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("roboRecall")}</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-white font-bold mb-4">Marketplaces</h3>
+            <h3 className="text-white font-bold mb-4">{t("marketplaces")}</h3>
             <ul className="flex flex-col gap-2">
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Epic Games Store</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Fab</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Quixel Megascans on Fab</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Quixel Megaplants on Fab</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Sketchfab</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">ArtStation</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Store Refund Policy</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Store EULA</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("epicGamesStore")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("fab")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("quixelMegascans")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("quixelMegaplants")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("sketchfab")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("artStation")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("storeRefundPolicy")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("storeEula")}</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-white font-bold mb-4">Tools</h3>
+            <h3 className="text-white font-bold mb-4">{t("tools")}</h3>
             <ul className="flex flex-col gap-2">
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Unreal Engine</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">UEFN</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">MetaHuman</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Twinmotion</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">RealityScan</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">RAD Game Tools</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("unrealEngine")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("uefn")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("metaHuman")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("twinmotion")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("realityScan")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("radGameTools")}</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-white font-bold mb-4">Online Services</h3>
+            <h3 className="text-white font-bold mb-4">{t("onlineServices")}</h3>
             <ul className="flex flex-col gap-2">
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Epic Online Services</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Kids Web Services</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Services Agreement</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Acceptable Use Policy</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Trust Statement</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Subprocessor List</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("epicOnlineServices")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("kidsWebServices")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("servicesAgreement")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("acceptableUsePolicy")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("trustStatement")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("subprocessorList")}</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-white font-bold mb-4">Company</h3>
+            <h3 className="text-white font-bold mb-4">{t("company")}</h3>
             <ul className="flex flex-col gap-2">
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">About</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Newsroom</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Careers</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Students</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">UX Research</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("about")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("newsroom")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("careers")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("students")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("uxResearch")}</a></li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-white font-bold mb-4">Resources</h3>
+            <h3 className="text-white font-bold mb-4">{t("resources")}</h3>
             <ul className="flex flex-col gap-2">
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Dev Community</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">MegaGrants</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Support-A-Creator</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Creator Agreement</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Distribute on Epic Games</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Unreal Engine Branding Guidelines</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Fan Art Policy</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Community Rules</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">EU Digital Services Act Inquiries</a></li>
-              <li><a href="#" className="text-gray-400 text-sm hover:text-white">Epic Pro Support</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("devCommunity")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("megaGrants")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("supportACreator")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("creatorAgreement")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("distributeOnEpic")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("unrealBranding")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("fanArtPolicy")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("communityRules")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("euDigitalServices")}</a></li>
+              <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("epicProSupport")}</a></li>
             </ul>
           </div>
         </div>
 
         <div className="md:border-t md:border-[#3a3a40] md:pt-8 mt-8 md:mt-0">
           <p className="text-[#AEAEAF] text-[11px] md:text-xs leading-relaxed text-center md:text-left max-w-[850px] mx-auto md:mx-0">
-            © 2026 Epic Games, Inc. All rights reserved. Epic, Epic Games, the
-            Epic Games logo, Fortnite, the Fortnite logo, Unreal, Unreal Engine,
-            the Unreal Engine logo, Unreal Tournament, and the Unreal Tournament
-            logo are trademarks or registered trademarks of Epic Games, Inc. in
-            the United States of America and elsewhere. Other brands or product
-            names are the trademarks of their respective owners. Our websites
-            may contain links to other sites and resources provided by third
-            parties. These links are provided for your convenience only. Epic
-            Games has no control over the contents of those sites or resources,
-            and accepts no responsibility for them or for any loss or damage
-            that may arise from your use of them.
+            {t("copyrightText")}
           </p>
 
           <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 mt-8">
             <a href="#" className="text-gray-400 text-xs hover:text-white">
-              Terms of service
+              {t("termsOfService")}
             </a>
 
             <a href="#" className="text-gray-400 text-xs hover:text-white">
-              Privacy policy
+              {t("privacyPolicy")}
             </a>
 
             <a href="#" className="text-gray-400 text-xs hover:text-white">
-              Safety & security
+              {t("safetySecurity")}
             </a>
 
             <a href="#" className="text-gray-400 text-xs hover:text-white">
-              Store refund policy
+              {t("storeRefundPolicy")}
             </a>
 
             <a href="#" className="text-gray-400 text-xs hover:text-white">
-              Publisher Index
+              {t("publisherIndex")}
             </a>
           </div>
         </div>
@@ -301,7 +294,7 @@ export default function Footer() {
             onClick={scrollToTop}
             className="flex items-center gap-2 text-white bg-[#353539] hover:bg-[#45454a] px-4 py-2 rounded-md text-sm"
           >
-            Back to top
+            {t("backToTop")}
             <ArrowUp size={15} />
           </button>
         </div>

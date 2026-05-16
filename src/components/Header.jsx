@@ -6,6 +6,7 @@ import logo from "../assets/logo.png";
 import store from "../assets/store.svg";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
+import { LanguageContext } from "../context/LanguageContext";
 
 const categories = [
   {
@@ -39,12 +40,15 @@ function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [games, setGames] = useState([]);
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
 
   const searchRef = useRef(null);
+  const langRef = useRef(null);
   const navigate = useNavigate();
 
   const { cart } = useContext(CartContext);
   const { wishlist } = useContext(WishlistContext);
+  const { language, setLanguage, t } = useContext(LanguageContext);
 
   useEffect(() => {
     async function loadGames() {
@@ -79,6 +83,9 @@ function Header() {
 
       if (searchRef.current && !searchRef.current.contains(e.target)) {
         setSearchOpen(false);
+      }
+      if (langRef.current && !langRef.current.contains(e.target)) {
+        setLangDropdownOpen(false);
       }
     }
 
@@ -135,7 +142,7 @@ function Header() {
 
   return (
     <>
-      <header className="bg-[#121216] h-[72px] w-full flex items-center justify-between p-5">
+      <header className="relative z-[60] bg-[#121216] h-[72px] w-full flex items-center justify-between p-5">
         <div className="flex items-center gap-5">
           <Link to="/" className="flex items-center gap-5 hover:opacity-80">
             <img src={logo} alt="logo" className="h-[40px]" />
@@ -143,23 +150,59 @@ function Header() {
           </Link>
 
           <Link to="/support" className="hidden md:block text-white hover:text-gray-300">
-            Support
+            {t("support")}
           </Link>
 
           <Link to="/" className="hidden md:block text-white hover:text-gray-300">
-            Distribute
+            {t("distribute")}
           </Link>
         </div>
 
         <div className="flex items-center gap-5">
-          <Earth className="hidden md:block text-white hover:opacity-60 cursor-pointer" />
+          <div className="relative hidden md:block" ref={langRef}>
+            <button 
+              onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+              className="text-white hover:opacity-60 flex items-center justify-center mt-1"
+            >
+              <Earth size={24} />
+            </button>
+            
+            {langDropdownOpen && (
+              <div className="absolute right-0 top-10 bg-[#18181c] rounded-md shadow-xl py-2 w-[150px] z-50">
+                <button 
+                  onClick={() => { setLanguage("en"); setLangDropdownOpen(false); }}
+                  className={`w-full text-left px-5 py-2.5 hover:bg-[#2a2a30] ${language === "en" ? "text-white font-bold" : "text-[#AEAEAF]"}`}
+                >
+                  English
+                </button>
+                <button 
+                  onClick={() => { setLanguage("tr"); setLangDropdownOpen(false); }}
+                  className={`w-full text-left px-5 py-2.5 hover:bg-[#2a2a30] ${language === "tr" ? "text-white font-bold" : "text-[#AEAEAF]"}`}
+                >
+                  Türkçe
+                </button>
+                <button 
+                  onClick={() => { setLanguage("ru"); setLangDropdownOpen(false); }}
+                  className={`w-full text-left px-5 py-2.5 hover:bg-[#2a2a30] ${language === "ru" ? "text-white font-bold" : "text-[#AEAEAF]"}`}
+                >
+                  Русский
+                </button>
+                <button 
+                  onClick={() => { setLanguage("az"); setLangDropdownOpen(false); }}
+                  className={`w-full text-left px-5 py-2.5 hover:bg-[#2a2a30] ${language === "az" ? "text-white font-bold" : "text-[#AEAEAF]"}`}
+                >
+                  Azərbaycanca
+                </button>
+              </div>
+            )}
+          </div>
 
-          <button className="hidden md:block text-white bg-[#353539] p-2 w-[71px] rounded-md hover:bg-[#656567]">
-            Sign In
+          <button className="hidden md:block text-white bg-[#353539] p-2 px-4 rounded-md hover:bg-[#656567] text-sm font-semibold">
+            {t("signIn")}
           </button>
 
-          <button className="bg-[#26BBFF] md:p-2 p-1 px-2 rounded-md hover:bg-[#72D3FF]">
-            Download
+          <button className="bg-[#26BBFF] md:p-2 p-1 px-3 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold">
+            {t("download")}
           </button>
 
           <button
@@ -188,20 +231,53 @@ function Header() {
           </div>
 
           <div className="flex justify-end items-center gap-5 mt-4">
-            <Earth className="text-white hover:opacity-60 cursor-pointer" />
-
-            <button className="text-white bg-[#353539] p-2 w-[71px] rounded-md hover:bg-[#656567]">
-              Sign In
+            <button className="text-white bg-[#353539] p-2 px-4 rounded-md hover:bg-[#656567] text-sm font-semibold">
+              {t("signIn")}
             </button>
           </div>
 
           <ul>
-            <li className="text-white text-[32px] font-bold">Menu</li>
-            <Link to="/support" onClick={() => setMenuOpen(false)} className="text-white pt-10">
-              Support
-            </Link>
-            <li className="text-white pt-5">Distribute</li>
+            <li className="text-white text-[32px] font-bold">{t("menu")}</li>
+            <li className="pt-10">
+              <Link to="/support" onClick={() => setMenuOpen(false)} className="text-white hover:text-gray-300">
+                {t("support")}
+              </Link>
+            </li>
+            <li className="text-white pt-5">
+              <Link to="/" onClick={() => setMenuOpen(false)} className="text-white hover:text-gray-300">
+                {t("distribute")}
+              </Link>
+            </li>
           </ul>
+          
+          <div className="mt-auto border-t border-[#2a2a30] pt-6 pb-2">
+            <div className="flex gap-4">
+              <button 
+                onClick={() => setLanguage("en")} 
+                className={`text-sm ${language === "en" ? "text-white font-bold" : "text-gray-400"}`}
+              >
+                EN
+              </button>
+              <button 
+                onClick={() => setLanguage("tr")} 
+                className={`text-sm ${language === "tr" ? "text-white font-bold" : "text-gray-400"}`}
+              >
+                TR
+              </button>
+              <button 
+                onClick={() => setLanguage("ru")} 
+                className={`text-sm ${language === "ru" ? "text-white font-bold" : "text-gray-400"}`}
+              >
+                RU
+              </button>
+              <button 
+                onClick={() => setLanguage("az")} 
+                className={`text-sm ${language === "az" ? "text-white font-bold" : "text-gray-400"}`}
+              >
+                AZ
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -216,7 +292,7 @@ function Header() {
 
                 <input
                   type="text"
-                  placeholder="Search store"
+                  placeholder={t("searchStore")}
                   value={searchText}
                   onChange={(e) => {
                     setSearchText(e.target.value);
@@ -297,14 +373,14 @@ function Header() {
                 to="/"
                 className="text-white hover:opacity-80 transition-opacity"
               >
-                Discover
+                {t("discover")}
               </Link>
 
               <Link
                 to="/browse"
                 className="text-[#AEAEAF] hover:text-white transition-colors"
               >
-                Browse
+                {t("browse")}
               </Link>
             </div>
           </div>
@@ -362,7 +438,7 @@ function Header() {
               <input
                 autoFocus
                 type="text"
-                placeholder="Search store"
+                placeholder={t("searchStore")}
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
                 className="bg-transparent text-white outline-none w-full"

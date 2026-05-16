@@ -21,6 +21,7 @@ import Footer from "./components/Footer";
 
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
+import { LanguageProvider } from "./context/LanguageContext";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -46,8 +47,9 @@ function Home() {
 
 function App() {
   return (
-    <CartProvider>
-      <WishlistProvider>
+    <LanguageProvider>
+      <CartProvider>
+        <WishlistProvider>
         <ScrollToTop />
         <div className="bg-[#101014] min-h-screen text-white">
           <Header />
@@ -65,8 +67,9 @@ function App() {
 
           <Footer />
         </div>
-      </WishlistProvider>
-    </CartProvider>
+        </WishlistProvider>
+      </CartProvider>
+    </LanguageProvider>
   );
 }
 export default App;

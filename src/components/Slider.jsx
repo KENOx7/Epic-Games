@@ -7,66 +7,69 @@ import img4 from "../assets/SliderImgs/may-the-4th.jpeg";
 import img5 from "../assets/SliderImgs/mongil-star.jpg";
 import img6 from "../assets/SliderImgs/first-light.jpg";
 
-const slides = [
+import { LanguageContext } from "../context/LanguageContext";
+import { useContext } from "react";
+
+const slidesData = [
   {
     id: 1,
-    title: "Fortnite | Star Wars",
-    subtitle: "AVAILABLE NOW",
-    description:
-      "All-new Star Wars Islands have come to Fortnite - everything from single-player role-playing games, to shooters, tycoons and more await!",
+    titleKey: "slide1Title",
+    subtitleKey: "slide1Subtitle",
+    descriptionKey: "slide1Desc",
     mainImage: img1,
     thumbImage: img1,
-    thumbTitle: "Fortnite | Star Wars",
+    thumbTitleKey: "slide1Title",
   },
   {
     id: 2,
-    title: "Hogwarts Legacy",
-    subtitle: "CELEBRATE 25 YEARS OF HARRY POTTER MAGIC!",
-    description:
-      "Play Hogwarts Legacy free and be at the center of your own adventure in the wizarding world.",
+    titleKey: "slide2Title",
+    subtitleKey: "slide2Subtitle",
+    descriptionKey: "slide2Desc",
     mainImage: img2,
     thumbImage: img2,
-    thumbTitle: "Hogwarts Legacy",
+    thumbTitleKey: "slide2Title",
   },
   {
     id: 3,
-    title: "Epic Savings",
-    subtitle: "APRIL 23 - MAY 7",
-    description: "Save big on must-play games and discover new adventures.",
+    titleKey: "slide3Title",
+    subtitleKey: "slide3Subtitle",
+    descriptionKey: "slide3Desc",
     mainImage: img3,
     thumbImage: img3,
-    thumbTitle: "Epic Savings",
+    thumbTitleKey: "slide3Title",
   },
   {
     id: 4,
-    title: "May the 4th Be With You",
-    subtitle: "SPECIAL OFFERS",
-    description: "Celebrate Star Wars day with amazing deals.",
+    titleKey: "slide4Title",
+    subtitleKey: "slide4Subtitle",
+    descriptionKey: "slide4Desc",
     mainImage: img4,
     thumbImage: img4,
-    thumbTitle: "May the 4th Be With You",
+    thumbTitleKey: "slide4Title",
   },
   {
     id: 5,
-    title: "MONGIL: STAR DIVE",
-    subtitle: "NEW RELEASE",
-    description: "Dive into a new adventure in the stars.",
+    titleKey: "slide5Title",
+    subtitleKey: "slide5Subtitle",
+    descriptionKey: "slide5Desc",
     mainImage: img5,
     thumbImage: img5,
-    thumbTitle: "MONGIL: STAR DIVE",
+    thumbTitleKey: "slide5Title",
   },
   {
     id: 6,
-    title: "007 First Light",
-    subtitle: "COMING SOON",
-    description: "The iconic spy returns in a new thriller.",
+    titleKey: "slide6Title",
+    subtitleKey: "slide6Subtitle",
+    descriptionKey: "slide6Desc",
     mainImage: img6,
     thumbImage: img6,
-    thumbTitle: "007 First Light",
+    thumbTitleKey: "slide6Title",
   },
 ];
 
 export default function Slider() {
+  const { t } = useContext(LanguageContext);
+  const slides = slidesData;
   const [activeIndex, setActiveIndex] = useState(0);
   const [oldIndex, setOldIndex] = useState(null);
   const [direction, setDirection] = useState("right");
@@ -143,12 +146,13 @@ export default function Slider() {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {oldIndex !== null && <Slide slide={slides[oldIndex]} />}
+        {oldIndex !== null && <Slide slide={slides[oldIndex]} t={t} />}
 
         <Slide
           slide={slides[activeIndex]}
           key={activeIndex}
           className={direction === "right" ? "slide-in-right" : "slide-in-left"}
+          t={t}
         />
 
         <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 md:hidden z-20 pointer-events-none">
@@ -200,7 +204,7 @@ export default function Slider() {
                   : "text-gray-400"
               }`}
             >
-              {slide.thumbTitle}
+              {t(slide.thumbTitleKey)}
             </div>
           </div>
         ))}
@@ -209,34 +213,34 @@ export default function Slider() {
   );
 }
 
-function Slide({ slide, className = "" }) {
+function Slide({ slide, className = "", t }) {
   return (
     <div className={`absolute inset-0 ${className}`}>
       <img
         src={slide.mainImage}
-        alt={slide.title}
+        alt={t(slide.titleKey)}
         className="w-full h-full object-cover"
         draggable="false"
       />
 
       <div className="absolute bottom-0 left-0 w-full p-5 md:p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none">
         <p className="text-gray-300 text-[10px] md:text-xs font-bold mb-1 md:mb-2">
-          {slide.subtitle}
+          {t(slide.subtitleKey)}
         </p>
 
         <h2 className="text-white text-xl md:text-4xl font-bold mb-2 md:mb-4">
-          {slide.title}
+          {t(slide.titleKey)}
         </h2>
 
         <p className="text-gray-200 text-xs md:text-lg mb-4 md:mb-6 max-w-[400px]">
-          {slide.description}
+          {t(slide.descriptionKey)}
         </p>
 
         <button
           type="button"
           className="bg-white text-black text-xs md:text-sm font-bold py-2 px-4 md:py-2.5 md:px-6 rounded hover:bg-gray-200 pointer-events-auto"
         >
-          Discover now
+          {t("discoverNow")}
         </button>
       </div>
     </div>

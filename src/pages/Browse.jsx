@@ -13,6 +13,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { WishlistContext } from "../context/WishlistContext";
+import { LanguageContext } from "../context/LanguageContext";
 
 const categories = [
   {
@@ -148,7 +149,7 @@ function priceMatches(game, filter) {
   return false;
 }
 
-function PopularGenresSlider({ games, setFilters }) {
+function PopularGenresSlider({ games, setFilters, t }) {
   const openGenre = (genre) => {
     setFilters((prev) => ({
       ...prev,
@@ -163,7 +164,7 @@ function PopularGenresSlider({ games, setFilters }) {
 
   return (
     <div className="max-w-[1200px] mx-auto px-4 mt-8">
-      <h2 className="text-xl font-bold text-white mb-4">Popular Genres</h2>
+      <h2 className="text-xl font-bold text-white mb-4">{t ? t("popularGenres") || "Popular Genres" : "Popular Genres"}</h2>
 
       <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4">
         {popularGenres.map((genre) => {
@@ -213,7 +214,7 @@ function PopularGenresSlider({ games, setFilters }) {
               </div>
 
               <p className="text-white text-center text-sm font-semibold">
-                {genre.title}
+                {t ? (t(genre.title) || genre.title) : genre.title}
               </p>
             </div>
           );
@@ -245,6 +246,7 @@ function Browse() {
   });
 
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     setKeyword(keywordParam);
@@ -406,14 +408,14 @@ function Browse() {
   return (
     <>
       {!loading && games.length > 0 && (
-        <PopularGenresSlider games={games} setFilters={setFilters} />
+        <PopularGenresSlider games={games} setFilters={setFilters} t={t} />
       )}
 
       <div className="max-w-[1200px] mx-auto mt-8 px-4 flex flex-col md:flex-row gap-8 pb-20">
         {mobileFilterOpen && (
           <div className="fixed inset-0 z-50 bg-[#121214] overflow-y-auto md:hidden">
             <div className="flex items-center justify-between px-4 pt-5 pb-3 border-b border-[#202024]">
-              <h3 className="text-white text-lg font-bold">Filters</h3>
+              <h3 className="text-white text-lg font-bold">{t("filters") || "Filters"}</h3>
 
               <button
                 onClick={() => setMobileFilterOpen(false)}
@@ -429,43 +431,45 @@ function Browse() {
                 setKeyword={setKeyword}
                 filters={filters}
                 toggleFilter={toggleFilter}
+                t={t}
               />
 
               <button
                 onClick={() => setMobileFilterOpen(false)}
                 className="mt-6 w-full bg-white text-black font-semibold py-3 rounded-lg text-sm"
               >
-                Show Results
+                {t("showResults") || "Show Results"}
               </button>
             </div>
           </div>
         )}
 
         <div className="hidden md:block md:w-[240px] md:min-w-[240px] md:order-2">
-          <h3 className="text-white text-lg font-bold mb-4">Filters</h3>
+          <h3 className="text-white text-lg font-bold mb-4">{t("filters") || "Filters"}</h3>
 
           <FilterPanel
             keyword={keyword}
             setKeyword={setKeyword}
             filters={filters}
             toggleFilter={toggleFilter}
+            t={t}
           />
         </div>
 
         <div className="flex-1 min-w-0 md:order-1">
           <div className="flex items-center gap-3 mb-6">
-            <span className="text-gray-400 text-sm">Show:</span>
+            <span className="text-gray-400 text-sm">{t("show") || "Show:"}</span>
 
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="bg-[#202024] text-white text-sm px-3 py-2 rounded-md outline-none"
             >
-              <option value="all">All</option>
-              <option value="new-release">New Release</option>
-              <option value="alphabetical">Alphabetical</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="price-low">Price: Low to High</option>
+              <option value="all">{t("all") || "All"}</option>
+              <option value="new-release">{t("newRelease") || "New Release"}</option>
+              <option value="alphabetical">{t("alphabetical") || "Alphabetical"}</option>
+              <option value="price-high">{t("priceHighToLow") || "Price: High to Low"}</option>
+              <option value="price-low">{t("priceLowToHigh") || "Price: Low to High"}</option>
             </select>
 
             <button
@@ -473,21 +477,21 @@ function Browse() {
               className="md:hidden ml-auto flex items-center gap-1.5 bg-[#202024] text-white text-sm px-3 py-2 rounded-md"
             >
               <SlidersHorizontal size={15} />
-              Filter
+              {t("filters") || "Filter"}
             </button>
           </div>
 
           {keyword && (
             <p className="text-gray-400 text-sm mb-5">
-              Results for <span className="text-white">"{keyword}"</span>
+              {t("resultsFor") || "Results for"} <span className="text-white">"{keyword}"</span>
             </p>
           )}
 
           {loading ? (
-            <div className="text-white text-center py-20">Loading...</div>
+            <div className="text-white text-center py-20">{t("loading") || "Loading..."}</div>
           ) : shownGames.length === 0 ? (
             <div className="text-gray-400 text-center py-20">
-              No games found.
+              {t("noGamesFound") || "No games found."}
             </div>
           ) : (
             <>
@@ -530,7 +534,7 @@ function Browse() {
 
                       <div className="mt-3">
                         <p className="text-gray-400 text-[11px] uppercase font-semibold mb-1">
-                          Base Game
+                          {t("baseGame") || "Base Game"}
                         </p>
 
                         <p className="text-white text-sm font-semibold mb-1 line-clamp-2">
@@ -605,7 +609,7 @@ function Browse() {
   );
 }
 
-function FilterPanel({ keyword, setKeyword, filters, toggleFilter }) {
+function FilterPanel({ keyword, setKeyword, filters, toggleFilter, t }) {
   return (
     <>
       <div className="relative mb-6">
@@ -616,62 +620,62 @@ function FilterPanel({ keyword, setKeyword, filters, toggleFilter }) {
 
         <input
           type="text"
-          placeholder="Keywords"
+          placeholder={t ? (t("keywords") || "Keywords") : "Keywords"}
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           className="w-full bg-[#202024] text-sm text-white rounded-md py-2.5 pl-10 pr-4 outline-none placeholder:text-gray-400"
         />
       </div>
 
-      <FilterSection title="Category" defaultOpen={filters.category.length > 0}>
+      <FilterSection title={t ? (t("category") || "Category") : "Category"} defaultOpen={filters.category.length > 0}>
         {categories.map((category) => (
           <Checkbox
             key={category.key}
-            label={category.label}
+            label={t ? (t(category.label) || category.label) : category.label}
             checked={filters.category.includes(category.key)}
             onChange={() => toggleFilter("category", category.key)}
           />
         ))}
       </FilterSection>
 
-      <FilterSection title="Price" defaultOpen={filters.price.length > 0}>
+      <FilterSection title={t ? (t("price") || "Price") : "Price"} defaultOpen={filters.price.length > 0}>
         {priceFilters.map((price) => (
           <Checkbox
             key={price}
-            label={price}
+            label={t ? (t(price) || price) : price}
             checked={filters.price.includes(price)}
             onChange={() => toggleFilter("price", price)}
           />
         ))}
       </FilterSection>
 
-      <FilterSection title="Genre" defaultOpen={filters.genre.length > 0}>
+      <FilterSection title={t ? (t("genre") || "Genre") : "Genre"} defaultOpen={filters.genre.length > 0}>
         {genreFilters.map((genre) => (
           <Checkbox
             key={genre}
-            label={genre}
+            label={t ? (t(genre) || genre) : genre}
             checked={filters.genre.includes(genre)}
             onChange={() => toggleFilter("genre", genre)}
           />
         ))}
       </FilterSection>
 
-      <FilterSection title="Features" defaultOpen={filters.features.length > 0}>
+      <FilterSection title={t ? (t("features") || "Features") : "Features"} defaultOpen={filters.features.length > 0}>
         {featureFilters.map((feature) => (
           <Checkbox
             key={feature}
-            label={feature}
+            label={t ? (t(feature) || feature) : feature}
             checked={filters.features.includes(feature)}
             onChange={() => toggleFilter("features", feature)}
           />
         ))}
       </FilterSection>
 
-      <FilterSection title="Platform" defaultOpen={filters.platform.length > 0}>
+      <FilterSection title={t ? (t("platform") || "Platform") : "Platform"} defaultOpen={filters.platform.length > 0}>
         {platformFilters.map((platform) => (
           <Checkbox
             key={platform}
-            label={platform}
+            label={t ? (t(platform) || platform) : platform}
             checked={filters.platform.includes(platform)}
             onChange={() => toggleFilter("platform", platform)}
           />

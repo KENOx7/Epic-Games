@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import megaSaleBg from "../assets/mega-sale.png";
+import { LanguageContext } from "../context/LanguageContext";
 
 export default function MegaSale() {
+  const { t } = useContext(LanguageContext);
+
   return (
     <div className="w-full mt-4 md:mt-0">
       <div
@@ -15,31 +18,30 @@ export default function MegaSale() {
 
         <div className="relative z-10 max-w-2xl flex flex-col items-center">
           <h3 className="text-white text-xl md:text-2xl font-bold mb-3">
-            The Epic Games MEGA Sale 2026
+            {t("megaSaleTitle")}
           </h3>
 
           <p className="text-white text-sm md:text-base mb-6 px-4">
-            Your one stop shop for MEGA deals, free games, gifts with purchase,
-            and more.
+            {t("megaSaleDesc")}
           </p>
 
           <Link
             to="/browse?price=Discounted"
             className="bg-white text-black font-bold text-sm px-10 py-3 rounded-lg hover:bg-gray-200 mb-4"
           >
-            Save Now
+            {t("saveNow")}
           </Link>
 
           <p className="text-white/80 text-[11px] md:text-xs mb-6 bg-black/40 px-4 py-1.5 rounded-full">
-            Sale ends June 11 at 11am ET
+            {t("saleEnds")}
           </p>
 
           <p className="text-white/60 text-[10px] md:text-xs max-w-lg">
-            Check out our{" "}
+            {t("megaSaleFooterStart")}{" "}
             <Link to="#" className="underline hover:text-white">
-              Epic Extras Page
+              {t("epicExtrasPage")}
             </Link>{" "}
-            to unlock free cosmetic packs, exclusive perks and more.
+            {t("megaSaleFooterEnd")}
           </p>
         </div>
       </div>

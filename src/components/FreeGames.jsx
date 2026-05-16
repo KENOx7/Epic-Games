@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { LanguageContext } from "../context/LanguageContext";
 
 const MYSTERY_IMAGE =
   "https://cdn1.epicgames.com/offer/d5241c76f178492ea1540fce45616757/image24_1200x1600-22d04473c1b145ca885d2867c05f5ea3?resize=1&w=360&h=480&quality=medium";
@@ -49,6 +50,7 @@ function toSlug(title) {
 export default function FreeGames() {
   const [games, setGames] = useState([]);
   const countdown = useCountdown(UNLOCK_DATE);
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     axios
@@ -64,14 +66,14 @@ export default function FreeGames() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <Gift size={20} className="text-white" />
-            <h2 className="text-white text-lg font-bold">Free Games</h2>
+            <h2 className="text-white text-lg font-bold">{t("freeGames")}</h2>
           </div>
 
           <Link
             to="/browse?price=Free"
             className="text-white text-sm px-4 py-1.5 border border-[#3a3a3a] rounded hover:bg-white/10"
           >
-            View More
+            {t("viewMore") || "View More"}
           </Link>
         </div>
 
@@ -96,7 +98,7 @@ export default function FreeGames() {
                   <div className="absolute inset-0 group-hover:bg-white/10 pointer-events-none" />
 
                   <div className="absolute bottom-0 left-0 right-0 bg-[#26bbff] text-black text-[11px] font-bold text-center py-1.5 uppercase">
-                    FREE NOW
+                    {t("freeNow")}
                   </div>
                 </div>
 
@@ -106,7 +108,7 @@ export default function FreeGames() {
                   </p>
 
                   <p className="text-[#aaa] text-xs">
-                    Free Now - May 14 at 07:00 PM
+                    {t("freeNow")} - May 14 at 07:00 PM
                   </p>
                 </div>
               </Link>
@@ -125,17 +127,17 @@ export default function FreeGames() {
                 <div className="absolute inset-0 bg-black/40" />
 
                 <div className="absolute bottom-0 left-0 right-0 bg-black/80 text-white text-[11px] font-bold text-center py-1.5 uppercase">
-                  MYSTERY GAME
+                  {t("mysteryGame")}
                 </div>
               </div>
 
               <div className="mt-3">
                 <p className="text-white text-sm font-semibold mb-1">
-                  Mystery Game
+                  {t("mysteryGame")}
                 </p>
 
                 <p className="text-[#26bbff] text-xs">
-                  Unlocking in {countdown}
+                  {t("unlockingIn")} {countdown}
                 </p>
               </div>
             </div>

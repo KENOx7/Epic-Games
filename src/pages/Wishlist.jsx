@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Bookmark, ShoppingCart, CircleDollarSign } from "lucide-react";
 import { WishlistContext } from "../context/WishlistContext";
 import { CartContext } from "../context/CartContext";
+import { LanguageContext } from "../context/LanguageContext";
 
 function getSlug(title) {
   return title
@@ -23,26 +24,27 @@ function getReward(price) {
 export default function Wishlist() {
   const { wishlist, removeFromWishlist } = useContext(WishlistContext);
   const { addToCart, isInCart } = useContext(CartContext);
+  const { t } = useContext(LanguageContext);
 
   if (wishlist.length === 0) {
     return (
       <div className="max-w-[1200px] mx-auto px-4 py-10 mt-10 min-h-[60vh]">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-8">Wishlist</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-8">{t("wishlistTitle")}</h1>
 
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <Bookmark size={64} className="text-gray-500 mb-6" />
 
-          <h2 className="text-2xl font-bold mb-2">Your Wishlist is empty</h2>
+          <h2 className="text-2xl font-bold mb-2">{t("wishlistEmpty")}</h2>
 
           <p className="text-gray-400 mb-6 max-w-md mx-auto">
-            Find games and add them to your wishlist to buy them later.
+            {t("wishlistEmptyDesc")}
           </p>
 
           <Link
             to="/"
             className="bg-white text-black px-8 py-3 rounded font-bold hover:bg-gray-200"
           >
-            Shop for Games
+            {t("shopGames")}
           </Link>
         </div>
       </div>
@@ -51,7 +53,7 @@ export default function Wishlist() {
 
   return (
     <div className="max-w-[1200px] mx-auto px-4 py-10 mt-10 min-h-[60vh]">
-      <h1 className="text-3xl sm:text-4xl font-bold mb-8">Wishlist</h1>
+      <h1 className="text-3xl sm:text-4xl font-bold mb-8">{t("wishlistTitle")}</h1>
 
       <div className="grid grid-cols-1 gap-6">
         {wishlist.map((game) => {
@@ -94,12 +96,12 @@ export default function Wishlist() {
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap gap-2 mb-2">
                     <span className="bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 font-bold">
-                      Base Game
+                      {t("baseGame")}
                     </span>
 
                     {game.features?.includes("Early Access") && (
                       <span className="bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 font-bold">
-                        Early Access
+                        {t("earlyAccess")}
                       </span>
                     )}
                   </div>
@@ -129,7 +131,7 @@ export default function Wishlist() {
                           {game.ageRating || "12+"}
                         </p>
                         <p className="text-gray-400 text-xs">
-                          {game.ageDescription || "Moderate Violence"}
+                          {game.ageDescription ? t(game.ageDescription) || game.ageDescription : t("moderateViolence")}
                         </p>
                       </div>
                     </div>
@@ -150,7 +152,7 @@ export default function Wishlist() {
                       {game.ageRating || "12+"}
                     </p>
                     <p className="text-gray-400 text-xs">
-                      {game.ageDescription || "Moderate Violence"}
+                      {game.ageDescription ? t(game.ageDescription) || game.ageDescription : t("moderateViolence")}
                     </p>
                   </div>
                 </div>
@@ -172,19 +174,19 @@ export default function Wishlist() {
                     )}
 
                     <span className="text-lg font-bold">
-                      {game.newPrice || "Free"}
+                      {game.newPrice || t("Free")}
                     </span>
                   </div>
 
                   {game.saleEnds && (
                     <p className="text-gray-400 text-xs mt-2">
-                      Sale ends {game.saleEnds}
+                      {t("saleEndsPrefix")} {game.saleEnds}
                     </p>
                   )}
 
                   <p className="text-[#b7d36b] text-sm flex items-center gap-2 sm:justify-end mt-4 sm:whitespace-nowrap">
                     <CircleDollarSign size={16} className="text-yellow-300" />
-                    Earn 5% back in Epic Rewards ${getReward(game.newPrice)}
+                    {t("earnEpicRewards")} ${getReward(game.newPrice)}
                   </p>
 
 
@@ -195,7 +197,7 @@ export default function Wishlist() {
                     onClick={() => removeFromWishlist(game.title)}
                     className="text-sm text-gray-400 underline"
                   >
-                    Remove
+                    {t("remove")}
                   </button>
 
                   {inCart ? (
@@ -204,7 +206,7 @@ export default function Wishlist() {
                       className="border border-[#3a3a3a] px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2"
                     >
                       <ShoppingCart size={14} />
-                      View in Cart
+                      {t("viewInCart")}
                     </Link>
                   ) : (
                     <button
@@ -212,7 +214,7 @@ export default function Wishlist() {
                       className="bg-[#26bbff] sm:bg-transparent text-black sm:text-white border border-[#26bbff] sm:border-[#3a3a3a] px-4 py-2 rounded-lg text-sm font-bold sm:font-normal flex items-center justify-center gap-2"
                     >
                       <ShoppingCart size={14} className="hidden sm:block" />
-                      Add To Cart
+                      {t("addToCartBtn")}
                     </button>
                   )}
                 </div>

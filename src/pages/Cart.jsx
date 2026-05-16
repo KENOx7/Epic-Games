@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ShoppingCart, Bookmark, CircleDollarSign } from "lucide-react";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
+import { LanguageContext } from "../context/LanguageContext";
 import Checkout from "../components/Checkout";
 
 function getPrice(price) {
@@ -21,6 +22,7 @@ function getReward(price) {
 export default function Cart() {
   const { cart, removeFromCart, clearCart } = useContext(CartContext);
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
+  const { t } = useContext(LanguageContext);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   let total = 0;
@@ -41,10 +43,10 @@ export default function Cart() {
   const subtotalText = subtotal.toFixed(2);
 
   const checkoutGame = {
-    title: `${cart.length} Item${cart.length > 1 ? "s" : ""} in Cart`,
+    title: `${cart.length} ${cart.length > 1 ? t("itemsInCart2") : t("itemsInCart1")}`,
     publisher: "Epic Games Store",
     oldPrice: `$${total.toFixed(2)}`,
-    newPrice: subtotal === 0 ? "Free" : `$${subtotalText}`,
+    newPrice: subtotal === 0 ? t("Free") : `$${subtotalText}`,
     discount: discount > 0 ? `-$${discount.toFixed(2)}` : null,
   };
 
@@ -60,19 +62,19 @@ export default function Cart() {
   if (cart.length === 0) {
     return (
       <div className="max-w-[1200px] mx-auto mt-10 px-4 min-h-[60vh]">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-8">My Cart</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-8">{t("myCart")}</h1>
 
         <div className="bg-[#18181c] rounded-xl p-8 sm:p-10 text-center flex flex-col items-center">
           <ShoppingCart size={64} className="mb-4 text-[#3a3a3a]" />
 
-          <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
-          <p className="text-gray-400 mb-6">Shop for games and apps.</p>
+          <h2 className="text-2xl font-bold mb-2">{t("cartEmpty")}</h2>
+          <p className="text-gray-400 mb-6">{t("shopGamesApps")}</p>
 
           <Link
             to="/"
             className="bg-[#26bbff] text-black font-bold px-6 py-3 rounded-lg"
           >
-            Shop for Games
+            {t("shopGames")}
           </Link>
         </div>
       </div>
@@ -91,7 +93,7 @@ export default function Cart() {
         />
       )}
 
-      <h1 className="text-3xl sm:text-4xl font-bold mb-8">My Cart</h1>
+      <h1 className="text-3xl sm:text-4xl font-bold mb-8">{t("myCart")}</h1>
 
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1 space-y-4">
@@ -138,7 +140,7 @@ export default function Cart() {
 
                     {game.newPrice !== "Free" && (
                       <p className="text-sm text-white mt-auto pt-2">
-                        {game.refundType || "Refundable"}
+                        {game.refundType ? t(game.refundType) || game.refundType : t("refundable")}
                       </p>
                     )}
                   </div>
@@ -160,19 +162,19 @@ export default function Cart() {
                       )}
 
                       <span className="text-lg font-bold">
-                        {game.newPrice || "Free"}
+                        {game.newPrice || t("Free")}
                       </span>
                     </div>
 
                     {game.saleEnds && (
                       <p className="text-gray-400 text-xs mt-2">
-                        Sale ends {game.saleEnds}
+                        {t("saleEndsPrefix")} {game.saleEnds}
                       </p>
                     )}
 
                     <p className="text-[#b7d36b] flex items-center gap-2 text-sm mt-4 sm:whitespace-nowrap">
                       <CircleDollarSign size={16} className="text-yellow-300" />
-                      Earn 5% back in Epic Rewards ${getReward(game.newPrice)}
+                      {t("earnEpicRewards")} ${getReward(game.newPrice)}
                     </p>
 
 
@@ -188,7 +190,7 @@ export default function Cart() {
                           size={14}
                           className={inWishlist ? "fill-white" : ""}
                         />
-                        {inWishlist ? "In wishlist" : "Move to wishlist"}
+                        {inWishlist ? t("inWishlist") : t("moveToWishlist")}
                       </button>
                     </div>
 
@@ -196,7 +198,7 @@ export default function Cart() {
                       onClick={() => removeFromCart(game.title)}
                       className="text-sm text-gray-400 hover:text-white text-right"
                     >
-                      Remove
+                      {t("remove")}
                     </button>
                   </div>
                 </div>
@@ -207,22 +209,22 @@ export default function Cart() {
 
         <div className="w-full lg:w-[320px]">
           <div className="bg-[#18181c] rounded-xl p-6">
-            <h2 className="text-2xl font-bold mb-6">Summary</h2>
+            <h2 className="text-2xl font-bold mb-6">{t("summary")}</h2>
 
             <div className="flex justify-between mb-3 text-sm">
-              <span>Price</span>
+              <span>{t("price")}</span>
               <span>${total.toFixed(2)}</span>
             </div>
 
             {discount > 0 && (
               <div className="flex justify-between mb-3 text-sm">
-                <span>Discount</span>
+                <span>{t("discountText")}</span>
                 <span>-${discount.toFixed(2)}</span>
               </div>
             )}
 
             <div className="flex justify-between border-t border-[#333] pt-4 mb-6 font-bold">
-              <span>Subtotal</span>
+              <span>{t("subtotal")}</span>
               <span>${subtotalText}</span>
             </div>
 
@@ -230,7 +232,7 @@ export default function Cart() {
               onClick={() => setCheckoutOpen(true)}
               className="w-full bg-[#26bbff] text-black font-bold py-3.5 rounded-lg"
             >
-              Check Out
+              {t("checkOutBtn")}
             </button>
           </div>
         </div>

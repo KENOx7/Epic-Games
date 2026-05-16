@@ -3,6 +3,7 @@ import { Bookmark, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { WishlistContext } from "../context/WishlistContext";
+import { LanguageContext } from "../context/LanguageContext";
 
 function getFolderName(title) {
   return title
@@ -18,6 +19,7 @@ export default function TopSellers() {
   const [touchEnd, setTouchEnd] = useState(null);
 
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     axios
@@ -68,7 +70,7 @@ export default function TopSellers() {
     <div className="max-w-[1200px] mx-auto mt-10 px-4">
       <div className="flex items-center justify-between mb-6">
         <Link to="/browse?category=top-sellers" className="flex items-center group">
-          <h2 className="text-white text-xl font-bold">Top Sellers</h2>
+          <h2 className="text-white text-xl font-bold">{t("Top Sellers")}</h2>
           <ChevronRight className="text-white ml-1 transition-transform duration-300 group-hover:translate-x-1" />
         </Link>
 

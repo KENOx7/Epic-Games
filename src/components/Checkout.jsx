@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { X, CreditCard, Wallet, Plus } from "lucide-react";
 import logo from "../assets/logo.png";
+import { LanguageContext } from "../context/LanguageContext";
 
 function getCoverUrl(item, basePath) {
   const folder = item.cartBasePath || basePath;
@@ -26,6 +27,7 @@ export default function Checkout({
   onSuccess,
   cartItems,
 }) {
+  const { t } = useContext(LanguageContext);
   const [selectedPayment, setSelectedPayment] = useState("credit");
 
   const items = cartItems || [game];
@@ -60,7 +62,7 @@ export default function Checkout({
         <div className="w-full md:w-[35%] bg-[#1a1a1e] p-5 md:p-8 flex flex-col">
           <div className="flex items-center gap-3 mb-6">
             <img src={logo} alt="Epic Games" className="h-9 object-contain" />
-            <span className="font-bold text-white text-xl">Checkout</span>
+            <span className="font-bold text-white text-xl">{t("checkoutTitle")}</span>
           </div>
 
           <div className="space-y-4 mb-6">
@@ -95,13 +97,13 @@ export default function Checkout({
 
           <div>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-gray-400 text-sm">Subtotal</span>
+              <span className="text-gray-400 text-sm">{t("subtotal")}</span>
               <span className="text-white text-sm">{game.oldPrice}</span>
             </div>
 
             {game.discount && (
               <div className="flex justify-between items-center mb-2 text-sm">
-                <span className="text-gray-400">Discount</span>
+                <span className="text-gray-400">{t("discountText")}</span>
                 <span className="text-gray-400">{game.discount}</span>
               </div>
             )}
@@ -109,42 +111,41 @@ export default function Checkout({
             <div className="border-t border-[#3a3a40] my-4"></div>
 
             <div className="flex justify-between items-center mb-4">
-              <span className="text-white font-bold text-lg">Total</span>
+              <span className="text-white font-bold text-lg">{t("total")}</span>
               <span className="text-white font-bold text-lg">
                 {game.newPrice}
               </span>
             </div>
 
             <div className="bg-[#1e2320] text-[#42b781] px-3 py-2 rounded text-xs">
-              Get 5% in Epic Rewards. ${rewards}
+              {t("getEpicRewards").replace('.', '')} ${rewards}
             </div>
           </div>
         </div>
 
         <div className="flex-1 p-5 md:p-8 bg-[#121214] flex flex-col">
-          <h2 className="text-xl font-bold text-white mb-6">Payment Details</h2>
+          <h2 className="text-xl font-bold text-white mb-6">{t("paymentDetails")}</h2>
 
           <div className="flex flex-col gap-3 mb-6">
             <div className="border border-gray-700 rounded-lg p-4 bg-[#1a1a1e] hover:bg-[#202024] cursor-pointer">
               <div className="flex items-center gap-3">
                 <Wallet className="text-[#26BBFF]" size={24} />
                 <span className="text-white font-medium flex-1">
-                  Account Balance
+                  {t("accountBalance")}
                 </span>
               </div>
 
               <p className="text-gray-400 text-xs mt-2 md:ml-9">
-                Use your account balance to buy games, V-Bucks, and in-game
-                items. Your account balance is tied to this account.
+                {t("accountBalanceDesc")}
               </p>
 
               <div className="mt-3 md:ml-9 flex items-center gap-4">
                 <button className="bg-[#2a2a30] text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-[#3a3a40]">
-                  Add funds
+                  {t("addFunds")}
                 </button>
 
                 <span className="text-gray-400 text-xs underline hover:text-white">
-                  Learn more
+                  {t("learnMore")}
                 </span>
               </div>
             </div>
@@ -161,7 +162,7 @@ export default function Checkout({
               </div>
 
               <span className="text-gray-300 font-medium flex-1">
-                Credit Card / Debit Card
+                {t("creditDebitCard")}
               </span>
 
               <div
@@ -208,29 +209,28 @@ export default function Checkout({
 
           <button className="flex items-center gap-2 text-gray-400 hover:text-white text-sm mb-6 w-fit">
             <Plus size={16} />
-            Creator Code
+            {t("creatorCode")}
           </button>
 
           <button
             onClick={payNow}
             className="w-full py-4 rounded-lg font-bold mb-4 bg-[#26BBFF] text-black hover:bg-[#72D3FF]"
           >
-            Pay Now
+            {t("payNow")}
           </button>
 
           <p className="text-[11px] text-gray-500 leading-relaxed pb-6 md:pb-0">
             By selecting "Pay Now", you certify that you are over 18, are
-            authorized to use this payment method, and agree to the{" "}
+            {t("payNowDisclaimer1")}{" "}
             <span className="text-[#26BBFF] hover:underline cursor-pointer">
-              End User License Agreement
+              {t("eula")}
             </span>
             .
             <br />
             <br />
-            You are paying for a digital license for this product; for terms,
-            see{" "}
+            {t("payNowDisclaimer2")}{" "}
             <span className="text-[#26BBFF] hover:underline cursor-pointer">
-              purchase policy
+              {t("purchasePolicy")}
             </span>
             .
           </p>

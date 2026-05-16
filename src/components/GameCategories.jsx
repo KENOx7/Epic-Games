@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Bookmark, ChevronRight } from "lucide-react";
 import axios from "axios";
 import { WishlistContext } from "../context/WishlistContext";
+import { LanguageContext } from "../context/LanguageContext";
 
 function getFolderName(title) {
   return title
@@ -14,6 +15,7 @@ function getFolderName(title) {
 function GameColumn({ title, endpoint }) {
   const [games, setGames] = useState([]);
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     axios
@@ -29,7 +31,7 @@ function GameColumn({ title, endpoint }) {
         to={`/browse?category=${endpoint}`}
         className="flex items-center mb-4 group w-fit"
       >
-        <h3 className="text-white text-lg">{title}</h3>
+        <h3 className="text-white text-lg">{t(title)}</h3>
         <ChevronRight className="text-white ml-1 transition-transform duration-300 group-hover:translate-x-1" />
       </Link>
 
