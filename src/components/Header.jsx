@@ -266,11 +266,39 @@ function Header() {
             </button>
           </div>
 
-          <div className="flex justify-end items-center mt-4">
-            <button className="bg-[#26BBFF] py-2.5 px-8 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold">
-              {t("download")}
-            </button>
+          <div className="flex justify-end items-center mt-2">
+            <div className="flex items-center gap-4">
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setLanguage("en")}
+                    className={`text-sm ${language === "en" ? "text-white font-bold" : "text-gray-400"}`}
+                  >
+                    EN
+                  </button>
+                  <button
+                    onClick={() => setLanguage("tr")}
+                    className={`text-sm ${language === "tr" ? "text-white font-bold" : "text-gray-400"}`}
+                  >
+                    TR
+                  </button>
+                  <button
+                    onClick={() => setLanguage("ru")}
+                    className={`text-sm ${language === "ru" ? "text-white font-bold" : "text-gray-400"}`}
+                  >
+                    RU
+                  </button>
+                  <button
+                    onClick={() => setLanguage("az")}
+                    className={`text-sm ${language === "az" ? "text-white font-bold" : "text-gray-400"}`}
+                  >
+                    AZ
+                  </button>
+                </div>
+                <Earth className="text-[#AEAEAF]" size={24} />
+            </div>
           </div>
+
+
 
           <ul>
             <li className="text-white text-[32px] font-bold">{t("menu")}</li>
@@ -286,34 +314,7 @@ function Header() {
             </li>
           </ul>
 
-          <div className="mt-auto border-t border-[#2a2a30] pt-6 pb-2">
-            <div className="flex gap-4">
-              <button
-                onClick={() => setLanguage("en")}
-                className={`text-sm ${language === "en" ? "text-white font-bold" : "text-gray-400"}`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => setLanguage("tr")}
-                className={`text-sm ${language === "tr" ? "text-white font-bold" : "text-gray-400"}`}
-              >
-                TR
-              </button>
-              <button
-                onClick={() => setLanguage("ru")}
-                className={`text-sm ${language === "ru" ? "text-white font-bold" : "text-gray-400"}`}
-              >
-                RU
-              </button>
-              <button
-                onClick={() => setLanguage("az")}
-                className={`text-sm ${language === "az" ? "text-white font-bold" : "text-gray-400"}`}
-              >
-                AZ
-              </button>
-            </div>
-          </div>
+
         </div>
       )}
 
