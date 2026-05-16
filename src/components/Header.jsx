@@ -206,7 +206,7 @@ function Header() {
           </div>
 
           {user ? (
-            <div className="relative hidden md:block" ref={userRef}>
+            <div className="relative" ref={userRef}>
               <button
                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                 className="text-[#AEAEAF] hover:text-white flex items-center justify-center p-2 rounded-full hover:bg-[#202024] transition-colors"
@@ -232,12 +232,12 @@ function Header() {
               )}
             </div>
           ) : (
-            <Link to="/login" className="hidden md:block text-white bg-[#353539] p-2 px-4 rounded-md hover:bg-[#656567] text-sm font-semibold transition-colors">
+            <Link to="/login" className="text-white bg-[#353539] p-1.5 px-3 md:p-2 md:px-4 rounded-md hover:bg-[#656567] text-xs md:text-sm font-semibold transition-colors">
               {t("signIn")}
             </Link>
           )}
 
-          <button className="bg-[#26BBFF] md:p-2 p-1 px-3 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold">
+          <button className="hidden md:block bg-[#26BBFF] p-2 px-3 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold">
             {t("download")}
           </button>
 
@@ -267,16 +267,9 @@ function Header() {
           </div>
 
           <div className="flex justify-end items-center gap-5 mt-4">
-            {user ? (
-              <button onClick={() => logOut()} className="text-white bg-[#353539] p-2 px-4 rounded-md hover:bg-[#656567] text-sm font-semibold flex items-center gap-2">
-                <LogOut size={16} />
-                {t("logOut")}
-              </button>
-            ) : (
-              <Link to="/login" onClick={() => setMenuOpen(false)} className="text-white bg-[#353539] p-2 px-4 rounded-md hover:bg-[#656567] text-sm font-semibold">
-                {t("signIn")}
-              </Link>
-            )}
+            <button className="bg-[#26BBFF] p-2 px-4 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold w-full">
+              {t("download")}
+            </button>
           </div>
 
           <ul>
