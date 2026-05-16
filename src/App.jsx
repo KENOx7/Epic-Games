@@ -12,9 +12,11 @@ import TopSellers from "./components/TopSellers";
 import GameCategories from "./components/GameCategories";
 import MegaSale from "./components/MegaSale";
 
+import Browse from "./pages/Browse";
 import GameDetails from "./pages/GameDetails";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
+import Support from "./pages/Support";
 import Footer from "./components/Footer";
 
 import { CartProvider } from "./context/CartContext";
@@ -34,17 +36,15 @@ function Home() {
       <Slider />
       <EpicSavings />
       <FreeGames />
-      <GameCategories />
       <MostPopular />
+      <GameCategories />
       <TopPlayerReviewed />
       <TopSellers />
     </>
   );
 }
 
-import Browse from "./pages/Browse";
-
-export default function App() {
+function App() {
   return (
     <CartProvider>
       <WishlistProvider>
@@ -59,6 +59,7 @@ export default function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/browse" element={<Browse />} />
+              <Route path="/support" element={<Support />} />
             </Routes>
           </main>
 
@@ -68,3 +69,4 @@ export default function App() {
     </CartProvider>
   );
 }
+export default App;

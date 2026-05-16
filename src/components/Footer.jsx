@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { ArrowUp, ChevronDown } from "lucide-react";
 import { FaFacebookF, FaXTwitter, FaYoutube } from "react-icons/fa6";
-import storeLogo from "../assets/store.svg";
+import logo from "../assets/logo.png";
 
 export default function Footer() {
   const [open, setOpen] = useState("");
@@ -25,18 +26,19 @@ export default function Footer() {
     <footer className="bg-[#121216] pt-10 pb-8 px-4 w-full">
       <div className="max-w-[1200px] mx-auto">
         <div className="flex flex-col items-center md:flex-row md:justify-between mb-8 gap-6">
-          <img src={storeLogo} alt="Epic Games Store" className="h-8" />
-
+          <Link to="/">
+            <img src={logo} alt="Epic Games Store" className="h-8" />
+          </Link>
           <div className="flex items-center gap-5 text-gray-400">
-            <a href="#" className="hover:text-white">
+            <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white">
               <FaFacebookF size={20} />
             </a>
 
-            <a href="#" className="hover:text-white">
+            <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white">
               <FaXTwitter size={20} />
             </a>
 
-            <a href="#" className="hover:text-white">
+            <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white">
               <FaYoutube size={22} />
             </a>
           </div>

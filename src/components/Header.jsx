@@ -35,13 +35,11 @@ function getFolderName(title) {
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [games, setGames] = useState([]);
 
-  const dropdownRef = useRef(null);
   const searchRef = useRef(null);
   const navigate = useNavigate();
 
@@ -78,9 +76,6 @@ function Header() {
 
   useEffect(() => {
     function closeMenus(e) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setDropdownOpen(false);
-      }
 
       if (searchRef.current && !searchRef.current.contains(e.target)) {
         setSearchOpen(false);
@@ -147,7 +142,7 @@ function Header() {
             <img src={store} alt="store" className="w-[54px] h-[32px]" />
           </Link>
 
-          <Link to="/" className="hidden md:block text-white hover:text-gray-300">
+          <Link to="/support" className="hidden md:block text-white hover:text-gray-300">
             Support
           </Link>
 
@@ -179,8 +174,9 @@ function Header() {
       {menuOpen && (
         <div className="md:hidden bg-[#121216] fixed inset-0 z-[60] flex flex-col p-5 gap-6">
           <div className="flex justify-between items-center">
-            <Link to="/" onClick={() => setMenuOpen(false)}>
+            <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-3">
               <img src={logo} alt="logo" className="h-[40px]" />
+              <img src={store} alt="store" className="w-[54px] h-[32px]" />
             </Link>
 
             <button
@@ -201,7 +197,9 @@ function Header() {
 
           <ul>
             <li className="text-white text-[32px] font-bold">Menu</li>
-            <li className="text-white pt-10">Support</li>
+            <Link to="/support" onClick={() => setMenuOpen(false)} className="text-white pt-10">
+              Support
+            </Link>
             <li className="text-white pt-5">Distribute</li>
           </ul>
         </div>
@@ -294,36 +292,20 @@ function Header() {
               <Search size={24} />
             </button>
 
-            <div className="relative ml-8" ref={dropdownRef}>
-              <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="text-white text-[18px] flex items-center gap-2 hover:opacity-80"
+            <div className="flex items-center gap-6 ml-8">
+              <Link
+                to="/"
+                className="text-white hover:opacity-80 transition-opacity"
               >
                 Discover
-                {dropdownOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-              </button>
+              </Link>
 
-              {dropdownOpen && (
-                <div className="absolute top-10 bg-[#18181c] rounded-md shadow-xl py-2 w-[180px] z-50">
-                  <ul>
-                    <Link to="/" onClick={() => setDropdownOpen(false)}>
-                      <li className="text-white hover:bg-[#2a2a30] px-5 py-3">
-                        Discover
-                      </li>
-                    </Link>
-
-                    <Link to="/browse" onClick={() => setDropdownOpen(false)}>
-                      <li className="text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] px-5 py-2.5">
-                        Browse
-                      </li>
-                    </Link>
-
-                    <li className="text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] px-5 py-2.5">
-                      News
-                    </li>
-                  </ul>
-                </div>
-              )}
+              <Link
+                to="/browse"
+                className="text-[#AEAEAF] hover:text-white transition-colors"
+              >
+                Browse
+              </Link>
             </div>
           </div>
 

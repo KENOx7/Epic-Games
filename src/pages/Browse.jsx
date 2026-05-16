@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import {
@@ -244,6 +244,29 @@ function Browse() {
 
   const currentSort = sortOptions.find((o) => o.value === sortBy);
 
+  const sortRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (sortRef.current && !sortRef.current.contains(e.target)) {
+        setSortOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (mobileFilterOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileFilterOpen]);
+
   const [filters, setFilters] = useState({
     category: categoryParam ? [categoryParam] : [],
     price: priceParam ? [priceParam] : [],
@@ -395,7 +418,10 @@ function Browse() {
         {mobileFilterOpen && (
           <div className="fixed inset-0 z-50 bg-[#121214] overflow-y-auto md:hidden">
             <div className="flex items-center justify-between px-4 pt-5 pb-3 border-b border-[#202024]">
-              <h3 className="text-white text-lg font-bold">Filters</h3>
+              <Link to="/" onClick={() => setMobileFilterOpen(false)} className="flex items-center gap-3">
+                <img src={logo} alt="logo" className="h-[40px]" />
+                <img src={store} alt="store" className="w-[54px] h-[32px]" />
+              </Link>
 
               <button
                 onClick={() => setMobileFilterOpen(false)}
@@ -438,7 +464,7 @@ function Browse() {
           <div className="flex items-center gap-3 mb-6">
             <span className="text-gray-400 text-sm">Show:</span>
 
-            <div className="relative">
+            <div className="relative" ref={sortRef}>
               <button
                 onClick={() => setSortOpen(!sortOpen)}
                 className="min-w-[150px] bg-[#202024] border border-[#333] rounded-lg px-3 py-2 text-white text-sm flex items-center justify-between gap-3"
@@ -517,7 +543,7 @@ function Browse() {
 
                       <div className="absolute inset-0 group-hover:bg-white/10 pointer-events-none"></div>
 
-                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100">
+                      <div className="absolute top-2 right-2 md:opacity-0 md:group-hover:opacity-100">
                         <button
                           onClick={(e) => {
                             e.preventDefault();

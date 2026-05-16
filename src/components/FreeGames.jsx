@@ -68,7 +68,7 @@ export default function FreeGames() {
           </div>
 
           <Link
-            to="/free"
+            to="/browse?price=Free"
             className="text-white text-sm px-4 py-1.5 border border-[#3a3a3a] rounded hover:bg-white/10"
           >
             View More
