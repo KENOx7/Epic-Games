@@ -6,57 +6,35 @@ import store from "../assets/store.svg";
 import { useLanguageStore } from "../store/useLanguageStore";
 
 export default function Footer() {
-  const [open, setOpen] = useState("");
-  const { t } = useLanguageStore();
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+  const [open, setOpen] = useState("")
+  const { t } = useLanguageStore()
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" })
 
   const toggleSection = (name) => {
-    if (open == name) {
-      setOpen("");
-    } else {
-      setOpen(name);
-    }
-  };
+    if (open == name) setOpen("")
+    else setOpen(name)
+  }
 
   return (
     <footer className="bg-[#121216] pt-10 pb-8 px-4 w-full">
       <div className="max-w-[1200px] mx-auto">
         <div className="flex flex-col items-center md:flex-row md:justify-between mb-8 gap-6">
-          <Link to="/">
-            <img src={store} alt="Epic Games Store" className="h-8" />
-          </Link>
+          <Link to="/"><img src={store} alt="Epic Games Store"/></Link>
           <div className="flex items-center gap-5 text-gray-400">
-            <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white">
-              <FaFacebookF size={20} />
-            </a>
-
-            <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white">
-              <FaXTwitter size={20} />
-            </a>
-
-            <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white">
-              <FaYoutube size={22} />
-            </a>
+            <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white"><FaFacebookF size={20} /></a>
+            <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white"><FaXTwitter size={20} /></a>
+            <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white"><FaYoutube size={22} /></a>
           </div>
         </div>
-
         <div className="md:hidden border-t border-[#2a2a2a]">
           <div className="border-b border-[#2a2a2a]">
             <button
               onClick={() => toggleSection("games")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold"
-            >
+              className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("games")}
-              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "games" ? "rotate-180" : ""}`} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open == "games" ? "rotate-180" : ""}`} />
             </button>
-
-            {open === "games" && (
+            {open == "games" && (
               <ul className="pb-4 flex flex-col gap-2">
                 <li><a href="#" className="text-gray-400 text-sm">{t("fortnite")}</a></li>
                 <li><a href="#" className="text-gray-400 text-sm">{t("fallGuys")}</a></li>
@@ -68,17 +46,14 @@ export default function Footer() {
               </ul>
             )}
           </div>
-
           <div className="border-b border-[#2a2a2a]">
             <button
               onClick={() => toggleSection("marketplaces")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold"
-            >
+              className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("marketplaces")}
-              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "marketplaces" ? "rotate-180" : ""}`} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open == "marketplaces" ? "rotate-180" : ""}`} />
             </button>
-
-            {open === "marketplaces" && (
+            {open == "marketplaces" && (
               <ul className="pb-4 flex flex-col gap-2">
                 <li><a href="#" className="text-gray-400 text-sm">{t("epicGamesStore")}</a></li>
                 <li><a href="#" className="text-gray-400 text-sm">{t("fab")}</a></li>
@@ -91,17 +66,14 @@ export default function Footer() {
               </ul>
             )}
           </div>
-
           <div className="border-b border-[#2a2a2a]">
             <button
               onClick={() => toggleSection("tools")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold"
-            >
+              className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("tools")}
-              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "tools" ? "rotate-180" : ""}`} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open == "tools" ? "rotate-180" : ""}`} />
             </button>
-
-            {open === "tools" && (
+            {open == "tools" && (
               <ul className="pb-4 flex flex-col gap-2">
                 <li><a href="#" className="text-gray-400 text-sm">{t("unrealEngine")}</a></li>
                 <li><a href="#" className="text-gray-400 text-sm">{t("uefn")}</a></li>
@@ -112,17 +84,14 @@ export default function Footer() {
               </ul>
             )}
           </div>
-
           <div className="border-b border-[#2a2a2a]">
             <button
               onClick={() => toggleSection("online")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold"
-            >
+              className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("onlineServices")}
-              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "online" ? "rotate-180" : ""}`} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open == "online" ? "rotate-180" : ""}`} />
             </button>
-
-            {open === "online" && (
+            {open == "online" && (
               <ul className="pb-4 flex flex-col gap-2">
                 <li><a href="#" className="text-gray-400 text-sm">{t("epicOnlineServices")}</a></li>
                 <li><a href="#" className="text-gray-400 text-sm">{t("kidsWebServices")}</a></li>
@@ -133,17 +102,14 @@ export default function Footer() {
               </ul>
             )}
           </div>
-
           <div className="border-b border-[#2a2a2a]">
             <button
               onClick={() => toggleSection("company")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold"
-            >
+              className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("company")}
-              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "company" ? "rotate-180" : ""}`} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open == "company" ? "rotate-180" : ""}`} />
             </button>
-
-            {open === "company" && (
+            {open == "company" && (
               <ul className="pb-4 flex flex-col gap-2">
                 <li><a href="#" className="text-gray-400 text-sm">{t("about")}</a></li>
                 <li><a href="#" className="text-gray-400 text-sm">{t("newsroom")}</a></li>
@@ -153,17 +119,14 @@ export default function Footer() {
               </ul>
             )}
           </div>
-
           <div className="border-b border-[#2a2a2a]">
             <button
               onClick={() => toggleSection("resources")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold"
-            >
+              className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("resources")}
-              <ChevronDown size={18} className={`transition-transform duration-200 ${open === "resources" ? "rotate-180" : ""}`} />
+              <ChevronDown size={18} className={`transition-transform duration-200 ${open == "resources" ? "rotate-180" : ""}`} />
             </button>
-
-            {open === "resources" && (
+            {open == "resources" && (
               <ul className="pb-4 flex flex-col gap-2">
                 <li><a href="#" className="text-gray-400 text-sm">{t("devCommunity")}</a></li>
                 <li><a href="#" className="text-gray-400 text-sm">{t("megaGrants")}</a></li>
@@ -179,8 +142,7 @@ export default function Footer() {
             )}
           </div>
         </div>
-
-        <div className="hidden md:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-12 border-t border-[#3a3a40] pt-8">
+        <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-6 gap-8 mb-12 border-t border-[#3a3a40] pt-8">
           <div>
             <h3 className="text-white font-bold mb-4">{t("games")}</h3>
             <ul className="flex flex-col gap-2">
@@ -193,7 +155,6 @@ export default function Footer() {
               <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("roboRecall")}</a></li>
             </ul>
           </div>
-
           <div>
             <h3 className="text-white font-bold mb-4">{t("marketplaces")}</h3>
             <ul className="flex flex-col gap-2">
@@ -207,7 +168,6 @@ export default function Footer() {
               <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("storeEula")}</a></li>
             </ul>
           </div>
-
           <div>
             <h3 className="text-white font-bold mb-4">{t("tools")}</h3>
             <ul className="flex flex-col gap-2">
@@ -219,7 +179,6 @@ export default function Footer() {
               <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("radGameTools")}</a></li>
             </ul>
           </div>
-
           <div>
             <h3 className="text-white font-bold mb-4">{t("onlineServices")}</h3>
             <ul className="flex flex-col gap-2">
@@ -231,7 +190,6 @@ export default function Footer() {
               <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("subprocessorList")}</a></li>
             </ul>
           </div>
-
           <div>
             <h3 className="text-white font-bold mb-4">{t("company")}</h3>
             <ul className="flex flex-col gap-2">
@@ -242,7 +200,6 @@ export default function Footer() {
               <li><a href="#" className="text-gray-400 text-sm hover:text-white">{t("uxResearch")}</a></li>
             </ul>
           </div>
-
           <div>
             <h3 className="text-white font-bold mb-4">{t("resources")}</h3>
             <ul className="flex flex-col gap-2">
@@ -259,42 +216,24 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-
         <div className="md:border-t md:border-[#3a3a40] md:pt-8 mt-8 md:mt-0">
-          <p className="text-[#AEAEAF] text-[11px] md:text-xs leading-relaxed text-center md:text-left max-w-[850px] mx-auto md:mx-0">
+          <p className="text-[#AEAEAF] text-xs md:text-xs leading-relaxed text-center md:text-left max-w-[850px]">
             {t("copyrightText")}
           </p>
-
           <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3 mt-8">
-            <a href="#" className="text-gray-400 text-xs hover:text-white">
-              {t("termsOfService")}
-            </a>
-
-            <a href="#" className="text-gray-400 text-xs hover:text-white">
-              {t("privacyPolicy")}
-            </a>
-
-            <a href="#" className="text-gray-400 text-xs hover:text-white">
-              {t("safetySecurity")}
-            </a>
-
-            <a href="#" className="text-gray-400 text-xs hover:text-white">
-              {t("storeRefundPolicy")}
-            </a>
-
-            <a href="#" className="text-gray-400 text-xs hover:text-white">
-              {t("publisherIndex")}
-            </a>
+            <a href="#" className="text-gray-400 text-xs hover:text-white">{t("termsOfService")}</a>
+            <a href="#" className="text-gray-400 text-xs hover:text-white">{t("privacyPolicy")}</a>
+            <a href="#" className="text-gray-400 text-xs hover:text-white">{t("safetySecurity")}</a>
+            <a href="#" className="text-gray-400 text-xs hover:text-white">{t("storeRefundPolicy")}</a>
+            <a href="#" className="text-gray-400 text-xs hover:text-white">{t("publisherIndex")}</a>
           </div>
         </div>
-
         <div className="flex justify-center md:justify-end mt-8">
-          <button
+          <button 
             onClick={scrollToTop}
-            className="flex items-center gap-2 text-white bg-[#353539] hover:bg-[#45454a] px-4 py-2 rounded-md text-sm"
-          >
+            className="flex items-center gap-2 text-white bg-[#353539] hover:bg-[#45454a] px-4 py-2 rounded-md text-sm">
             {t("backToTop")}
-            <ArrowUp size={15} />
+            <ArrowUp size={16} />
           </button>
         </div>
       </div>
