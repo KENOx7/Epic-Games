@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import megaSaleBg from "../assets/mega-sale.png";
 import { useLanguageStore } from "../store/useLanguageStore";

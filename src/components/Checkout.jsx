@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { X, CreditCard, Wallet, Plus } from "lucide-react";
 import logo from "../assets/logo.png";
 import { useLanguageStore } from "../store/useLanguageStore";

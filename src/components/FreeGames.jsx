@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -39,9 +39,7 @@ function FreeGames() {
   useEffect(() => {
     axios
       .get("https://epic-games-api-eta.vercel.app/free/category_summary.json")
-      .then((res) => {
-        setGames(res.data)
-      })
+      .then((res) => {setGames(res.data)})
   }, [])
 
   return (

@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
-
+import { useEffect, useState } from "react";
 import img1 from "../assets/SliderImgs/horizoncopper-keyart.jpg";
 import img2 from "../assets/SliderImgs/hogwarts-legacy.jpg";
 import img3 from "../assets/SliderImgs/epic-savings.jpeg";
 import img4 from "../assets/SliderImgs/may-the-4th.jpeg";
 import img5 from "../assets/SliderImgs/mongil-star.jpg";
 import img6 from "../assets/SliderImgs/first-light.jpg";
-
 import { useLanguageStore } from "../store/useLanguageStore";
 
 const slidesData = [
