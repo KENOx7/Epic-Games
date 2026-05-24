@@ -3,14 +3,14 @@ import { X, CreditCard, Wallet, Plus } from "lucide-react";
 import logo from "../assets/logo.png";
 import { useLanguageStore } from "../store/useLanguageStore";
 
-function getCoverUrl(item) {
-  const folder = item.cartBasePath
+function getCoverUrl(item, basePath) {
+  const folder = item.cartBasePath || basePath
   const isPng = item.saved_images?.includes("cover.png")
   return `${folder}/${isPng ? "cover.png" : "cover.jpg"}`
 }
 
 function getPrice(price) {
-  if (!price || price === "Free") return 0
+  if (!price || price == "Free") return 0
   return Number(price.replace("$", ""))
 }
 
@@ -54,7 +54,7 @@ function Checkout({ game, basePath, onClose, onSuccess, cartItems }) {
             {items.map((item) => (
               <div key={item.title} className="flex gap-4">
                 <div className="w-16 h-20 bg-[#111] rounded">
-                  <img src={getCoverUrl(item, basePath)} alt={item.title} className="object-cover" />
+                  <img src={getCoverUrl(item, basePath)} alt={item.title} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-white text-sm font-medium">{item.title}</h3>

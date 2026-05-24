@@ -1,95 +1,71 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { ShoppingCart, Bookmark, CircleDollarSign } from "lucide-react";
-import { useCartStore } from "../store/useCartStore";
-import { useWishlistStore } from "../store/useWishlistStore";
-import { useLanguageStore } from "../store/useLanguageStore";
-import { useAuthStore } from "../store/useAuthStore";
-import Checkout from "../components/Checkout";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { ShoppingCart, Bookmark, CircleDollarSign } from "lucide-react"
+import { useCartStore } from "../store/useCartStore"
+import { useWishlistStore } from "../store/useWishlistStore"
+import { useLanguageStore } from "../store/useLanguageStore"
+import { useAuthStore } from "../store/useAuthStore"
+import Checkout from "../components/Checkout"
 
-function getPrice(price) {
-  if (!price || price === "Free" || price === "—") {
-    return 0;
-  }
-
-  return parseFloat(price.replace(/[^0-9.]/g, "")) || 0;
+const getPrice = (price) => {
+  if (!price || price == "Free" || price == "—") return 0
+  return Number(price.replace("$", ""))
 }
 
-function getSlug(title) {
-  return title
-    .toLowerCase()
+const getSlug = (title) => 
+  title.toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+    .replace(/^-+|-+$/g, "")
+
+const getReward = (price) => (getPrice(price) * 0.05).toFixed(2)
+
+const getCoverUrl = (game) => {
+  const cover = game.saved_images?.find((img) => img == "cover.jpg" || img == "cover.png")
+  return `${game.cartBasePath}/${cover || "cover.jpg"}`
 }
 
-function getReward(price) {
-  const value = getPrice(price);
-  return (value * 0.05).toFixed(2);
-}
+function Cart() {
+  const { cart, removeFromCart, clearCart } = useCartStore()
+  const { toggleWishlist, isInWishlist } = useWishlistStore()
+  const { t } = useLanguageStore()
+  const { user } = useAuthStore()
+  const navigate = useNavigate()
+  const [checkoutOpen, setCheckoutOpen] = useState(false)
 
-export default function Cart() {
-  const { cart, removeFromCart, clearCart } = useCartStore();
-  const { toggleWishlist, isInWishlist } = useWishlistStore();
-  const { t } = useLanguageStore();
-  const { user } = useAuthStore();
-  const navigate = useNavigate();
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
-
-  let total = 0;
-  let discount = 0;
+  let total = 0
+  let discount = 0
 
   cart.forEach((game) => {
-    const oldPrice = getPrice(game.oldPrice || game.newPrice);
-    const newPrice = getPrice(game.newPrice || game.oldPrice);
+    const oldP = getPrice(game.oldPrice)
+    const newP = getPrice(game.newPrice)
+    total += oldP
+    if (oldP > newP) discount += oldP - newP
+  })
 
-    total += oldPrice;
-
-    if (oldPrice > newPrice) {
-      discount += oldPrice - newPrice;
-    }
-  });
-
-  const subtotal = total - discount;
-  const subtotalText = subtotal.toFixed(2);
+  const subtotal = total - discount
+  const subtotalText = subtotal.toFixed(2)
 
   const checkoutGame = {
     title: `${cart.length} ${cart.length > 1 ? t("itemsInCart2") : t("itemsInCart1")}`,
-    publisher: "Epic Games Store",
-    oldPrice: `$${total.toFixed(2)}`,
-    newPrice: subtotal === 0 ? t("Free") : `$${subtotalText}`,
-    discount: discount > 0 ? `-$${discount.toFixed(2)}` : null,
-  };
+    oldPrice: `$${total}`,
+    newPrice: subtotal == 0 ? t("Free") : `$${subtotalText}`,
+    discount: discount > 0 ? `-$${discount}` : null,
+  }
 
-  const closeCheckout = () => {
-    setCheckoutOpen(false);
-  };
-
-  const finishCheckout = () => {
-    clearCart();
-    setCheckoutOpen(false);
-  };
-
-  if (cart.length === 0) {
+  if (cart.length == 0) {
     return (
       <div className="max-w-[1200px] mx-auto mt-10 px-4 min-h-[60vh]">
         <h1 className="text-3xl sm:text-4xl font-bold mb-8">{t("myCart")}</h1>
-
         <div className="bg-[#18181c] rounded-xl p-8 sm:p-10 text-center flex flex-col items-center">
           <ShoppingCart size={64} className="mb-4 text-[#3a3a3a]" />
-
           <h2 className="text-2xl font-bold mb-2">{t("cartEmpty")}</h2>
           <p className="text-gray-400 mb-6">{t("shopGamesApps")}</p>
-
-          <Link
-            to="/"
-            className="bg-[#26bbff] text-black font-bold px-6 py-3 rounded-lg"
-          >
+          <Link to="/" className="bg-[#26bbff] text-black font-bold px-6 py-3 rounded-lg">
             {t("shopGames")}
           </Link>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -99,58 +75,37 @@ export default function Cart() {
           game={checkoutGame}
           basePath={cart[0]?.cartBasePath || ""}
           cartItems={cart}
-          onClose={closeCheckout}
-          onSuccess={finishCheckout}
+          onClose={() => setCheckoutOpen(false)}
+          onSuccess={() => {
+            clearCart()
+            setCheckoutOpen(false)
+          }}
         />
       )}
-
       <h1 className="text-3xl sm:text-4xl font-bold mb-8">{t("myCart")}</h1>
-
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1 space-y-4">
           {cart.map((game) => {
-            const cover = game.saved_images?.find((img) => {
-              return img === "cover.jpg" || img === "cover.png";
-            });
-
-            const coverUrl = `${game.cartBasePath}/${cover || "cover.jpg"}`;
-            const inWishlist = isInWishlist(game.title);
-
+            const coverUrl = getCoverUrl(game)
+            const inWishlist = isInWishlist(game.title)
+            const slug = getSlug(game.title)
+            const detailUrl = `/game/${slug}?from=${game.endpoint}`
             return (
-              <div
-                key={game.title}
-                className="bg-[#18181c] rounded-xl p-4 flex flex-col sm:flex-row gap-4"
-              >
+              <div key={game.title} className="bg-[#18181c] rounded-xl p-4 flex flex-col sm:flex-row gap-4">
                 <div className="flex gap-4 flex-1 min-w-0">
-                  <Link to={`/game/${getSlug(game.title)}?from=${game.endpoint || "epic-savings"}`} className="w-[58px] h-[78px] sm:w-[120px] sm:h-[160px] bg-[#111] rounded overflow-hidden shrink-0 block">
-                    <img
-                      src={coverUrl}
-                      alt={game.title}
-                      className="w-full h-full object-contain"
-                    />
+                  <Link to={detailUrl} className="w-[58px] h-[78px] sm:w-[120px] sm:h-[160px] bg-[#111] rounded overflow-hidden block">
+                    <img src={coverUrl} alt={game.title} className="w-full h-full object-contain" />
                   </Link>
-
                   <div className="flex-1 min-w-0 flex flex-col">
                     {game.genres && (
-                      <span className="inline-block bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 mb-2 font-bold self-start">
-                        {Array.isArray(game.genres)
-                          ? game.genres[0]
-                          : game.genres}
-                      </span>
-                    )}
-
-                    <Link to={`/game/${getSlug(game.title)}?from=${game.endpoint || "epic-savings"}`}>
-                      <h2 className="text-lg sm:text-xl font-bold leading-tight line-clamp-2 hover:underline">
-                        {game.title}
-                      </h2>
-                    </Link>
-
-                    {game.platform && (
-                      <p className="text-gray-500 text-xs mt-3">
-                        {game.platform}
+                      <p className="inline-block bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 mb-2 font-bold self-start">
+                        {game.genres[0]}
                       </p>
                     )}
-
+                    <Link to={detailUrl}>
+                      <h2 className="text-lg sm:text-xl font-bold hover:underline">{game.title}</h2>
+                    </Link>
+                    {game.platform && <p className="text-gray-500 text-xs mt-3">{game.platform}</p>}
                     {game.newPrice !== "Free" && (
                       <p className="text-sm text-white mt-auto pt-2">
                         {game.refundType ? t(game.refundType) || game.refundType : t("refundable")}
@@ -158,7 +113,6 @@ export default function Cart() {
                     )}
                   </div>
                 </div>
-
                 <div className="sm:w-auto sm:min-w-[290px] flex flex-col sm:items-end sm:justify-between gap-4">
                   <div className="sm:text-right">
                     <div className="flex flex-wrap items-center sm:justify-end gap-2">
@@ -167,95 +121,57 @@ export default function Cart() {
                           {game.discount}
                         </span>
                       )}
-
                       {game.oldPrice && (
-                        <span className="text-gray-500 line-through text-sm">
-                          {game.oldPrice}
-                        </span>
+                        <span className="text-gray-500 line-through text-sm">{game.oldPrice}</span>
                       )}
-
-                      <span className="text-lg font-bold">
-                        {game.newPrice || t("Free")}
-                      </span>
+                      <span className="text-lg font-bold">{game.newPrice || t("Free")}</span>
                     </div>
-
-                    {game.saleEnds && (
-                      <p className="text-gray-400 text-xs mt-2">
-                        {t("saleEndsPrefix")} {game.saleEnds}
-                      </p>
-                    )}
-
-                    <p className="text-[#b7d36b] flex items-center gap-2 text-sm mt-4 sm:whitespace-nowrap">
+                    <p className="text-[#b7d36b] flex items-center gap-2 text-sm mt-4">
                       <CircleDollarSign size={16} className="text-yellow-300" />
                       {t("earnEpicRewards")} ${getReward(game.newPrice)}
                     </p>
-
-
                   </div>
-
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => toggleWishlist(game)}
-                        className="flex-1 sm:flex-none border border-[#3a3a3a] px-4 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-2 min-w-[140px]"
-                      >
-                        <Bookmark
-                          size={14}
-                          className={inWishlist ? "fill-white" : ""}
-                        />
-                        {inWishlist ? t("inWishlist") : t("moveToWishlist")}
-                      </button>
-                    </div>
-
-                    <button
-                      onClick={() => removeFromCart(game.title)}
-                      className="text-sm text-gray-400 hover:text-white text-right"
-                    >
-                      {t("remove")}
+                    <button onClick={() => toggleWishlist(game)}
+                      className="border border-[#3a3a3a] px-4 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-2 min-w-[140px]">
+                      <Bookmark size={14} className={inWishlist ? "fill-white" : ""} />
+                      {inWishlist ? t("inWishlist") : t("moveToWishlist")}
+                    </button>
+                    <button onClick={() => removeFromCart(game.title)}
+                      className="text-sm text-gray-400 hover:text-white text-right">{t("remove")}
                     </button>
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
-
         <div className="w-full lg:w-[320px]">
           <div className="bg-[#18181c] rounded-xl p-6">
             <h2 className="text-2xl font-bold mb-6">{t("summary")}</h2>
-
             <div className="flex justify-between mb-3 text-sm">
               <span>{t("price")}</span>
               <span>${total.toFixed(2)}</span>
             </div>
-
             {discount > 0 && (
               <div className="flex justify-between mb-3 text-sm">
                 <span>{t("discountText")}</span>
-                <span>-${discount.toFixed(2)}</span>
+                <span>-${discount}</span>
               </div>
             )}
-
             <div className="flex justify-between border-t border-[#333] pt-4 mb-6 font-bold">
               <span>{t("subtotal")}</span>
               <span>${subtotalText}</span>
             </div>
-
-            <button
-              onClick={() => {
-                if (user) {
-                  setCheckoutOpen(true);
-                } else {
-                  navigate("/login");
-                }
-              }}
-              className="w-full bg-[#26bbff] text-black font-bold py-3.5 rounded-lg"
-            >
+            <button onClick={() => (user ? setCheckoutOpen(true) : navigate("/login"))}
+              className="w-full bg-[#26bbff] text-black font-bold py-3.5 rounded-lg">
               {t("checkOutBtn")}
             </button>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
+
+export default Cart
