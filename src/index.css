@@ -2,55 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Inter', sans-serif;
-}
+body {font-family: 'Inter', sans-serif;}
 
 @keyframes fillProgress {
-  0% {
-    width: 0%;
-  }
+  0% {width: 0%;}
+  100% {width: 100%;}}
 
-  100% {
-    width: 100%;
-  }
-}
-
-.animate-fill {
-  animation: fillProgress 5s linear forwards;
-}
+.animate-fill {animation: fillProgress 5s linear forwards;}
 
 @keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-}
-
-.slide-in-right {
-  animation: slideInRight 500ms ease forwards;
-}
+  from {transform: translateX(100%);}
+  to {transform: translateX(0);}}
+  
+.slide-in-right {animation: slideInRight 500ms ease forwards;}
 
 @keyframes slideInLeft {
-  from {
-    transform: translateX(-100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
+  from {transform: translateX(-100%);}
+  to {transform: translateX(0);}
 }
 
-.slide-in-left {
-  animation: slideInLeft 500ms ease forwards;
-}
+.slide-in-left {animation: slideInLeft 500ms ease forwards;}
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+.hide-scrollbar::-webkit-scrollbar {display: none;}
 
 .hide-scrollbar {
   -ms-overflow-style: none;

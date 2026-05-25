@@ -10,8 +10,8 @@ function getCoverUrl(item, basePath) {
 }
 
 function getPrice(price) {
-  if (!price || price == "Free") return 0
-  return Number(price.replace("$", ""))
+  if (!price || price == "Free" || price == "—") return 0
+  return Number(price.startsWith("$") ? price.slice(1) : price) || 0
 }
 
 function Checkout({ game, basePath, onClose, onSuccess, cartItems }) {

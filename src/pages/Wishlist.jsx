@@ -9,10 +9,12 @@ const getSlug = (title) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
 
-const getReward = (price) => {
-  if (!price || price == "Free") return 0
-  return (Number(price.slice(1)) * 0.05).toFixed(2)
+const getPrice = (price) => {
+  if (!price || price == "Free" || price == "—") return 0
+  return Number(price.startsWith("$") ? price.slice(1) : price) || 0
 }
+
+const getReward = (price) => (getPrice(price) * 0.05).toFixed(2)
 
 function Wishlist() {
   const { wishlist, removeFromWishlist } = useWishlistStore()

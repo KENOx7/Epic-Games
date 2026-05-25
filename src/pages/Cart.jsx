@@ -9,7 +9,7 @@ import Checkout from "../components/Checkout"
 
 const getPrice = (price) => {
   if (!price || price == "Free" || price == "—") return 0
-  return Number(price.replace("$", ""))
+  return Number(price.startsWith("$") ? price.slice(1) : price) || 0
 }
 
 const getSlug = (title) => 
@@ -36,8 +36,8 @@ function Cart() {
   let discount = 0
 
   cart.forEach((game) => {
-    const oldP = getPrice(game.oldPrice)
     const newP = getPrice(game.newPrice)
+    const oldP = game.oldPrice ? getPrice(game.oldPrice) : newP
     total += oldP
     if (oldP > newP) discount += oldP - newP
   })
@@ -47,9 +47,9 @@ function Cart() {
 
   const checkoutGame = {
     title: `${cart.length} ${cart.length > 1 ? t("itemsInCart2") : t("itemsInCart1")}`,
-    oldPrice: `$${total}`,
+    oldPrice: `$${total.toFixed(2)}`,
     newPrice: subtotal == 0 ? t("Free") : `$${subtotalText}`,
-    discount: discount > 0 ? `-$${discount}` : null,
+    discount: discount > 0 ? `-$${discount.toFixed(2)}` : null,
   }
 
   if (cart.length == 0) {

@@ -1,12 +1,5 @@
 import { create } from 'zustand';
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  onAuthStateChanged,
-  GoogleAuthProvider,
-  signInWithPopup
-} from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebase';
 
 export const useAuthStore = create((set) => ({
@@ -14,59 +7,57 @@ export const useAuthStore = create((set) => ({
   loading: true,
   error: null,
 
-  // Register with Email
+  // E-poçt və şifrə ilə qeydiyyatdan keçmək
   signUp: async (email, password) => {
-    set({ loading: true, error: null });
+    set({ loading: true, error: null })
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      set({ user: userCredential.user, loading: false });
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      set({ user: userCredential.user, loading: false })
     } catch (error) {
-      set({ error: error.message, loading: false });
-      throw error;
+      set({ error: error.message, loading: false })
+      throw error
     }
   },
 
-  // Login with Email
+  // E-poçt və şifrə ilə giriş etmək
   logIn: async (email, password) => {
-    set({ loading: true, error: null });
+    set({ loading: true, error: null })
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      set({ user: userCredential.user, loading: false });
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      set({ user: userCredential.user, loading: false })
     } catch (error) {
-      set({ error: error.message, loading: false });
-      throw error;
+      set({ error: error.message, loading: false })
+      throw error
     }
   },
 
-  // Login with Google
+  // Google hesabı ilə giriş etmək
   logInWithGoogle: async () => {
-    set({ loading: true, error: null });
+    set({ loading: true, error: null })
     try {
-      const provider = new GoogleAuthProvider();
-      const userCredential = await signInWithPopup(auth, provider);
-      set({ user: userCredential.user, loading: false });
+      const provider = new GoogleAuthProvider()
+      const userCredential = await signInWithPopup(auth, provider)
+      set({ user: userCredential.user, loading: false })
     } catch (error) {
-      set({ error: error.message, loading: false });
-      throw error;
+      set({ error: error.message, loading: false })
+      throw error
     }
   },
 
-  // Logout
+  // Sistemdən çıxış etmək
   logOut: async () => {
-    set({ loading: true, error: null });
+    set({ loading: true, error: null })
     try {
-      await signOut(auth);
-      set({ user: null, loading: false });
+      await signOut(auth)
+      set({ user: null, loading: false })
     } catch (error) {
-      set({ error: error.message, loading: false });
-      throw error;
+      set({ error: error.message, loading: false })
+      throw error
     }
   },
 
-  // Listen to Auth State changes
+  // İstifadəçinin giriş/çıxış vəziyyətini (auth state) daim izləmək
   initializeAuthListener: () => {
-    onAuthStateChanged(auth, (user) => {
-      set({ user, loading: false });
-    });
+    onAuthStateChanged(auth, (user) => set({ user, loading: false }))
   }
-}));
+}))

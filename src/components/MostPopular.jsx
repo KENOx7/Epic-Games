@@ -12,7 +12,7 @@ function getFolderName(title) {
     .replace(/^-+|-+$/g, "")
 }
 
-export default function MostPopular() {
+function MostPopular() {
   const [games, setGames] = useState([])
   const [scrollIndex, setScrollIndex] = useState(0)
   const touchStart = useRef(0)
@@ -103,3 +103,5 @@ export default function MostPopular() {
     </div>
   )
 }
+
+export default MostPopular
