@@ -72,7 +72,6 @@ function Slider() {
   const touchStart = useRef(0)
   const lastIndex = slidesData.length - 1
 
-  // Hər 5 saniyədən bir növbəti slide-a keçir
   useEffect(() => {
     const timer = setTimeout(() => {goNext()}, 5000)
     return () => clearTimeout(timer)
@@ -96,11 +95,7 @@ function Slider() {
 
   const chooseSlide = (index) => {if (index > activeIndex)
     {changeSlide(index, "right"); return} changeSlide(index, "left")}
-
-  // Mobil swipe üçün başlanğıc toxunma yerini saxlayır
   const handleTouchStart = (e) => {touchStart.current = e.touches[0].clientX}
-
-  // Barmaq buraxılanda swipe istiqamətini yoxlayır
   const handleTouchEnd = (e) => {
     const touchEnd = e.changedTouches[0].clientX
     const distance = touchStart.current - touchEnd
@@ -115,16 +110,12 @@ function Slider() {
         {oldIndex > -1 && <Slide slide={slidesData[oldIndex]} t={t} />}
         <Slide key={activeIndex} slide={slidesData[activeIndex]} t={t}
           className={direction == "right" ? "slide-in-right" : "slide-in-left"} />
-
-        {/* Mobil indicator nöqtələri */}
         <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 md:hidden z-20">
           {slidesData.map((slide, index) => (
             <div key={slide.id} className={activeIndex == index ? "w-2 h-2 rounded-full bg-white" : "w-2 h-2 rounded-full bg-white/30"} />
           ))}
         </div>
       </div>
-
-      {/* PC-də sağ tərəfdə thumbnail list görünür */}
       <div className="w-[280px] hidden md:flex flex-col justify-between">
         {slidesData.map((slide, index) => (
           <div key={slide.id} onClick={() => chooseSlide(index)} className="relative flex items-center gap-4 px-4 flex-1 max-h-[90px] rounded-xl cursor-pointer overflow-hidden">
