@@ -3,18 +3,7 @@ import { Bookmark, ShoppingCart, CircleDollarSign } from "lucide-react";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useCartStore } from "../store/useCartStore";
 import { useLanguageStore } from "../store/useLanguageStore";
-
-const getSlug = (title) =>
-  title.toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-
-const getPrice = (price) => {
-  if (!price || price == "Free" || price == "—") return 0
-  return Number(price.startsWith("$") ? price.slice(1) : price) || 0
-}
-
-const getReward = (price) => (getPrice(price) * 0.05).toFixed(2)
+import { getSlug, getReward } from "../utils/helpers";
 
 function Wishlist() {
   const { wishlist, removeFromWishlist } = useWishlistStore()

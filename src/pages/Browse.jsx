@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { Bookmark, ChevronDown, Search, Check, X, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useLanguageStore } from "../store/useLanguageStore";
+import { getSlug, getPrice } from "../utils/helpers";
 
 const categories = [
   { key: "top-sellers", label: "Top Sellers", url: "https://epic-games-api-eta.vercel.app/top-sellers/category_summary.json" },
@@ -34,17 +35,6 @@ const featureFilters = ["Achievements", "Cloud Saves", "Co-op", "Competitive", "
 
 const platformFilters = ["Mac OS", "Windows", "Linux"]
 
-function getFolderName(title) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-}
-
-const getPrice = (price) => {
-  if (!price || price == "Free" || price == "—") return 0
-  return Number(price.startsWith("$") ? price.slice(1) : price) || 0
-}
 
 const getDate = (date) => {
   const [month, day, year] = date.split("/").map(Number)
@@ -74,7 +64,7 @@ const PopularGenresSlider = ({ games, setFilters, t }) => {
       <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4">
         {popularGenres.map((genre) => {
           const genreGames = games.filter((game) => game.genres.includes(genre.name)).slice(0, 3)
-          const covers = genreGames.map((game) => `https://epic-games-api-eta.vercel.app/${game.endpoint}/${getFolderName(game.title)}/cover.jpg`)
+          const covers = genreGames.map((game) => `https://epic-games-api-eta.vercel.app/${game.endpoint}/${getSlug(game.title)}/cover.jpg`)
           return (
             <div key={genre.name} onClick={() => openGenre(genre.name)} className="min-w-[180px] md:min-w-0 md:flex-1 bg-[#202024] hover:bg-[#2a2a30] rounded-xl p-4 cursor-pointer">
               <div className="relative h-[140px] md:h-[150px] mb-3">
@@ -386,7 +376,7 @@ const Browse = () => {
             <div>
               <div className="flex flex-wrap gap-4">
                 {paginatedGames.map((game) => {
-                  const folderName = getFolderName(game.title)
+                  const folderName = getSlug(game.title)
                   const imageSrc = `https://epic-games-api-eta.vercel.app/${game.endpoint}/${folderName}/cover.jpg`
                   const inWishlist = isInWishlist(game.title)
                   return (

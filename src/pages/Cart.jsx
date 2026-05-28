@@ -6,23 +6,7 @@ import { useWishlistStore } from "../store/useWishlistStore"
 import { useLanguageStore } from "../store/useLanguageStore"
 import { useAuthStore } from "../store/useAuthStore"
 import Checkout from "../components/Checkout"
-
-const getPrice = (price) => {
-  if (!price || price == "Free" || price == "—") return 0
-  return Number(price.startsWith("$") ? price.slice(1) : price) || 0
-}
-
-const getSlug = (title) => 
-  title.toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-
-const getReward = (price) => (getPrice(price) * 0.05).toFixed(2)
-
-const getCoverUrl = (game) => {
-  const cover = game.saved_images?.find((img) => img == "cover.jpg" || img == "cover.png")
-  return `${game.cartBasePath}/${cover || "cover.jpg"}`
-}
+import { getPrice, getSlug, getReward, getCoverUrl } from "../utils/helpers"
 
 function Cart() {
   const { cart, removeFromCart, clearCart } = useCartStore()
