@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { Bookmark, ChevronDown, Search, Check, X, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
+import { Bookmark, ChevronDown, Search, X, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useLanguageStore } from "../store/useLanguageStore";
 import { getSlug, getPrice } from "../utils/helpers";
@@ -256,7 +256,10 @@ const Browse = () => {
                   {catOpen && (
                     <div className="flex flex-col gap-3 mt-4">
                       {categories.map((c) => (
-                        <Checkbox key={c.key} label={t(c.label)} checked={filters.category.includes(c.key)} onChange={() => toggleFilter("category", c.key)} />
+                        <label key={c.key} className="flex items-center gap-3 cursor-pointer select-none">
+                          <input type="checkbox" checked={filters.category.includes(c.key)} onChange={() => toggleFilter("category", c.key)} />
+                          <span className="text-gray-300 text-sm">{t(c.label)}</span>
+                        </label>
                       ))}
                     </div>
                   )}
@@ -269,7 +272,10 @@ const Browse = () => {
                   {priceOpen && (
                     <div className="flex flex-col gap-3 mt-4">
                       {priceFilters.map((p) => (
-                        <Checkbox key={p} label={t(p)} checked={filters.price.includes(p)} onChange={() => toggleFilter("price", p)} />
+                        <label key={p} className="flex items-center gap-3 cursor-pointer select-none">
+                          <input type="checkbox" checked={filters.price.includes(p)} onChange={() => toggleFilter("price", p)} />
+                          <span className="text-gray-300 text-sm">{t(p)}</span>
+                        </label>
                       ))}
                     </div>
                   )}
@@ -282,7 +288,10 @@ const Browse = () => {
                   {genreOpen && (
                     <div className="flex flex-col gap-3 mt-4">
                       {genreFilters.map((g) => (
-                        <Checkbox key={g} label={t(g)} checked={filters.genre.includes(g)} onChange={() => toggleFilter("genre", g)} />
+                        <label key={g} className="flex items-center gap-3 cursor-pointer select-none">
+                          <input type="checkbox" checked={filters.genre.includes(g)} onChange={() => toggleFilter("genre", g)} />
+                          <span className="text-gray-300 text-sm">{t(g)}</span>
+                        </label>
                       ))}
                     </div>
                   )}
@@ -295,7 +304,10 @@ const Browse = () => {
                   {featOpen && (
                     <div className="flex flex-col gap-3 mt-4">
                       {featureFilters.map((f) => (
-                        <Checkbox key={f} label={t(f)} checked={filters.features.includes(f)} onChange={() => toggleFilter("features", f)} />
+                        <label key={f} className="flex items-center gap-3 cursor-pointer select-none">
+                          <input type="checkbox" checked={filters.features.includes(f)} onChange={() => toggleFilter("features", f)} />
+                          <span className="text-gray-300 text-sm">{t(f)}</span>
+                        </label>
                       ))}
                     </div>
                   )}
@@ -308,7 +320,10 @@ const Browse = () => {
                   {platOpen && (
                     <div className="flex flex-col gap-3 mt-4">
                       {platformFilters.map((p) => (
-                        <Checkbox key={p} label={t(p)} checked={filters.platform.includes(p)} onChange={() => toggleFilter("platform", p)} />
+                        <label key={p} className="flex items-center gap-3 cursor-pointer select-none">
+                          <input type="checkbox" checked={filters.platform.includes(p)} onChange={() => toggleFilter("platform", p)} />
+                          <span className="text-gray-300 text-sm">{t(p)}</span>
+                        </label>
                       ))}
                     </div>
                   )}
@@ -336,7 +351,10 @@ const Browse = () => {
               {catOpen && (
                 <div className="flex flex-col gap-3 mt-4">
                   {categories.map((c) => (
-                    <Checkbox key={c.key} label={t(c.label)} checked={filters.category.includes(c.key)} onChange={() => toggleFilter("category", c.key)} />
+                    <label key={c.key} className="flex items-center gap-3 cursor-pointer select-none">
+                      <input type="checkbox" checked={filters.category.includes(c.key)} onChange={() => toggleFilter("category", c.key)} />
+                      <span className="text-gray-300 text-sm">{t(c.label)}</span>
+                    </label>
                   ))}
                 </div>
               )}
@@ -349,7 +367,10 @@ const Browse = () => {
               {priceOpen && (
                 <div className="flex flex-col gap-3 mt-4">
                   {priceFilters.map((p) => (
-                    <Checkbox key={p} label={t(p)} checked={filters.price.includes(p)} onChange={() => toggleFilter("price", p)} />
+                    <label key={p} className="flex items-center gap-3 cursor-pointer select-none">
+                      <input type="checkbox" checked={filters.price.includes(p)} onChange={() => toggleFilter("price", p)} />
+                      <span className="text-gray-300 text-sm">{t(p)}</span>
+                    </label>
                   ))}
                 </div>
               )}
@@ -362,7 +383,10 @@ const Browse = () => {
               {genreOpen && (
                 <div className="flex flex-col gap-3 mt-4">
                   {genreFilters.map((g) => (
-                    <Checkbox key={g} label={t(g)} checked={filters.genre.includes(g)} onChange={() => toggleFilter("genre", g)} />
+                    <label key={g} className="flex items-center gap-3 cursor-pointer select-none">
+                      <input type="checkbox" checked={filters.genre.includes(g)} onChange={() => toggleFilter("genre", g)} />
+                      <span className="text-gray-300 text-sm">{t(g)}</span>
+                    </label>
                   ))}
                 </div>
               )}
@@ -375,7 +399,10 @@ const Browse = () => {
               {featOpen && (
                 <div className="flex flex-col gap-3 mt-4">
                   {featureFilters.map((f) => (
-                    <Checkbox key={f} label={t(f)} checked={filters.features.includes(f)} onChange={() => toggleFilter("features", f)} />
+                    <label key={f} className="flex items-center gap-3 cursor-pointer select-none">
+                      <input type="checkbox" checked={filters.features.includes(f)} onChange={() => toggleFilter("features", f)} />
+                      <span className="text-gray-300 text-sm">{t(f)}</span>
+                    </label>
                   ))}
                 </div>
               )}
@@ -388,7 +415,10 @@ const Browse = () => {
               {platOpen && (
                 <div className="flex flex-col gap-3 mt-4">
                   {platformFilters.map((p) => (
-                    <Checkbox key={p} label={t(p)} checked={filters.platform.includes(p)} onChange={() => toggleFilter("platform", p)} />
+                    <label key={p} className="flex items-center gap-3 cursor-pointer select-none">
+                      <input type="checkbox" checked={filters.platform.includes(p)} onChange={() => toggleFilter("platform", p)} />
+                      <span className="text-gray-300 text-sm">{t(p)}</span>
+                    </label>
                   ))}
                 </div>
               )}
@@ -462,16 +492,6 @@ const Browse = () => {
           )}
         </div>
       </div>
-    </div>
-  )
-}
-const Checkbox = ({ label, checked, onChange }) => {
-  return (
-    <div onClick={onChange} className="flex items-center gap-3 cursor-pointer select-none">
-      <div className={checked ? "w-[18px] h-[18px] rounded flex items-center justify-center border bg-white border-white" : "w-[18px] h-[18px] rounded flex items-center justify-center border border-gray-500"}>
-        {checked && <Check size={14} className="text-black" />}
-      </div>
-      <span className="text-gray-300 text-sm">{label}</span>
     </div>
   )
 }
