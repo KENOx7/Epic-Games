@@ -33,9 +33,9 @@ function Cart() {
 
   const checkoutGame = {
     title: `${cart.length} ${cart.length > 1 ? t("itemsInCart2") : t("itemsInCart1")}`,
-    oldPrice: `$${total}`,
-    newPrice: subtotal == 0 ? t("Free") : `$${subtotal}`,
-    discount: discount > 0 ? `-$${discount}` : null
+    oldPrice: `$${total.toFixed(2)}`,
+    newPrice: subtotal == 0 ? t("Free") : `$${subtotal.toFixed(2)}`,
+    discount: discount > 0 ? `-$${discount.toFixed(2)}` : null
   }
 
   if (cart.length == 0) {
@@ -137,7 +137,7 @@ function Cart() {
             <h2 className="text-2xl font-bold mb-6">{t("summary")}</h2>
             <div className="flex justify-between mb-3 text-sm">
               <span>{t("price")}</span>
-              <span>${total}</span>
+              <span>${total.toFixed(2)}</span>
             </div>
             {discount > 0 && (
               <div className="flex justify-between mb-3 text-sm">
@@ -147,7 +147,7 @@ function Cart() {
             )}
             <div className="flex justify-between border-t border-[#333] pt-4 mb-6 font-bold">
               <span>{t("subtotal")}</span>
-              <span>${subtotal}</span>
+              <span>${subtotal.toFixed(2)}</span>
             </div>
             <button onClick={() => (user ? setCheckoutOpen(true) : navigate("/login"))}
               className="w-full bg-[#26bbff] text-black font-bold py-4 rounded-lg">
