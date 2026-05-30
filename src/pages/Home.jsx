@@ -19,6 +19,6 @@ function Home() {
       <TopPlayerReviewed />
       <TopSellers />
     </>
-  );
+  )
 }
-export default Home;
+export default Home

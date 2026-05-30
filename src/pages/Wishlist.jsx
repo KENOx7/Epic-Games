@@ -3,7 +3,7 @@ import { Bookmark, ShoppingCart, CircleDollarSign } from "lucide-react";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useCartStore } from "../store/useCartStore";
 import { useLanguageStore } from "../store/useLanguageStore";
-import { getSlug, getReward } from "../utils/helpers";
+import { getSlug, getReward, getCoverUrl } from "../utils/helpers";
 
 function Wishlist() {
   const { wishlist, removeFromWishlist } = useWishlistStore()
@@ -31,25 +31,12 @@ function Wishlist() {
       <div className="grid grid-cols-1 gap-6">
         {wishlist.map((game) => {
           const slug = getSlug(game.title)
-          const endpoint = game.endpoint || "epic-savings"
-          const basePath = game.cartBasePath || `https://epic-games-api-eta.vercel.app/${endpoint}/${slug}`
-          const cover = game.saved_images?.find((img) => img === "cover.jpg" || img === "cover.png")
-          const ageImage = game.saved_images?.find((img) => img.startsWith("age"))
-          const coverUrl = `${basePath}/${cover || "cover.jpg"}`
-          const ageUrl = ageImage ? `${basePath}/${ageImage}` : null
+          const endpoint = game.endpoint
+          const basePath = `https://epic-games-api-eta.vercel.app/${endpoint}/${slug}`
+          const coverUrl = getCoverUrl(game, basePath)
           const inCart = isInCart(game.title)
           const detailUrl = `/game/${slug}?from=${endpoint}`
-          const AgeBlock = ({ className }) => (
-            <div className={`border border-[#333] rounded-lg p-3 flex items-center gap-3 ${className}`}>
-              <img src={ageUrl} alt="Age rating" className="w-12 h-12 object-contain bg-white" />
-              <div>
-                <p className="text-white text-sm font-bold">{game.ageRating || t("ageRating")}</p>
-                <p className="text-gray-400 text-xs">
-                  {game.ageDescription ? t(game.ageDescription) || game.ageDescription : t("ageRatingWarning")}
-                </p>
-              </div>
-            </div>
-          )
+
           return (
             <div key={game.title} className="bg-[#18181c] rounded-xl p-4 flex flex-col sm:flex-row gap-4">
               <div className="flex gap-4 flex-1 min-w-0">
@@ -61,27 +48,19 @@ function Wishlist() {
                     <span className="bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 font-bold">
                       {t("baseGame")}
                     </span>
-                    {game.features?.includes("Early Access") && (
-                      <span className="bg-[#2a2a2a] text-[10px] sm:text-xs px-2 py-1 rounded text-gray-300 font-bold">
-                        {t("earlyAccess")}
-                      </span>
-                    )}
                   </div>
                   <Link to={detailUrl}>
                     <h2 className="text-lg sm:text-xl font-bold leading-tight line-clamp-2">{game.title}</h2>
                   </Link>
                   {game.platform && <p className="text-gray-500 text-xs mt-3">{game.platform}</p>}
-                  {ageUrl && <AgeBlock className="mt-4 hidden sm:flex max-w-[260px]" />}
                 </div>
               </div>
-              {ageUrl && <AgeBlock className="sm:hidden" />}
               <div className="sm:w-auto sm:min-w-[260px] flex flex-col sm:items-end sm:justify-between gap-4">
                 <div className="sm:text-right">
                   <div className="flex flex-wrap items-center sm:justify-end gap-2">
                     {game.discount && (<span className="bg-[#26bbff] text-black text-xs font-bold px-2 py-1 rounded">{game.discount}</span>)}
                     {game.oldPrice && (<span className="text-gray-500 line-through text-sm">{game.oldPrice}</span>)}
-                    <span className="text-lg font-bold">{game.newPrice || t("Free")}</span></div>
-                  {game.saleEnds && (<p className="text-gray-400 text-xs mt-2">{t("saleEndsPrefix")} {game.saleEnds}</p>)}
+                    <span className="text-lg font-bold">{game.newPrice}</span></div>
                   <p className="text-[#b7d36b] text-sm flex items-center gap-2 sm:justify-end mt-4 sm:whitespace-nowrap">
                     <CircleDollarSign size={16} className="text-yellow-300" />{t("earnEpicRewards")} ${getReward(game.newPrice)}
                   </p>

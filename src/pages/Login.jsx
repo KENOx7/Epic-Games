@@ -1,25 +1,36 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useLanguageStore } from "../store/useLanguageStore";
 import logo from "../assets/logo.png";
 
-export default function Login() {
+function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const { logIn, logInWithGoogle, error, loading } = useAuthStore()
   const { t } = useLanguageStore()
   const navigate = useNavigate()
 
+  // Email ve sifre ile giriş
   const handleLogin = async (e) => {
     e.preventDefault()
-    try {await logIn(email, password) 
-      navigate("/")} 
-    catch (err) {console.log(err)}}
-  const handleGoogleLogin = async () => 
-    {try {await logInWithGoogle()
-      navigate("/")} 
-    catch (err) {console.log(err)}}
+    try {
+      await logIn(email, password)
+      navigate("/")
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  // Google hesabı ile giris
+  const handleGoogleLogin = async () => {
+    try {
+      await logInWithGoogle()
+      navigate("/")
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#101014] flex flex-col items-center justify-center p-4">
@@ -35,7 +46,6 @@ export default function Login() {
             {error}
           </div>
         )}
-
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <div>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("emailAddress")}
@@ -68,5 +78,6 @@ export default function Login() {
         </p>
       </div>
     </div>
-  );
+  )
 }
+export default Login

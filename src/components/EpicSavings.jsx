@@ -4,13 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useLanguageStore } from "../store/useLanguageStore";
-
-function getFolderName(title) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-}
+import { getSlug } from "../utils/helpers";
 
 function EpicSavings() {
   const [games, setGames] = useState([])
@@ -22,31 +16,55 @@ function EpicSavings() {
   useEffect(() => {
     axios
       .get("https://epic-games-api-eta.vercel.app/epic-savings/category_summary.json")
-      .then((res) => setGames(res.data))
+      .then((res) => {
+        setGames(res.data)
+      })
   }, [])
 
   const sol = () => {
-    const addim = window.innerWidth < 768 ? 2 : 6
-    setScrollIndex((evvel) => {
-      const sonraki = evvel - addim
-      return sonraki < 0 ? 0 : sonraki
-    })
+    let addim = 6
+    if (window.innerWidth < 768) {
+      addim = 2
+    } else if (window.innerWidth < 1024) {
+      addim = 4
+    }
+    let yeniIndex = scrollIndex - addim
+    if (yeniIndex < 0) {
+      yeniIndex = 0
+    }
+    setScrollIndex(yeniIndex)
   }
 
   const sag = () => {
-    const addim = window.innerWidth < 768 ? 2 : 6
-    const sonuncu = games.length - addim
-    setScrollIndex((evvel) => {
-      const sonraki = evvel + addim
-      return sonuncu < 0 ? 0 : sonraki > sonuncu ? sonuncu : sonraki
-    })
+    let addim = 6
+    if (window.innerWidth < 768) {
+      addim = 2
+    } else if (window.innerWidth < 1024) {
+      addim = 4
+    }
+    const sonuncuIndex = games.length - addim
+    let yeniIndex = scrollIndex + addim
+    if (yeniIndex > sonuncuIndex) {
+      yeniIndex = sonuncuIndex
+    }
+    if (yeniIndex < 0) {
+      yeniIndex = 0
+    }
+    setScrollIndex(yeniIndex)
   }
 
-  const handleTouchStart = (e) => touchStart.current = e.touches[0].clientX
+  const handleTouchStart = (e) => {
+    touchStart.current = e.touches[0].clientX
+  }
+  
   const handleTouchEnd = (e) => {
     const distance = touchStart.current - e.changedTouches[0].clientX
-    if (distance > 50) sag()
-    if (distance < -50) sol()
+    if (distance > 50) {
+      sag()
+    }
+    if (distance < -50) {
+      sol()
+    }
   }
 
   return (
@@ -65,20 +83,20 @@ function EpicSavings() {
         <div className="flex gap-5 transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${scrollIndex * 198}px)` }}>
           {games.map((game) => {
-            const folderName = getFolderName(game.title)
+            const folderName = getSlug(game.title)
             const imageSrc = `https://epic-games-api-eta.vercel.app/epic-savings/${folderName}/cover.jpg`
             const inWishlist = isInWishlist(game.title)
-
             return (
               <Link key={game.title} to={`/game/${folderName}?from=epic-savings`} className="block w-[178px] flex-none group">
                 <div className="relative w-full h-[238px] rounded-lg overflow-hidden">
                   <img src={imageSrc} alt={game.title} className="object-cover h-full w-full" />
                   <div className="absolute inset-0 group-hover:bg-white/10" />
                   <div className="absolute top-2 right-2 md:opacity-0 md:group-hover:opacity-100">
-                    <button onClick={(e) => {
-                      e.preventDefault()
-                      toggleWishlist({ ...game, endpoint: "epic-savings" })
-                    }}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault()
+                        toggleWishlist({ ...game, endpoint: "epic-savings" })
+                      }}
                       className="w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center">
                       <Bookmark size={16} className={inWishlist ? "fill-white" : ""} />
                     </button>
@@ -96,12 +114,11 @@ function EpicSavings() {
                   </div>
                 </div>
               </Link>
-            );
+            )
           })}
         </div>
       </div>
     </div>
-  );
+  )
 }
-
-export default EpicSavings;
+export default EpicSavings

@@ -7,7 +7,7 @@ export const useAuthStore = create((set) => ({
   loading: true,
   error: null,
 
-  // E-poçt və şifrə ilə qeydiyyatdan keçmək
+  // Epoçt ve sifre ile qeydiyyat
   signUp: async (email, password) => {
     set({ loading: true, error: null })
     try {
@@ -19,7 +19,7 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  // E-poçt və şifrə ilə giriş etmək
+  // Epoct ve sifre ile giris 
   logIn: async (email, password) => {
     set({ loading: true, error: null })
     try {
@@ -31,7 +31,7 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  // Google hesabı ilə giriş etmək
+  // Google ile giris
   logInWithGoogle: async () => {
     set({ loading: true, error: null })
     try {
@@ -44,7 +44,6 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  // Sistemdən çıxış etmək
   logOut: async () => {
     set({ loading: true, error: null })
     try {
@@ -56,7 +55,6 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  // İstifadəçinin giriş/çıxış vəziyyətini (auth state) daim izləmək
   initializeAuthListener: () => {
     onAuthStateChanged(auth, (user) => set({ user, loading: false }))
   }

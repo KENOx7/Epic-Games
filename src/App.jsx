@@ -25,6 +25,6 @@ function App({ children }) {
         <Footer />
       </div>
     </>
-  );
+  )
 }
-export default App;
+export default App

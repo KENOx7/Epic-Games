@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { useLanguageStore } from "../store/useLanguageStore";
 import logo from "../assets/logo.png";
 
-export default function Register() {
+function Register() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -12,19 +12,30 @@ export default function Register() {
   const { t } = useLanguageStore()
   const navigate = useNavigate()
 
+  // Email ve sifre ile qeydiyyat
   const handleRegister = async (e) => {
     e.preventDefault()
-    if (password !== confirmPassword) {
+    if (password != confirmPassword) {
       alert("Passwords do not match")
-      return}
-    try {await signUp(email, password)
-      navigate("/")}
-    catch (err) {console.log(err)}}
-
-  const handleGoogleLogin = async () => {
-    try {await logInWithGoogle()
+      return
+    }
+    try {
+      await signUp(email, password)
       navigate("/")
-    } catch (err) {console.log(err)}}
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  // Google hesabı ile qeydiyyat
+  const handleGoogleLogin = async () => {
+    try {
+      await logInWithGoogle()
+      navigate("/")
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#101014] flex flex-col items-center justify-center p-4">
@@ -78,5 +89,6 @@ export default function Register() {
         </p>
       </div>
     </div>
-  );
+  )
 }
+export default Register

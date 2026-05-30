@@ -2,17 +2,23 @@ import { useEffect, useState } from "react";
 import { X, CreditCard, Wallet, Plus } from "lucide-react";
 import logo from "../assets/logo.png";
 import { useLanguageStore } from "../store/useLanguageStore";
-import { getPrice, getCoverUrl } from "../utils/helpers";
+import { getReward, getCoverUrl } from "../utils/helpers";
 
 function Checkout({ game, basePath, onClose, onSuccess, cartItems }) {
   const { t } = useLanguageStore()
   const [payment, setPayment] = useState("credit")
   const items = cartItems || [game]
-  const rewards = (getPrice(game.newPrice) * 0.05).toFixed(2)
+  const rewards = getReward(game.newPrice)
 
   useEffect(() => {
     document.body.style.overflow = "hidden"
-    return () => {document.body.style.overflow = ""}}, [])
+    return () => document.body.style.overflow = ""
+  }, [])
+
+  const finishPayment = () => {
+    if (onSuccess) onSuccess()
+    else onClose()
+  }
 
   return (
     <div className="fixed inset-0 z-[70] bg-[#121214] md:bg-black/70 md:p-4 md:flex md:items-center md:justify-center">
@@ -68,16 +74,11 @@ function Checkout({ game, basePath, onClose, onSuccess, cartItems }) {
               </div>
               <p className="text-gray-400 text-xs mt-2 md:ml-9">{t("accountBalanceDesc")}</p>
               <div className="mt-3 md:ml-9 flex items-center gap-4">
-                <button className="bg-[#2a2a30] text-white px-3 py-2 rounded text-xs font-bold">
-                  {t("addFunds")}
-                </button>
+                <button className="bg-[#2a2a30] text-white px-3 py-2 rounded text-xs font-bold">{t("addFunds")}</button>
                 <span className="text-gray-400 text-xs underline">{t("learnMore")}</span>
               </div>
             </div>
-            <div
-              onClick={() => setPayment("credit")}
-              className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer 
-                ${payment == "credit" ? "border-[#26BBFF] bg-[#2a2a30]" : "border-gray-700"}`}>
+            <div onClick={() => setPayment("credit")} className={payment == "credit" ? "border border-[#26BBFF] bg-[#2a2a30] rounded-lg p-4 flex items-center gap-3 cursor-pointer" : "border border-gray-700 rounded-lg p-4 flex items-center gap-3 cursor-pointer"}>
               <div className="w-10 h-8 bg-white rounded flex items-center justify-center">
                 <CreditCard size={18} className="text-[#444]" />
               </div>
@@ -86,12 +87,9 @@ function Checkout({ game, basePath, onClose, onSuccess, cartItems }) {
                 {payment == "credit" && <div className="w-3 h-3 rounded-full bg-[#26BBFF]" />}
               </div>
             </div>
-            <div
-              onClick={() => setPayment("paypal")}
-              className={`border rounded-lg p-4 flex items-center gap-3 cursor-pointer
-                ${payment == "paypal" ? "border-[#26BBFF] bg-[#2a2a30]" : "border-gray-700"}`}>
+            <div onClick={() => setPayment("paypal")} className={payment == "paypal" ? "border border-[#26BBFF] bg-[#2a2a30] rounded-lg p-4 flex items-center gap-3 cursor-pointer" : "border border-gray-700 rounded-lg p-4 flex items-center gap-3 cursor-pointer"}>
               <div className="w-10 h-8 flex items-center justify-center">
-                <img src="https://static-assets-prod.epicgames.com/payment-web/static/pm_icons/paypal-40x26-fb9398e4e292.svg" alt="PayPal" className="rounded-sm"/>
+                <img src="https://static-assets-prod.epicgames.com/payment-web/static/pm_icons/paypal-40x26-fb9398e4e292.svg" alt="PayPal" className="rounded-sm" />
               </div>
               <span className="text-gray-300 font-medium flex-1">PayPal</span>
               <div className="w-5 h-5 rounded-full border border-gray-500 flex items-center justify-center">
@@ -103,10 +101,11 @@ function Checkout({ game, basePath, onClose, onSuccess, cartItems }) {
             <Plus size={16} />
             {t("creatorCode")}
           </button>
-          <button onClick={onSuccess || onClose} className="w-full py-4 rounded-lg font-bold mb-4 bg-[#26BBFF] text-black">
+          <button onClick={finishPayment} className="w-full py-4 rounded-lg font-bold mb-4 bg-[#26BBFF] text-black">
             {t("payNow")}
           </button>
-          <p className="text-[12px] text-gray-500 pb-6 md:pb-0">{t("payNowDisclaimer1")}
+          <p className="text-[12px] text-gray-500 pb-6 md:pb-0">
+            {t("payNowDisclaimer1")}
             <span className="text-[#26BBFF]">{t("eula")}</span>. <br /> <br />
             {t("payNowDisclaimer2")} <span className="text-[#26BBFF]">{t("purchasePolicy")}</span>.
           </p>
@@ -115,5 +114,4 @@ function Checkout({ game, basePath, onClose, onSuccess, cartItems }) {
     </div>
   )
 }
-
 export default Checkout

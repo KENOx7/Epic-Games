@@ -1,12 +1,12 @@
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { ShoppingCart, Bookmark, CircleDollarSign } from "lucide-react"
-import { useCartStore } from "../store/useCartStore"
-import { useWishlistStore } from "../store/useWishlistStore"
-import { useLanguageStore } from "../store/useLanguageStore"
-import { useAuthStore } from "../store/useAuthStore"
-import Checkout from "../components/Checkout"
-import { getPrice, getSlug, getReward, getCoverUrl } from "../utils/helpers"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ShoppingCart, Bookmark, CircleDollarSign } from "lucide-react";
+import { useCartStore } from "../store/useCartStore";
+import { useWishlistStore } from "../store/useWishlistStore";
+import { useLanguageStore } from "../store/useLanguageStore";
+import { useAuthStore } from "../store/useAuthStore";
+import Checkout from "../components/Checkout";
+import { getPrice, getSlug, getReward, getCoverUrl } from "../utils/helpers";
 
 function Cart() {
   const { cart, removeFromCart, clearCart } = useCartStore()
@@ -18,22 +18,24 @@ function Cart() {
 
   let total = 0
   let discount = 0
-
   cart.forEach((game) => {
-    const newP = getPrice(game.newPrice)
-    const oldP = game.oldPrice ? getPrice(game.oldPrice) : newP
-    total += oldP
-    if (oldP > newP) discount += oldP - newP
+    let newP = getPrice(game.newPrice)
+    let oldP = 0
+    if (game.oldPrice) {oldP = getPrice(game.oldPrice)} 
+    else {oldP = newP}
+    total = total + oldP
+    if (oldP > newP) {
+      let ferq = oldP - newP
+      discount = discount + ferq
+    }
   })
-
   const subtotal = total - discount
-  const subtotalText = subtotal.toFixed(2)
 
   const checkoutGame = {
     title: `${cart.length} ${cart.length > 1 ? t("itemsInCart2") : t("itemsInCart1")}`,
-    oldPrice: `$${total.toFixed(2)}`,
-    newPrice: subtotal == 0 ? t("Free") : `$${subtotalText}`,
-    discount: discount > 0 ? `-$${discount.toFixed(2)}` : null,
+    oldPrice: `$${total}`,
+    newPrice: subtotal == 0 ? t("Free") : `$${subtotal}`,
+    discount: discount > 0 ? `-$${discount}` : null
   }
 
   if (cart.length == 0) {
@@ -57,7 +59,7 @@ function Cart() {
       {checkoutOpen && (
         <Checkout
           game={checkoutGame}
-          basePath={cart[0]?.cartBasePath || ""}
+          basePath={cart[0].cartBasePath}
           cartItems={cart}
           onClose={() => setCheckoutOpen(false)}
           onSuccess={() => {
@@ -90,9 +92,9 @@ function Cart() {
                       <h2 className="text-lg sm:text-xl font-bold hover:underline">{game.title}</h2>
                     </Link>
                     {game.platform && <p className="text-gray-500 text-xs mt-3">{game.platform}</p>}
-                    {game.newPrice !== "Free" && (
+                    {game.newPrice != "Free" && (
                       <p className="text-sm text-white mt-auto pt-2">
-                        {game.refundType ? t(game.refundType) || game.refundType : t("refundable")}
+                        {t("refundable")}
                       </p>
                     )}
                   </div>
@@ -108,7 +110,7 @@ function Cart() {
                       {game.oldPrice && (
                         <span className="text-gray-500 line-through text-sm">{game.oldPrice}</span>
                       )}
-                      <span className="text-lg font-bold">{game.newPrice || t("Free")}</span>
+                      <span className="text-lg font-bold">{game.newPrice}</span>
                     </div>
                     <p className="text-[#b7d36b] flex items-center gap-2 text-sm mt-4">
                       <CircleDollarSign size={16} className="text-yellow-300" />
@@ -135,20 +137,20 @@ function Cart() {
             <h2 className="text-2xl font-bold mb-6">{t("summary")}</h2>
             <div className="flex justify-between mb-3 text-sm">
               <span>{t("price")}</span>
-              <span>${total.toFixed(2)}</span>
+              <span>${total}</span>
             </div>
             {discount > 0 && (
               <div className="flex justify-between mb-3 text-sm">
                 <span>{t("discountText")}</span>
-                <span>-${discount}</span>
+                <span>-${discount.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between border-t border-[#333] pt-4 mb-6 font-bold">
               <span>{t("subtotal")}</span>
-              <span>${subtotalText}</span>
+              <span>${subtotal}</span>
             </div>
             <button onClick={() => (user ? setCheckoutOpen(true) : navigate("/login"))}
-              className="w-full bg-[#26bbff] text-black font-bold py-3.5 rounded-lg">
+              className="w-full bg-[#26bbff] text-black font-bold py-4 rounded-lg">
               {t("checkOutBtn")}
             </button>
           </div>
@@ -157,5 +159,4 @@ function Cart() {
     </div>
   )
 }
-
 export default Cart

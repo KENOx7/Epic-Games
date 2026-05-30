@@ -5,11 +5,10 @@ import { FaFacebookF, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import store from "../assets/store.svg";
 import { useLanguageStore } from "../store/useLanguageStore";
 
-export default function Footer() {
+function Footer() {
   const [open, setOpen] = useState("")
   const { t } = useLanguageStore()
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" })
-
   const toggleSection = (name) => {
     if (open == name) setOpen("")
     else setOpen(name)
@@ -19,7 +18,7 @@ export default function Footer() {
     <footer className="bg-[#121216] pt-10 pb-8 px-4 w-full">
       <div className="max-w-[1200px] mx-auto">
         <div className="flex flex-col items-center md:flex-row md:justify-between mb-8 gap-6">
-          <Link to="/"><img src={store} alt="Epic Games Store"/></Link>
+          <Link to="/"><img src={store} alt="Epic Games Store" /></Link>
           <div className="flex items-center gap-5 text-gray-400">
             <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white"><FaFacebookF size={20} /></a>
             <a href="https://www.linkedin.com/in/kanan-akhmadov-774647291" className="hover:text-white"><FaXTwitter size={20} /></a>
@@ -28,9 +27,7 @@ export default function Footer() {
         </div>
         <div className="md:hidden border-t border-[#2a2a2a]">
           <div className="border-b border-[#2a2a2a]">
-            <button
-              onClick={() => toggleSection("games")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold">
+            <button onClick={() => toggleSection("games")} className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("games")}
               <ChevronDown size={18} className={`transition-transform duration-200 ${open == "games" ? "rotate-180" : ""}`} />
             </button>
@@ -47,9 +44,7 @@ export default function Footer() {
             )}
           </div>
           <div className="border-b border-[#2a2a2a]">
-            <button
-              onClick={() => toggleSection("marketplaces")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold">
+            <button onClick={() => toggleSection("marketplaces")} className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("marketplaces")}
               <ChevronDown size={18} className={`transition-transform duration-200 ${open == "marketplaces" ? "rotate-180" : ""}`} />
             </button>
@@ -67,9 +62,7 @@ export default function Footer() {
             )}
           </div>
           <div className="border-b border-[#2a2a2a]">
-            <button
-              onClick={() => toggleSection("tools")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold">
+            <button onClick={() => toggleSection("tools")} className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("tools")}
               <ChevronDown size={18} className={`transition-transform duration-200 ${open == "tools" ? "rotate-180" : ""}`} />
             </button>
@@ -85,9 +78,7 @@ export default function Footer() {
             )}
           </div>
           <div className="border-b border-[#2a2a2a]">
-            <button
-              onClick={() => toggleSection("online")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold">
+            <button onClick={() => toggleSection("online")} className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("onlineServices")}
               <ChevronDown size={18} className={`transition-transform duration-200 ${open == "online" ? "rotate-180" : ""}`} />
             </button>
@@ -103,9 +94,7 @@ export default function Footer() {
             )}
           </div>
           <div className="border-b border-[#2a2a2a]">
-            <button
-              onClick={() => toggleSection("company")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold">
+            <button onClick={() => toggleSection("company")} className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("company")}
               <ChevronDown size={18} className={`transition-transform duration-200 ${open == "company" ? "rotate-180" : ""}`} />
             </button>
@@ -120,9 +109,7 @@ export default function Footer() {
             )}
           </div>
           <div className="border-b border-[#2a2a2a]">
-            <button
-              onClick={() => toggleSection("resources")}
-              className="w-full flex items-center justify-between py-4 text-white font-bold">
+            <button onClick={() => toggleSection("resources")} className="w-full flex items-center justify-between py-4 text-white font-bold">
               {t("resources")}
               <ChevronDown size={18} className={`transition-transform duration-200 ${open == "resources" ? "rotate-180" : ""}`} />
             </button>
@@ -229,14 +216,13 @@ export default function Footer() {
           </div>
         </div>
         <div className="flex justify-center md:justify-end mt-8">
-          <button 
-            onClick={scrollToTop}
-            className="flex items-center gap-2 text-white bg-[#353539] hover:bg-[#45454a] px-4 py-2 rounded-md text-sm">
+          <button onClick={scrollToTop} className="flex items-center gap-2 text-white bg-[#353539] hover:bg-[#45454a] px-4 py-2 rounded-md text-sm">
             {t("backToTop")}
             <ArrowUp size={16} />
           </button>
         </div>
       </div>
     </footer>
-  );
+  )
 }
+export default Footer

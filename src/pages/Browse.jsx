@@ -44,7 +44,10 @@ const getDate = (date) => {
 const priceMatches = (game, filter) => {
   const price = getPrice(game.newPrice)
   if (filter == "Free") return price == 0
-  if (filter == "Discounted") return !!game.discount
+  if (filter == "Discounted") {
+    if (game.discount) return true
+    return false
+  }
   if (filter == "Under $5.00") return price > 0 && price < 5
   if (filter == "Under $10.00") return price > 0 && price < 10
   if (filter == "Under $20.00") return price > 0 && price < 20
@@ -80,7 +83,7 @@ const PopularGenresSlider = ({ games, setFilters, t }) => {
               </div>
               <p className="text-white text-center text-sm font-semibold">{t(genre.title)}</p>
             </div>
-          );
+          )
         })}
       </div>
     </div>
@@ -88,7 +91,7 @@ const PopularGenresSlider = ({ games, setFilters, t }) => {
 }
 
 const SortDropdown = ({ value, onChange, t }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   const options = [
     { value: "all", label: t("all") },
     { value: "new-release", label: t("newRelease") },
@@ -110,7 +113,10 @@ const SortDropdown = ({ value, onChange, t }) => {
           <div className="fixed inset-0 z-0" onClick={() => setOpen(false)}></div>
           <div className="absolute top-full left-0 md:right-0 md:left-auto mt-1 w-full md:w-44 bg-[#202024] rounded-md shadow-xl py-1 z-10 border border-[#303036]">
             {options.map((opt) => (
-              <div key={opt.value} onClick={() => { onChange(opt.value); setOpen(false) }}
+              <div key={opt.value} onClick={() => {
+                onChange(opt.value)
+                setOpen(false)
+              }}
                 className={`px-4 py-2 text-sm cursor-pointer ${value == opt.value ? 'text-white bg-[#303036]' : 'text-gray-300 hover:text-white hover:bg-[#2a2a30]'}`}>{opt.label}
               </div>
             ))}
@@ -124,8 +130,13 @@ const SortDropdown = ({ value, onChange, t }) => {
 const Browse = () => {
   const [searchParams] = useSearchParams()
   const categoryParam = searchParams.get("category")
-  const keywordParam = searchParams.get("keyword") || ""
+  let keywordParam = searchParams.get("keyword")
+  if (!keywordParam) keywordParam = ""
   const priceParam = searchParams.get("price")
+  let categoryList = []
+  let priceList = []
+  if (categoryParam) categoryList = [categoryParam]
+  if (priceParam) priceList = [priceParam]
   const [games, setGames] = useState([])
   const [loading, setLoading] = useState(true)
   const [sortBy, setSortBy] = useState("all")
@@ -133,12 +144,11 @@ const Browse = () => {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [filters, setFilters] = useState({
-    category: categoryParam ? [categoryParam] : [],
-    price: priceParam ? [priceParam] : [],
+    category: categoryList,
+    price: priceList,
     genre: [], features: [], platform: []
   })
 
-  // Junior üsulu: Hər bir açılıb-bağlanan menyu üçün ayrı bir state (vəziyyət)
   const [catOpen, setCatOpen] = useState(categoryParam ? true : false)
   const [priceOpen, setPriceOpen] = useState(priceParam ? true : false)
   const [genreOpen, setGenreOpen] = useState(false)
@@ -148,41 +158,65 @@ const Browse = () => {
   const { t } = useLanguageStore()
 
   useEffect(() => setKeyword(keywordParam), [keywordParam])
-  useEffect(() => {setFilters(prev => ({...prev, category: categoryParam ? [categoryParam] : [], 
-      price: priceParam ? [priceParam] : []}))}, [categoryParam, priceParam])
+
+  useEffect(() => {
+    let category = []
+    let price = []
+    if (categoryParam) category = [categoryParam]
+    if (priceParam) price = [priceParam]
+    setFilters((prev) => ({ ...prev, category, price }))
+  }, [categoryParam, priceParam])
+
   useEffect(() => { document.body.style.overflow = mobileFilterOpen ? "hidden" : "auto" }, [mobileFilterOpen])
-  useEffect(() => {const loadGames = async () => {
-      const requests = categories.map(i => axios.get(i.url).then(res => res.data.map(g => ({ ...g, endpoint: i.key }))))
+
+  useEffect(() => {
+    const loadGames = async () => {
+      const requests = categories.map((item) =>
+        axios.get(item.url).then((res) => res.data.map((game) => ({ ...game, endpoint: item.key })))
+      )
       const data = await Promise.all(requests)
-      const tekOyun = Array.from(new Map(data.flat().map(g => [g.title, g])).values())
+      const list = data.flat()
+      const tekOyun = list.filter((game, i) => list.findIndex((item) => item.title == game.title) == i)
       setGames(tekOyun)
-      setLoading(false)}
+      setLoading(false)
+    }
     loadGames()
   }, [])
+
   useEffect(() => setCurrentPage(1), [keyword, sortBy, filters])
   
   const toggleFilter = (name, value) => {setFilters(prev => ({...prev,
       [name]: prev[name].includes(value) ? prev[name].filter(item => item != value) : [...prev[name], value],
     }))
   }
+
+  // search ve filtr
   const searchText = keyword.trim().toLowerCase()
-  const shownGames = games.filter(game => 
-    (!searchText || [game.title, game.developer, game.publisher].some(f => f?.toLowerCase().includes(searchText))) &&
-    (!filters.category.length || filters.category.includes(game.endpoint)) &&
-    (!filters.price.length    || filters.price.some(i => priceMatches(game, i))) &&
-    (!filters.genre.length    || game.genres.some(i => filters.genre.includes(i))) &&
-    (!filters.features.length || game.features.some(i => filters.features.includes(i))) &&
-    (!filters.platform.length || filters.platform.includes(game.platform))
-  )
+  const shownGames = games.filter((game) => {
+    if (searchText) {
+      const title = game.title.toLowerCase()
+      const developer = game.developer.toLowerCase()
+      const publisher = game.publisher.toLowerCase()
+      if (!title.includes(searchText) && !developer.includes(searchText) && !publisher.includes(searchText)) return false
+    }
+    if (filters.category.length && !filters.category.includes(game.endpoint)) return false
+    if (filters.price.length && !filters.price.some((i) => priceMatches(game, i))) return false
+    if (filters.genre.length && !game.genres.some((i) => filters.genre.includes(i))) return false
+    if (filters.features.length && !game.features.some((i) => filters.features.includes(i))) return false
+    if (filters.platform.length && !filters.platform.includes(game.platform)) return false
+    return true
+  })
   const sortMethods = {
     "alphabetical": (a, b) => a.title.localeCompare(b.title),
     "price-high":   (a, b) => getPrice(b.newPrice) - getPrice(a.newPrice),
     "price-low":    (a, b) => getPrice(a.newPrice) - getPrice(b.newPrice),
     "new-release":  (a, b) => getDate(b.releaseDate) - getDate(a.releaseDate)
   }
-  const sortedGames = sortMethods[sortBy] ? [...shownGames].sort(sortMethods[sortBy]) : shownGames
+  let sortedGames = shownGames
+  if (sortBy != "all") {
+    sortedGames = [...shownGames].sort(sortMethods[sortBy])
+  }
 
-  // Səhifələmə məntiqi
   const perPage = 20
   const totalPages = Math.ceil(sortedGames.length / perPage)
   const firstGame = (currentPage - 1) * perPage
@@ -190,7 +224,10 @@ const Browse = () => {
   const pageStart = Math.max(1, currentPage - 2)
   const pageEnd = Math.min(totalPages, pageStart + 4)
   const pages = Array.from({ length: pageEnd - pageStart + 1 }, (_, i) => pageStart + i)
-  const changePage = (page) => {setCurrentPage(page); window.scrollTo({ top: 0, behavior: "smooth" })}
+  const changePage = (page) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   return (
     <div>
@@ -289,7 +326,7 @@ const Browse = () => {
           <div>
             <div className="flex items-center gap-2 bg-[#202024] rounded-md px-3 mb-6">
               <Search size={16} className="text-gray-400 min-w-max" />
-              <input type="text" placeholder={t("keywords")} value={keyword} onChange={(e) => setKeyword(e.target.value)} className="w-full bg-transparent text-sm text-white py-2.5 outline-none placeholder:text-gray-400" />
+              <input type="text" placeholder={t("keywords")} value={keyword} onChange={(e) => setKeyword(e.target.value)} className="w-full bg-transparent text-sm text-white py-3 outline-none placeholder:text-gray-400" />
             </div>
             <div className="border-b border-[#202024] py-4">
               <button onClick={() => setCatOpen(!catOpen)} className="w-full flex items-center justify-between text-white hover:text-gray-300">
@@ -385,16 +422,19 @@ const Browse = () => {
                         <img src={imageSrc} alt={game.title} className="w-full h-full object-contain" />
                         <div className="absolute inset-0 group-hover:bg-white/10"></div>
                         <div className="absolute top-2 right-2 md:opacity-0 md:group-hover:opacity-100">
-                          <button onClick={(e) => { e.preventDefault(); toggleWishlist(game); }} className="w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center">
+                          <button onClick={(e) => {
+                            e.preventDefault()
+                            toggleWishlist(game)
+                          }} className="w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center">
                             <Bookmark size={16} className={inWishlist ? "fill-white" : ""} />
                           </button>
                         </div>
                       </div>
                       <div className="mt-3">
-                        <p className="text-gray-400 text-[11px] uppercase font-semibold mb-1">{t("baseGame")}</p>
+                        <p className="text-gray-400 text-[12px] uppercase font-semibold mb-1">{t("baseGame")}</p>
                         <p className="text-white text-sm font-semibold mb-1">{game.title}</p>
                         <div className="flex flex-wrap items-center gap-2 mt-2">
-                          {game.discount && <span className="bg-[#26bbff] text-black text-[11px] font-bold px-2 py-1 rounded">{game.discount}</span>}
+                          {game.discount && <span className="bg-[#26bbff] text-black text-[12px] font-bold px-2 py-1 rounded">{game.discount}</span>}
                           {game.oldPrice && <span className="text-gray-500 text-xs line-through">{game.oldPrice}</span>}
                           {game.newPrice && <span className="text-white text-sm">{game.newPrice}</span>}
                         </div>
@@ -433,7 +473,6 @@ const Checkbox = ({ label, checked, onChange }) => {
       </div>
       <span className="text-gray-300 text-sm">{label}</span>
     </div>
-  );
-};
-
-export default Browse;
+  )
+}
+export default Browse

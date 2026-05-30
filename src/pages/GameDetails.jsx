@@ -7,27 +7,18 @@ import { useCartStore } from "../store/useCartStore"
 import { useWishlistStore } from "../store/useWishlistStore"
 import { useLanguageStore } from "../store/useLanguageStore"
 import { useAuthStore } from "../store/useAuthStore"
-
-const createSlug = (title) =>
-  title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
+import { getSlug } from "../utils/helpers"
 
 const GameDetails = () => {
   const { slug } = useParams()
   const location = useLocation()
   const navigate = useNavigate()
-
-  // Hal-hazırkı kateqoriyanı URL-dən götürür 
   const params = new URLSearchParams(location.search)
   const from = params.get("from")
-
   const { addToCart, isInCart } = useCartStore()
   const { toggleWishlist, isInWishlist } = useWishlistStore()
   const { t } = useLanguageStore()
   const { user } = useAuthStore()
-
   const [game, setGame] = useState(null)
   const [selectedImage, setSelectedImage] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -36,42 +27,15 @@ const GameDetails = () => {
   const [copied, setCopied] = useState(false)
   const [touchStart, setTouchStart] = useState(null)
 
-  const ALL_ENDPOINTS = ["top-sellers", "free-games", "most-popular", "top-player-reviewed", "epic-savings"]
-
-  // Oyun məlumatlarını yükləyir
   useEffect(() => {
     window.scrollTo(0, 0)
     setLoading(true)
-
     axios
       .get(`https://epic-games-api-eta.vercel.app/${from}/category_summary.json`)
       .then((res) => {
-        const foundGame = res.data.find((item) => createSlug(item.title) === slug)
-        if (foundGame) {
-          setGame(foundGame)
-          setLoading(false)
-        } else {
-          // Əgər oyun ilkin göndərilən kateqoriyada yoxdursa, digər kateqoriyalardan axtarır
-          const otherEndpoints = ALL_ENDPOINTS.filter((ep) => ep !== from)
-          return Promise.all(
-            otherEndpoints.map((ep) =>
-              axios
-                .get(`https://epic-games-api-eta.vercel.app/${ep}/category_summary.json`)
-                .then((r) => ({ data: r.data, ep }))
-                .catch(() => null)
-            )
-          ).then((results) => {
-            for (const result of results) {
-              if (!result) continue
-              const found = result.data.find((item) => createSlug(item.title) === slug)
-              if (found) {
-                setGame(found)
-                return
-              }
-            }
-            setGame(null)
-          }).finally(() => setLoading(false))
-        }
+        const oyun = res.data.find((item) => getSlug(item.title) == slug)
+        setGame(oyun)
+        setLoading(false)
       })
       .catch(() => {
         setGame(null)
@@ -79,7 +43,6 @@ const GameDetails = () => {
       })
   }, [slug, from])
 
-  // inki kopyalayır
   const copyLink = () => {
     navigator.clipboard.writeText(window.location.href)
     setCopied(true)
@@ -103,27 +66,27 @@ const GameDetails = () => {
     )
   }
 
-  const folderName = createSlug(game.title)
+  const folderName = getSlug(game.title)
   const basePath = `https://epic-games-api-eta.vercel.app/${from}/${folderName}`
-  const images = game.saved_images || []
+  const images = game.saved_images
   const imgGame = images.filter((img) => img != "cover.jpg" && img != "cover.png" && !img.startsWith("cover-2") && !img.startsWith("age"))
   const ageImage = images.find((img) => img.startsWith("age"))
-  const cover2 = images.find((img) => img.startsWith("cover-2"))
-  const cover1 = images.find((img) => img == "cover.jpg" || img == "cover.png")
-  const coverSrc = `${basePath}/${cover2 || cover1 || "cover.jpg"}`
-  const currentImage = imgGame.length > 0 ? `${basePath}/${imgGame[selectedImage]}` : `${basePath}/cover.jpg`
-  const rating = parseFloat(game.playerRating) || 0
-  const fullStars = Math.round(rating)
+  const cover = images.find((img) => img.startsWith("cover-2"))
+  const coverSrc = `${basePath}/${cover}`
+  const hazrkiImg = `${basePath}/${imgGame[selectedImage]}`
+  const rating = parseFloat(game.playerRating)
+  const ulduz = Math.round(rating)
   const inCart = isInCart(game.title)
   const inWishlist = isInWishlist(game.title)
-  const goPrev = () => setSelectedImage((prev) => (prev == 0 ? imgGame.length - 1 : prev - 1))
-  const goNext = () => setSelectedImage((prev) => (prev == imgGame.length - 1 ? 0 : prev + 1))
+  const goEvvel = () => setSelectedImage((evvel) => (evvel == 0 ? imgGame.length - 1 : evvel - 1))
+  const goSonra = () => setSelectedImage((evvel) => (evvel == imgGame.length - 1 ? 0 : evvel + 1))
   const handleTouchEnd = (e) => {
-    if (!touchStart || imgGame.length < 2) return
+    if (!touchStart) return
+    if (imgGame.length < 2) return
     const touchEnd = e.changedTouches[0].clientX
     const distance = touchStart - touchEnd
-    if (distance > 50) goNext()
-    if (distance < -50) goPrev()
+    if (distance > 50) goSonra()
+    if (distance < -50) goEvvel()
   }
 
   return (
@@ -152,13 +115,8 @@ const GameDetails = () => {
         <h1 className="text-3xl font-bold mb-2">{game.title}</h1>
         <div className="flex items-center gap-2 mb-6">
           <div className="flex gap-1">
-            {[...Array(5)].map((_, index) => (
-              <Star
-                key={index}
-                size={16}
-                fill={index < fullStars ? "white" : "none"}
-                color={index < fullStars ? "white" : "#555"}
-              />
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} size={16} fill={i < ulduz ? "white" : "none"} color={i < ulduz ? "white" : "#555"} />
             ))}
           </div>
           <span className="text-gray-300 text-sm ml-1">{game.playerRating}</span>
@@ -172,10 +130,10 @@ const GameDetails = () => {
           <div className="mb-4">
             <div className="flex items-center gap-3 mb-3">
               {game.discount && (
-                <span className="bg-[#26BBFF] text-black font-bold px-2.5 py-1 rounded-md text-sm">{game.discount}</span>
+                <span className="bg-[#26BBFF] text-black font-bold px-3 py-1 rounded-md text-sm">{game.discount}</span>
               )}
               {game.oldPrice && <span className="text-gray-500 line-through text-sm">{game.oldPrice}</span>}
-              <span className="text-white font-bold text-lg">{game.newPrice || "—"}</span>
+              <span className="text-white font-bold text-lg">{game.newPrice}</span>
             </div>
             <button
               onClick={() => (user ? setCheckoutOpen(true) : navigate("/login"))}
@@ -233,7 +191,7 @@ const GameDetails = () => {
           {ageImage && (
             <div className="mt-4 flex items-center gap-4">
               <div className="w-12 h-12 bg-[#2a2a30] rounded-md flex items-center justify-center p-1">
-                <img src={`${basePath}/${ageImage}`} alt="Age Rating" className="w-full h-full object-contain" />
+                <img src={`${basePath}/${ageImage}`} alt="age rating" className="w-full h-full object-contain" />
               </div>
               <div>
                 <p className="text-white text-sm font-bold">{t("ageRating")}</p>
@@ -247,14 +205,14 @@ const GameDetails = () => {
             className="relative group w-full rounded-xl overflow-hidden bg-[#1a1a1e] mb-4"
             onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
             onTouchEnd={handleTouchEnd}>
-            <img src={currentImage} alt={game.title} className="w-full h-full object-contain" />
+            <img src={hazrkiImg} alt={game.title} className="w-full h-full object-contain" />
             {imgGame.length > 1 && (
               <div>
-                <button onClick={goPrev}
+                <button onClick={goEvvel}
                   className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <ChevronLeft size={22} />
                 </button>
-                <button onClick={goNext}
+                <button onClick={goSonra}
                   className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <ChevronRight size={22} />
                 </button>
@@ -263,48 +221,40 @@ const GameDetails = () => {
           </div>
           {imgGame.length > 1 && (
             <div
-              ref={(el) => {
-                if (el) {
-                  const active = el.children[selectedImage]
+              ref={(e) => {
+                if (e) {
+                  const active = e.children[selectedImage]
                   if (active) active.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })
                 }
               }}
               className="flex gap-2 overflow-x-auto mb-8 hide-scrollbar">
               {imgGame.map((img, index) => (
-                <button
-                  key={img}
-                  onClick={() => setSelectedImage(index)}
+                <button key={img} onClick={() => setSelectedImage(index)}
                   className={`w-[110px] h-[64px] rounded-md overflow-hidden shrink-0 border-2 ${
-                    selectedImage === index ? "border-[#26BBFF]" : "border-transparent opacity-60 hover:opacity-90"
-                  }`}>
+                  selectedImage == index ? "border-[#26BBFF]" : "border-transparent opacity-60 hover:opacity-90"}`}>
                   <img src={`${basePath}/${img}`} alt={`imgGame ${index + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
           )}
-
           <div>
             <div className="flex gap-12 mb-6 flex-wrap">
-              {game.genres && (
-                <div>
-                  <p className="text-gray-400 text-sm mb-2">{t("genre")}</p>
-                  <div className="flex gap-2 flex-wrap">
-                    {game.genres.map((genre) => (
-                      <span key={genre} className="bg-[#1e1e24] px-3 py-1 rounded text-sm text-gray-300">{t(genre)}</span>
-                    ))}
-                  </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-2">{t("genre")}</p>
+                <div className="flex gap-2 flex-wrap">
+                  {game.genres.map((genre) => (
+                    <span key={genre} className="bg-[#1e1e24] px-3 py-1 rounded text-sm text-gray-300">{t(genre)}</span>
+                  ))}
                 </div>
-              )}
-              {game.features && (
-                <div>
-                  <p className="text-gray-400 text-sm mb-2">{t("features")}</p>
-                  <div className="flex gap-2 flex-wrap">
-                    {game.features.map((feature) => (
-                      <span key={feature} className="bg-[#1e1e24] px-3 py-1 rounded text-sm text-gray-300">{t(feature)}</span>
-                    ))}
-                  </div>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-2">{t("features")}</p>
+                <div className="flex gap-2 flex-wrap">
+                  {game.features.map((feature) => (
+                    <span key={feature} className="bg-[#1e1e24] px-3 py-1 rounded text-sm text-gray-300">{t(feature)}</span>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
             <h2 className="text-xl font-bold mb-3">{game.title}</h2>
             <p className="text-gray-300 text-sm mt-2 whitespace-pre-wrap">{game.description}</p>
@@ -372,11 +322,8 @@ const GameDetails = () => {
                   <p className="text-sm">{t("textLanguages")}</p>
                 </div>
                 <div className="text-gray-400 text-xs">
-                  <p className="mb-3">
-                    {game.title} © 2025 {t("developedAndPublishedBy")} Broken Arms Games srl. {t("allRightsReserved")}
-                  </p>
-                  <a href="#" className="flex items-center gap-1 text-white hover:underline font-bold">
-                    {t("privacyPolicy")}
+                  <p className="mb-3">{game.title} © 2025 {t("developedAndPublishedBy")} Broken Arms Games srl. {t("allRightsReserved")}</p>
+                  <a href="#" className="flex items-center gap-1 text-white hover:underline font-bold">{t("privacyPolicy")}
                     <ExternalLink size={14} />
                   </a>
                 </div>

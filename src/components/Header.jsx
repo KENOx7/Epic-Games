@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Earth, TextAlignJustify, X, Search, Bookmark,
-          ShoppingCart, ArrowRight, User, LogOut, } from "lucide-react";
+import { Earth, TextAlignJustify, X, Search, Bookmark, ShoppingCart, ArrowRight, User, LogOut } from "lucide-react";
 import axios from "axios";
 import logo from "../assets/logo.png";
 import store from "../assets/store.svg";
@@ -9,26 +8,21 @@ import { useCartStore } from "../store/useCartStore";
 import { useWishlistStore } from "../store/useWishlistStore";
 import { useLanguageStore } from "../store/useLanguageStore";
 import { useAuthStore } from "../store/useAuthStore";
+import { getSlug } from "../utils/helpers";
 
 const categories = [
   { key: "top-sellers", url: "https://epic-games-api-eta.vercel.app/top-sellers/category_summary.json" },
   { key: "epic-savings", url: "https://epic-games-api-eta.vercel.app/epic-savings/category_summary.json" },
   { key: "most-popular", url: "https://epic-games-api-eta.vercel.app/most-popular/category_summary.json" },
-  { key: "top-player-reviewed", url: "https://epic-games-api-eta.vercel.app/top-player-reviewed/category_summary.json" },
+  { key: "top-player-reviewed", url: "https://epic-games-api-eta.vercel.app/top-player-reviewed/category_summary.json" }
 ]
 
 const languages = [
-  { code: "en", label: "English", short: "EN" },
-  { code: "tr", label: "Türkçe", short: "TR" },
-  { code: "ru", label: "Русский", short: "RU" },
-  { code: "az", label: "Azərbaycanca", short: "AZ" },
+  { dil: "en", label: "English", short: "EN" },
+  { dil: "tr", label: "Türkçe", short: "TR" },
+  { dil: "ru", label: "Русский", short: "RU" },
+  { dil: "az", label: "Azərbaycanca", short: "AZ" }
 ]
-
-const getFolderName = (title) =>
-  title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -46,12 +40,13 @@ function Header() {
   const wishlist = useWishlistStore((state) => state.wishlist)
   const { language, setLanguage, t } = useLanguageStore()
   const { user, logOut } = useAuthStore()
+  const userName = user ? user.displayName || user.email : ""
 
   useEffect(() => {
     const loadGames = async () => {
-      const responses = await Promise.all(categories.map(c => axios.get(c.url)))
-      const allGames = responses.flatMap((res, idx) => res.data.map(g => ({ ...g, endpoint: categories[idx].key })))
-      setGames(allGames.filter((g, idx) => allGames.findIndex(item => item.title == g.title) == idx))
+      const res = await Promise.all(categories.map((item) => axios.get(item.url)))
+      const data = res.flatMap((item,i) => item.data.map((game) => ({...game, endpoint: categories[i].key})))
+      setGames(data.filter((game,i) => data.findIndex((p) => p.title == game.title) == i))
     }
     loadGames()
   }, [])
@@ -63,23 +58,35 @@ function Header() {
       if (userRef.current && !userRef.current.contains(e.target)) setUserOpen(false)
     }
     document.addEventListener("mousedown", closeDropdowns)
-    return () => document.removeEventListener("mousedown", closeDropdowns)}, [])
+    return () => {document.removeEventListener("mousedown", closeDropdowns)}}, [])
 
-  const searchValue = searchText.trim().toLowerCase()
-  const results = searchValue
-    ? games.filter((game) => {
-        const title = game.title.toLowerCase()
-        const developer = game.developer.toLowerCase()
-        const publisher = game.publisher.toLowerCase()
-        return (title.includes(searchValue) || developer.includes(searchValue) || publisher.includes(searchValue))
-      }).slice(0, 5) : []
-  const closeSearch = () => {setSearchOpen(false); setMobileSearchOpen(false); setSearchText("")}
+  const search = searchText.trim().toLowerCase()
+  const results = search ? games.filter((x) => {
+    const title = x.title.toLowerCase()
+    const developer = x.developer.toLowerCase()
+    const publisher = x.publisher.toLowerCase()
+    return title.includes(search) || developer.includes(search) || publisher.includes(search)
+  }).slice(0, 5) : []
 
-  const goSearchPage = (e) => {e?.preventDefault()
-    if (!searchValue) return
-    navigate(`/browse?keyword=${encodeURIComponent(searchText.trim())}`); closeSearch()}
-  const changeLanguage = (code) => {setLanguage(code); setLangOpen(false)}
-  const handleLogOut = () => {logOut(); setUserOpen(false)}
+  const closeSearch = () => {
+    setSearchOpen(false)
+    setMobileSearchOpen(false)
+    setSearchText("")
+  }
+  const goSearchPage = (e) => {
+    e.preventDefault()
+    if (!search) return
+    navigate(`/browse?keyword=${encodeURIComponent(searchText.trim())}`)
+    closeSearch()
+  }
+  const changeLanguage = (dil) => {
+    setLanguage(dil)
+    setLangOpen(false)
+  }
+  const handleLogOut = () => {
+    logOut()
+    setUserOpen(false)
+  }
 
   return (
     <div>
@@ -100,8 +107,8 @@ function Header() {
             {langOpen && (
               <div className="absolute right-0 top-10 bg-[#18181c] rounded-md shadow-xl py-2 w-[150px] z-50">
                 {languages.map((item) => (
-                  <button key={item.code} onClick={() => changeLanguage(item.code)}
-                    className={`w-full text-left px-5 py-2.5 hover:bg-[#2a2a30] ${language == item.code ? "text-white font-bold" : "text-[#AEAEAF]"}`}>{item.label}
+                  <button key={item.dil} onClick={() => changeLanguage(item.dil)} className={`w-full text-left px-5 py-3 hover:bg-[#2a2a30] ${language == item.dil ? "text-white font-bold" : "text-[#AEAEAF]"}`}>
+                    {item.label}
                   </button>
                 ))}
               </div>
@@ -109,31 +116,32 @@ function Header() {
           </div>
           {user ? (
             <div className="relative" ref={userRef}>
-              <button onClick={() => setUserOpen(!userOpen)} className="text-[#AEAEAF] hover:text-white flex items-center justify-center 
-                p-2 rounded-full hover:bg-[#202024] transition-colors"><User size={20} />
+              <button onClick={() => setUserOpen(!userOpen)} className="text-[#AEAEAF] hover:text-white flex items-center justify-center p-2 rounded-full hover:bg-[#202024] transition-colors">
+                <User size={20} />
               </button>
               {userOpen && (
                 <div className="absolute right-0 top-10 bg-[#18181c] rounded-md shadow-xl py-2 w-[200px] z-50 border border-[#2e2e34]">
                   <div className="px-4 py-2 border-b border-[#2e2e34] mb-2">
-                    <p className="text-white text-sm font-semibold truncate">{user.email}</p>
+                    <p className="text-white text-sm font-semibold truncate">{userName}</p>
                   </div>
-                  <button onClick={handleLogOut} className="w-full text-left px-4 py-2 text-sm text-[#AEAEAF] 
-                    hover:text-white hover:bg-[#2a2a30] flex items-center gap-2"><LogOut size={16} />{t("logOut")}
+                  <button onClick={handleLogOut} className="w-full text-left px-4 py-2 text-sm text-[#AEAEAF] hover:text-white hover:bg-[#2a2a30] flex items-center gap-2">
+                    <LogOut size={16} />{t("logOut")}
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <Link to="/login" className="text-white bg-[#353539] py-2 px-3 md:py-2.5 md:px-4 rounded-md 
-              hover:bg-[#656567] text-xs md:text-sm font-semibold transition-colors">{t("signIn")}
+            <Link to="/login" className="text-white bg-[#353539] py-2 px-3 md:py-3 md:px-4 rounded-md hover:bg-[#656567] text-xs md:text-sm font-semibold transition-colors">
+              {t("signIn")}
             </Link>
           )}
-          <button className="hidden md:block bg-[#26BBFF] py-2.5 px-4 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold">{t("download")}</button>
+          <button className="hidden md:block bg-[#26BBFF] py-3 px-4 rounded-md hover:bg-[#72D3FF] text-black text-sm font-bold">{t("download")}</button>
           <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-white hover:opacity-60">
             {menuOpen ? <X /> : <TextAlignJustify />}
           </button>
         </div>
       </header>
+      {/* Mobil ucun menu */}
       {menuOpen && (
         <div className="md:hidden bg-[#121216] fixed inset-0 z-[60] flex flex-col">
           <div className="h-[72px] w-full flex items-center justify-between p-5">
@@ -149,10 +157,9 @@ function Header() {
             <div className="flex justify-end items-center mt-2">
               <div className="flex items-center gap-4">
                 <div className="flex gap-4">
-                  {languages.map((item) => (
-                    <button key={item.code} onClick={() => setLanguage(item.code)} 
-                    className={`text-sm ${language == item.code ? "text-white font-bold" : "text-gray-400"}`}>
-                      {item.short}
+                  {languages.map((i) => (
+                    <button key={i.dil} onClick={() => setLanguage(i.dil)} className={`text-sm ${language == i.dil ? "text-white font-bold" : "text-gray-400"}`}>
+                      {i.short}
                     </button>
                   ))}
                 </div>
@@ -161,12 +168,12 @@ function Header() {
             </div>
             <ul>
               <li className="text-white text-[32px] font-bold">{t("menu")}</li>
-              <li className="pt-10"><Link to="/support" onClick={() => setMenuOpen(false)} 
-                className="text-white hover:text-gray-300">{t("support")}
-              </Link></li>
-              <li className="pt-5"><Link to="/" onClick={() => setMenuOpen(false)} 
-                className="text-white hover:text-gray-300">{t("distribute")}
-              </Link></li>
+              <li className="pt-10">
+                <Link to="/support" onClick={() => setMenuOpen(false)} className="text-white hover:text-gray-300">{t("support")}</Link>
+              </li>
+              <li className="pt-5">
+                <Link to="/" onClick={() => setMenuOpen(false)} className="text-white hover:text-gray-300">{t("distribute")}</Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -174,30 +181,31 @@ function Header() {
       <div className="bg-[#101014] h-[100px] w-full sticky top-0 z-50">
         <div className="max-w-[1200px] mx-auto h-full flex justify-between items-center px-4 xl:px-0">
           <div className="flex items-center">
-            {/* PC üçün Search */}
+            {/* PC ucun search */}
             <div className="hidden md:block relative" ref={searchRef}>
               <form onSubmit={goSearchPage} className="flex items-center bg-[#202024] rounded-full h-[40px] px-4">
                 <Search size={16} className="text-[#AEAEAF] mr-2 min-w-max" />
                 <input type="text" placeholder={t("searchStore")} value={searchText}
-                  onChange={(e) => { setSearchText(e.target.value); setSearchOpen(true) }}
-                  onFocus={() => { if (searchText.trim()) setSearchOpen(true) }}
+                  onChange={(e) => {
+                    setSearchText(e.target.value)
+                    setSearchOpen(true)
+                  }}
+                  onFocus={() => {if (searchText.trim()) setSearchOpen(true)}}
                   className="bg-transparent text-[#AEAEAF] w-[180px] outline-none" />
               </form>
-              {searchOpen && searchValue && (
+              {searchOpen && search && (
                 <div className="absolute top-[48px] left-0 w-[380px] bg-[#18181c] rounded-lg shadow-2xl border border-[#2a2a30] overflow-hidden z-50">
                   {results.length > 0 ? (
                     <div>
-                      <p className="text-[#AEAEAF] text-[11px] uppercase font-bold px-4 pt-4 pb-2">{t("topResults")}</p>
+                      <p className="text-[#AEAEAF] text-[12px] uppercase font-bold px-4 pt-4 pb-2">{t("topResults")}</p>
                       {results.map((game) => {
-                        const folderName = getFolderName(game.title)
-                        const imageSrc = `https://epic-games-api-eta.vercel.app/${game.endpoint}/${folderName}/cover.jpg`
+                        const slug = getSlug(game.title)
+                        const img = `https://epic-games-api-eta.vercel.app/${game.endpoint}/${slug}/cover.jpg`
                         return (
-                          <Link key={game.title} to={`/game/${folderName}?from=${game.endpoint}`} 
-                            onClick={closeSearch} 
-                            className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#2a2a30]">
-                            <img src={imageSrc} alt={game.title} className="w-[40px] h-[52px] object-cover rounded bg-[#111]" />
+                          <Link key={game.title} to={`/game/${slug}?from=${game.endpoint}`} onClick={closeSearch} className="flex items-center gap-3 px-4 py-3 hover:bg-[#2a2a30]">
+                            <img src={img} alt={game.title} className="w-[40px] h-[52px] object-cover rounded bg-[#111]" />
                             <div>
-                              <p className="text-[#AEAEAF] text-[11px]">{t("baseGame")}</p>
+                              <p className="text-[#AEAEAF] text-[12px]">{t("baseGame")}</p>
                               <p className="text-white text-sm font-semibold">{game.title}</p>
                             </div>
                           </Link>
@@ -208,10 +216,12 @@ function Header() {
                       </button>
                     </div>
                   ) : (
-                    <p className="text-[#AEAEAF] text-sm px-4 py-6 text-center">{t("noGamesFound")}</p>)}
+                    <p className="text-[#AEAEAF] text-sm px-4 py-6 text-center">{t("noGamesFound")}</p>
+                  )}
                 </div>
               )}
             </div>
+            {/* Mobil ucun search */}
             <button onClick={() => setMobileSearchOpen(true)} className="md:hidden text-[#AEAEAF] hover:text-white">
               <Search size={24} />
             </button>
@@ -223,21 +233,16 @@ function Header() {
           <div className="flex items-center gap-6 text-[#AEAEAF]">
             <Link to="/wishlist" className="relative hover:text-white flex items-center">
               <Bookmark size={20} />
-              {wishlist.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-white text-black text-[10px] font-bold 
-                                 w-4 h-4 flex items-center justify-center rounded-full">{wishlist.length}</span>
-              )}
+              {wishlist.length > 0 && <span className="absolute -top-2 -right-2 bg-white text-black text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">{wishlist.length}</span>}
             </Link>
             <Link to="/cart" className="relative hover:text-white flex items-center">
               <ShoppingCart size={20} />
-              {cart.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-white text-black text-[10px] font-bold 
-                                 w-4 h-4 flex items-center justify-center rounded-full">{cart.length}</span>
-              )}
+              {cart.length > 0 && <span className="absolute -top-2 -right-2 bg-white text-black text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">{cart.length}</span>}
             </Link>
           </div>
         </div>
       </div>
+      {/* Mobil ucun search */}
       {mobileSearchOpen && (
         <div className="fixed inset-0 bg-[#121216] z-[60] flex flex-col p-5">
           <div className="flex justify-between items-center mb-6">
@@ -246,28 +251,25 @@ function Header() {
               <X size={28} />
             </button>
           </div>
-          {/* Mobil üçün Search */}
           <form onSubmit={goSearchPage}>
             <div className="flex items-center bg-[#202024] rounded-full px-4 py-3 h-[50px]">
               <Search className="text-[#AEAEAF] mr-3" size={20} />
-              <input autoFocus type="text" placeholder={t("searchStore")} value={searchText} 
-                     onChange={(e) => setSearchText(e.target.value)} 
-                     className="bg-transparent text-white outline-none w-full" />
+              <input autoFocus type="text" placeholder={t("searchStore")} value={searchText} onChange={(e) => setSearchText(e.target.value)} className="bg-transparent text-white outline-none w-full" />
             </div>
           </form>
-          {searchValue && (
+          {search && (
             <div className="mt-4">
               {results.length > 0 ? (
                 <div>
-                  <p className="text-[#AEAEAF] text-[11px] uppercase font-bold px-2 pb-2">{t("topResults")}</p>
+                  <p className="text-[#AEAEAF] text-[12px] uppercase font-bold px-2 pb-2">{t("topResults")}</p>
                   {results.map((game) => {
-                    const folderName = getFolderName(game.title)
-                    const imageSrc = `https://epic-games-api-eta.vercel.app/${game.endpoint}/${folderName}/cover.jpg`
+                    const slug = getSlug(game.title)
+                    const img = `https://epic-games-api-eta.vercel.app/${game.endpoint}/${slug}/cover.jpg`
                     return (
-                      <Link key={game.title} to={`/game/${folderName}?from=${game.endpoint}`} onClick={closeSearch} className="flex items-center gap-3 px-2 py-2.5 hover:bg-[#2a2a30] rounded-md">
-                        <img src={imageSrc} alt={game.title} className="w-[40px] h-[52px] object-cover rounded bg-[#111]" />
+                      <Link key={game.title} to={`/game/${slug}?from=${game.endpoint}`} onClick={closeSearch} className="flex items-center gap-3 px-2 py-3 hover:bg-[#2a2a30] rounded-md">
+                        <img src={img} alt={game.title} className="w-[40px] h-[52px] object-cover rounded bg-[#111]" />
                         <div>
-                          <p className="text-[#AEAEAF] text-[11px]">{t("baseGame")}</p>
+                          <p className="text-[#AEAEAF] text-[12px]">{t("baseGame")}</p>
                           <p className="text-white text-sm font-semibold">{game.title}</p>
                         </div>
                       </Link>
@@ -276,7 +278,10 @@ function Header() {
                   <button onClick={goSearchPage} className="w-full text-left px-2 py-3 text-white text-sm flex items-center gap-2 mt-2">
                     {t("viewAllResults")} <ArrowRight size={14} />
                   </button>
-                </div>) : (<p className="text-[#AEAEAF] text-sm text-center mt-8">{t("noGamesFound")}</p>)}
+                </div>
+              ) : (
+                <p className="text-[#AEAEAF] text-sm text-center mt-8">{t("noGamesFound")}</p>
+              )}
             </div>
           )}
         </div>
@@ -284,5 +289,4 @@ function Header() {
     </div>
   )
 }
-
 export default Header
